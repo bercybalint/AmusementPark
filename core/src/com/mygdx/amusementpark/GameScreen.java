@@ -77,7 +77,7 @@ public class GameScreen implements Screen
             for(int j = 0; j< tiles.get(i).size; j++)
             {
                 Rectangle act = tiles.get(i).get(j);
-                if(j==0)
+                if(j==1)
                 {
                     if(i == 8 || i==12)
                     {
@@ -92,7 +92,7 @@ public class GameScreen implements Screen
                     }
 
                 }
-                else if (i == 0|| j == 0 || i == tiles.size - 1 || j == tiles.get(i).size - 1)
+                else if (i == 0|| i == tiles.size - 1 || j == tiles.get(i).size - 1)
                 {
                     actual = wall_texture;
                 }
