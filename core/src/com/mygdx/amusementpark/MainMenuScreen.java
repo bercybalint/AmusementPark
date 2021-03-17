@@ -2,61 +2,90 @@ package com.mygdx.amusementpark;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.utils.ScreenUtils;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
-    public class MainMenuScreen implements Screen {
 
-        final AmusementPark game;
-        OrthographicCamera camera;
+public class MainMenuScreen implements Screen {
 
-        public MainMenuScreen(final AmusementPark gam) {
-            game = gam;
+    private AmusementPark game;
+    private final Stage stage;
+    private OrthographicCamera camera;
 
-            camera = new OrthographicCamera();
-            camera.setToOrtho(false, 1200, 700);
-        }
+    public MainMenuScreen(final AmusementPark game) {
+        this.game = game;
 
-        @Override
-        public void render(float delta) {
-            ScreenUtils.clear(0, 0, 0.2f, 1);
+        stage = new Stage();
 
-            camera.update();
-            game.batch.setProjectionMatrix(camera.combined);
+        Gdx.input.setInputProcessor(stage);
 
-            game.batch.begin();
-            game.font.draw(game.batch, "Welcome to AmusementPark!!! ", 100, 150);
-            game.font.draw(game.batch, "Tap anywhere to begin!", 100, 100);
-            game.batch.end();
+        Skin skin = new Skin(Gdx.files.internal("uiskin.json"));
 
-            if (Gdx.input.isTouched()) {
+        TextButton playButton = new TextButton("Play Game", skin);
+        playButton.setSize(300, 100);
+        playButton.setPosition(stage.getWidth()/2 - playButton.getWidth()/2,stage.getHeight()/2);
+        playButton.addListener(new ClickListener() {
+            @Override
+            public void touchUp(InputEvent e, float x, float y, int point, int button) {
                 game.setScreen(new GameScreen(game));
-                dispose();
             }
-        }
+        });
 
-        @Override
-        public void resize(int width, int height) {
-        }
+        TextButton exitButton = new TextButton("Exit Game", skin);
+        exitButton.setSize(300, 100);
+        exitButton.setPosition(stage.getWidth()/2 - exitButton.getWidth()/2,stage.getHeight()/2 - exitButton.getHeight());
+        exitButton.addListener(new ClickListener() {
+            @Override
+            public void touchUp(InputEvent e, float x, float y, int point, int button) {
+                Gdx.app.exit();
+                System.exit(0);
+            }
+        });
 
-        @Override
-        public void show() {
-        }
 
-        @Override
-        public void hide() {
-        }
+        stage.addActor(playButton);
+        stage.addActor(exitButton);
 
-        @Override
-        public void pause() {
-        }
 
-        @Override
-        public void resume() {
-        }
-
-        @Override
-        public void dispose() {
-        }
     }
+
+    @Override
+    public void render(float delta) {
+        Gdx.gl.glClearColor(.135f, .206f, .235f, 1);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+        stage.act(delta);
+        stage.draw();
+    }
+
+    @Override
+    public void resize(int width, int height) {
+    }
+
+    @Override
+    public void show() {
+        //Stage should controll input:
+    }
+
+    @Override
+    public void hide() {
+    }
+
+    @Override
+    public void pause() {
+    }
+
+    @Override
+    public void resume() {
+    }
+
+    @Override
+    public void dispose() {
+    }
+}
 
