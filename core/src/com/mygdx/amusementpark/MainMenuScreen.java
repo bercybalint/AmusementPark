@@ -14,7 +14,7 @@ import com.badlogic.gdx.utils.ScreenUtils;
             game = gam;
 
             camera = new OrthographicCamera();
-            camera.setToOrtho(false, 1200, 900);
+            camera.setToOrtho(false, 1200, 700);
         }
 
         @Override

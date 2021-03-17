@@ -14,15 +14,20 @@ public class GameScreen implements Screen
 {
     final AmusementPark game;
     OrthographicCamera camera;
-    private int window_height = 900;
+    private int window_height = 800;
     private int window_width = 1200;
     private int x_size=20;
     private int y_size=20;
-    private int tile_width = window_width/x_size;
-    private int tile_height = window_height/y_size;
-    Texture tile_texture;
+    private int tile_width = (window_width)/x_size;
+    private int tile_height = (window_height)/y_size;
+    Texture wall_texture;
+    Texture grass_texture;
+    Texture gate_texture;
+    Texture fence_texture;
+    Texture actual;
 
-    private Array<Array<Rectangle>> tiles = new Array<Array<Rectangle>>(20);
+
+    private Array<Array<Rectangle>> tiles = new Array<Array<Rectangle>>();
     //Ebben tárolódnak
 
     Rectangle tile;
@@ -31,8 +36,12 @@ public class GameScreen implements Screen
     {
         this.game = game;
         camera = new OrthographicCamera();
-        camera.setToOrtho(false, window_width, window_height);
-        tile_texture = new Texture(Gdx.files.internal("tile.png"));
+        camera.setToOrtho(false, window_width, window_height+100);
+        wall_texture = new Texture(Gdx.files.internal("tile.png"));
+        grass_texture = new Texture(Gdx.files.internal("grass.png"));
+        gate_texture = new Texture(Gdx.files.internal("gate.png"));
+        fence_texture = new Texture(Gdx.files.internal("fence.png"));
+
 
         for(int i = 0; i < y_size; i++)
         {
@@ -41,11 +50,14 @@ public class GameScreen implements Screen
             for(int j = 0; j < x_size; j++)
             {
                 tile = new Rectangle();
-                tile.x=i*tile_width;
-                tile.y=j*tile_height;
+                tile.x=(i)*tile_width;
+                tile.y=(j)*tile_height;
                 tile.width=tile_width;
-                tile_height=tile_height;
+                tile.height=tile_height;
                 tiles.get(i).add(tile);
+                System.out.println(tile.width + " " + tile.height);
+                System.out.println("x: "+tile.x + " y:" + tile.y);
+
             }
         }
     }
@@ -60,11 +72,36 @@ public class GameScreen implements Screen
         game.batch.begin();
         //draw dolgok
 
-        for(Array<Rectangle> til : tiles)
+        for(int i = 0; i < tiles.size; i++)
         {
-            for(Rectangle t : til)
+            for(int j = 0; j< tiles.get(i).size; j++)
             {
-                game.batch.draw(tile_texture,t.x,t.y);
+                Rectangle act = tiles.get(i).get(j);
+                if(j==0)
+                {
+                    if(i == 8 || i==12)
+                    {
+                        actual = gate_texture;
+                    }
+                    else if(i>8 && i<12)
+                    {
+                        actual = grass_texture;
+                    }
+                    else {
+                        actual = fence_texture;
+                    }
+
+                }
+                else if (i == 0|| j == 0 || i == tiles.size - 1 || j == tiles.get(i).size - 1)
+                {
+                    actual = wall_texture;
+                }
+                else
+                {
+                    actual = grass_texture;
+                }
+                game.batch.draw(actual,act.x,act.y+100,act.width,act.height);
+
             }
         }
 
