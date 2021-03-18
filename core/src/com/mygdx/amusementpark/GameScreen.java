@@ -125,6 +125,9 @@ public class GameScreen implements Screen
                 guestButton.setPosition(buttonWidth*3 + 40,40);
                 roadButton.setVisible(false);
                 rButton.setVisible(false);
+
+                if (isSelected)
+                    isSelected = false;
             }
         });
 
@@ -158,6 +161,9 @@ public class GameScreen implements Screen
             public void clicked(InputEvent e, float x, float y) {
                 plantsButton.setVisible(false);
                 roadButton.setVisible(false);
+
+                if (isSelected)
+                    isSelected = false;
             }
         });
 
@@ -169,6 +175,9 @@ public class GameScreen implements Screen
                 plantsButton.setPosition(buttonWidth*2 + 30, 40);
                 gamesButton.setVisible(false);
                 roadButton.setVisible(false);
+
+                if (isSelected)
+                    isSelected = false;
             }
         });
 
@@ -185,6 +194,8 @@ public class GameScreen implements Screen
                 rButton.setVisible(true);
                 rButton.setPosition(buttonWidth * 3 + 50,40);
 
+                if (isSelected)
+                    isSelected = false;
 
             }
         });
@@ -205,8 +216,10 @@ public class GameScreen implements Screen
             public void clicked(InputEvent e, float x, float y) {
                 parkButton.setVisible(false);
                 guestButton.setVisible(false);
-
                 staffButton.setPosition(buttonWidth + 20, 40);
+
+                if (isSelected)
+                    isSelected = false;
             }
         });
 
@@ -219,6 +232,9 @@ public class GameScreen implements Screen
                 staffButton.setVisible(false);
 
                 guestButton.setPosition(buttonWidth + 20, 40);
+
+                if (isSelected)
+                    isSelected = false;
             }
         });
 
