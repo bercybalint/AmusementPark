@@ -5,23 +5,21 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.math.Vector;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
 
-import java.awt.*;
-
 public class GameScreen implements Screen
 {
     final AmusementPark game;
     OrthographicCamera camera;
-    private Stage stage;
+    private final Stage stage;
     private final int window_height = 800;
     private final int window_width = 1200;
     private final int x_size=20;
@@ -31,11 +29,13 @@ public class GameScreen implements Screen
 
     private TextButton buildButton;
     private TextButton parkButton;
+    private TextButton gamesButton;
+    private TextButton plantsButton;
+    private TextButton roadButton;
     private TextButton staffButton;
     private TextButton guestButton;
-    private TextButton RoadsButton;
-    private int buttonWidth = 150;
-    private int buttonHeight = 50;
+    private final int buttonWidth = 150;
+    private final int buttonHeight = 50;
 
 
     Texture wall_texture;
@@ -44,8 +44,8 @@ public class GameScreen implements Screen
     Texture fence_texture;
     Texture road_texture;
     Texture actual;
-    Texture choosen; //ezt állítjuk be a gomb lenyomásával.
-    Boolean isScelected=false; //ez mondja meg, hogy van-e vmi kiválsztva építésre.
+    Texture chosen; //ezt állítjuk be a gomb lenyomásával.
+    Boolean isSelected=false; //ez mondja meg, hogy van-e vmi kiválsztva építésre.
 
 
     private final Array<Array<Buildable>> tiles = new Array<Array<Buildable>>();
@@ -109,16 +109,15 @@ public class GameScreen implements Screen
         buildButton.setSize(buttonWidth, buttonHeight);
         buildButton.setPosition(10, 48);
         buildButton.addListener(new ClickListener() {
-            @Override
-            public void touchUp(InputEvent e, float x, float y, int point, int button) {
-                stage.addActor(parkButton);
-                stage.addActor(staffButton);
+            public void clicked(InputEvent e, float x, float y) {
+                parkButton.setVisible(true);
                 staffButton.setVisible(true);
-                stage.addActor(guestButton);
+                staffButton.setPosition(320, 48);
+                guestButton.setVisible(true);
+                guestButton.setPosition(480,48);
 
-
-                choosen = road_texture;
-                isScelected=true;
+                chosen = road_texture;
+                isSelected=true;
             }
         });
 
@@ -126,28 +125,98 @@ public class GameScreen implements Screen
         parkButton.setSize(buttonWidth, buttonHeight);
         parkButton.setPosition(160, 48);
         parkButton.addListener(new ClickListener() {
-            @Override
-            public void touchUp(InputEvent e, float x, float y, int point, int button) {
+            public void clicked(InputEvent e, float x, float y) {
                 guestButton.setVisible(false);
                 staffButton.setVisible(false);
 
+                gamesButton.setVisible(true);
+                gamesButton.setPosition(320,48);
+                plantsButton.setVisible(true);
+                plantsButton.setPosition(480, 48);
+                roadButton.setVisible(true);
+                roadButton.setPosition(640, 48);
 
-                choosen = grass_texture;
-                isScelected=true;
 
+                chosen = grass_texture;
+                isSelected=true;
+
+            }
+        });
+
+        gamesButton = new TextButton("Games", skin);
+        gamesButton.setSize(buttonWidth, buttonHeight);
+        gamesButton.setPosition(320, 48);
+        gamesButton.addListener(new ClickListener() {
+            public void clicked(InputEvent e, float x, float y) {
+                plantsButton.setVisible(false);
+                roadButton.setVisible(false);
+            }
+        });
+
+        plantsButton = new TextButton("Plants", skin);
+        plantsButton.setSize(buttonWidth, buttonHeight);
+        plantsButton.setPosition(480, 48);
+        plantsButton.addListener(new ClickListener() {
+            public void clicked(InputEvent e, float x, float y) {
+                plantsButton.setPosition(320, 48);
+                gamesButton.setVisible(false);
+                roadButton.setVisible(false);
+            }
+        });
+
+        roadButton = new TextButton("Road", skin);
+        roadButton.setSize(buttonWidth, buttonHeight);
+        roadButton.setPosition(640, 48);
+        roadButton.addListener(new ClickListener() {
+            public void clicked(InputEvent e, float x, float y) {
+                roadButton.setPosition(320, 48);
+                staffButton.setVisible(false);
+                gamesButton.setVisible(false);
+                plantsButton.setVisible(false);
+
+                chosen = road_texture;
+                isSelected=true;
             }
         });
 
         staffButton = new TextButton("Staff", skin);
         staffButton.setSize(buttonWidth, buttonHeight);
         staffButton.setPosition(320, 48);
+        staffButton.addListener(new ClickListener() {
+            public void clicked(InputEvent e, float x, float y) {
+                parkButton.setVisible(false);
+                guestButton.setVisible(false);
+
+                staffButton.setPosition(160, 48);
+            }
+        });
 
         guestButton = new TextButton("Guest", skin);
         guestButton.setSize(buttonWidth, buttonHeight);
         guestButton.setPosition(480, 48);
+        guestButton.addListener(new ClickListener() {
+            public void clicked(InputEvent e, float x, float y) {
+                parkButton.setVisible(false);
+                staffButton.setVisible(false);
+
+                guestButton.setPosition(160, 48);
+            }
+        });
 
 
         stage.addActor(buildButton);
+        stage.addActor(parkButton);
+        stage.addActor(staffButton);
+        stage.addActor(guestButton);
+        stage.addActor(gamesButton);
+        stage.addActor(plantsButton);
+        stage.addActor(roadButton);
+        parkButton.setVisible(false);
+        staffButton.setVisible(false);
+        guestButton.setVisible(false);
+        gamesButton.setVisible(false);
+        plantsButton.setVisible(false);
+        roadButton.setVisible(false);
 
     }
 
@@ -182,8 +251,8 @@ public class GameScreen implements Screen
 
         if(Gdx.input.justTouched())
         {
-            System.out.println(isScelected);
-            System.out.println(choosen);
+            System.out.println(isSelected);
+            System.out.println(chosen);
             Vector3 touch = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
             camera.unproject(touch);
             for (Array<Buildable> arr_buildable : tiles)
@@ -192,9 +261,9 @@ public class GameScreen implements Screen
                 {
                     if(build.contains(touch.x,touch.y-100))
                     {
-                        if(isScelected==true)
+                        if(isSelected==true)
                         {
-                            build.texture = choosen;
+                            build.texture = chosen;
                         }
                     }
                     else{

@@ -7,8 +7,10 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import sun.tools.jconsole.Tab;
 
 
 public class MainMenuScreen implements Screen {
@@ -46,7 +48,6 @@ public class MainMenuScreen implements Screen {
                 System.exit(0);
             }
         });
-
 
         stage.addActor(playButton);
         stage.addActor(exitButton);
