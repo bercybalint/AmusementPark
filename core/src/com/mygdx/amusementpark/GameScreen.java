@@ -1,9 +1,12 @@
 package com.mygdx.amusementpark;
 
+import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.math.Vector;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -34,17 +37,21 @@ public class GameScreen implements Screen
     private int buttonWidth = 150;
     private int buttonHeight = 50;
 
+
     Texture wall_texture;
     Texture grass_texture;
     Texture gate_texture;
     Texture fence_texture;
+    Texture road_texture;
     Texture actual;
+    Texture choosen; //ezt állítjuk be a gomb lenyomásával.
+    Boolean isScelected=false; //ez mondja meg, hogy van-e vmi kiválsztva építésre.
 
 
-    private final Array<Array<Rectangle>> tiles = new Array<Array<Rectangle>>();
+    private final Array<Array<Buildable>> tiles = new Array<Array<Buildable>>();
     //Ebben tárolódnak
 
-    Rectangle tile;
+    Buildable tile;
 
     public GameScreen(final AmusementPark game)
     {
@@ -59,23 +66,42 @@ public class GameScreen implements Screen
         grass_texture = new Texture(Gdx.files.internal("grass.png"));
         gate_texture = new Texture(Gdx.files.internal("gate.png"));
         fence_texture = new Texture(Gdx.files.internal("fence.png"));
+        road_texture = new Texture(Gdx.files.internal("road.png"));
+
 
 
         for(int i = 0; i < y_size; i++)
         {
-            Array<Rectangle> asd = new Array<Rectangle>();
+            Array<Buildable> asd = new Array<Buildable>();
             tiles.add(asd);
             for(int j = 0; j < x_size; j++)
             {
-                tile = new Rectangle();
-                tile.x=(i)*tile_width;
-                tile.y=(j)*tile_height;
-                tile.width=tile_width;
-                tile.height=tile_height;
-                tiles.get(i).add(tile);
-                System.out.println(tile.width + " " + tile.height);
-                System.out.println("x: "+tile.x + " y:" + tile.y);
+                if(j==1)
+                {
+                    if(i == 8 || i==12)
+                    {
+                        actual = gate_texture;
+                    }
+                    else if(i>8 && i<12)
+                    {
+                        actual = grass_texture;
+                    }
+                    else
+                    {
+                        actual = fence_texture;
+                    }
 
+                }
+                else if (i == 0|| i == x_size - 1 || j == y_size - 1)
+                {
+                    actual = wall_texture;
+                }
+                else
+                {
+                    actual = grass_texture;
+                }
+                tile = new Buildable((i)*tile_width,(j)*tile_height,tile_width,tile_height,actual,10);
+                tiles.get(i).add(tile);
             }
         }
 
@@ -89,6 +115,10 @@ public class GameScreen implements Screen
                 stage.addActor(staffButton);
                 staffButton.setVisible(true);
                 stage.addActor(guestButton);
+
+
+                choosen = road_texture;
+                isScelected=true;
             }
         });
 
@@ -100,6 +130,11 @@ public class GameScreen implements Screen
             public void touchUp(InputEvent e, float x, float y, int point, int button) {
                 guestButton.setVisible(false);
                 staffButton.setVisible(false);
+
+
+                choosen = grass_texture;
+                isScelected=true;
+
             }
         });
 
@@ -119,6 +154,8 @@ public class GameScreen implements Screen
     @Override
     public void render(float delta)
     {
+
+
         ScreenUtils.clear(.135f, .206f, .235f, 1);
 
         camera.update();
@@ -130,31 +167,8 @@ public class GameScreen implements Screen
         {
             for(int j = 0; j< tiles.get(i).size; j++)
             {
-                Rectangle act = tiles.get(i).get(j);
-                if(j==1)
-                {
-                    if(i == 8 || i==12)
-                    {
-                        actual = gate_texture;
-                    }
-                    else if(i>8 && i<12)
-                    {
-                        actual = grass_texture;
-                    }
-                    else {
-                        actual = fence_texture;
-                    }
-
-                }
-                else if (i == 0|| i == tiles.size - 1 || j == tiles.get(i).size - 1)
-                {
-                    actual = wall_texture;
-                }
-                else
-                {
-                    actual = grass_texture;
-                }
-                game.batch.draw(actual,act.x,act.y+100,act.width,act.height);
+                Buildable act = tiles.get(i).get(j);
+                game.batch.draw(act.texture,act.x,act.y+100,act.width,act.height);
 
 
             }
@@ -165,6 +179,31 @@ public class GameScreen implements Screen
         stage.draw();
 
         //user inputok Gdx.input.isKeyPressed(Keys.LEFT)
+
+        if(Gdx.input.justTouched())
+        {
+            System.out.println(isScelected);
+            System.out.println(choosen);
+            Vector3 touch = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
+            camera.unproject(touch);
+            for (Array<Buildable> arr_buildable : tiles)
+            {
+                for(Buildable build : arr_buildable)
+                {
+                    if(build.contains(touch.x,touch.y-100))
+                    {
+                        if(isScelected==true)
+                        {
+                            build.texture = choosen;
+                        }
+                    }
+                    else{
+                        Gdx.app.setLogLevel(Application.LOG_DEBUG);
+                        Gdx.app.debug("POSITION", "X touched: " + touch.x + " Y touched: " + touch.y);
+                    }
+                }
+            }
+        }
 
     }
     @Override
@@ -181,15 +220,18 @@ public class GameScreen implements Screen
     }
 
     @Override
-    public void pause() {
+    public void pause()
+    {
     }
 
     @Override
-    public void resume() {
+    public void resume()
+    {
     }
 
     @Override
-    public void dispose() {
+    public void dispose()
+    {
 
     }
 

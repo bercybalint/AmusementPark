@@ -19,7 +19,8 @@ public class AmusementPark extends Game{
 		super.render(); // important!
 	}
 
-	public void dispose() {
+	public void dispose()
+	{
 		batch.dispose();
 		font.dispose();
 	}
