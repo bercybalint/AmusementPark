@@ -5,13 +5,16 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
 
@@ -32,6 +35,7 @@ public class GameScreen implements Screen
     private TextButton gamesButton;
     private TextButton plantsButton;
     private TextButton roadButton;
+    private ImageButton rButton;
     private TextButton staffButton;
     private TextButton guestButton;
     private final int buttonWidth = 150;
@@ -43,6 +47,8 @@ public class GameScreen implements Screen
     Texture gate_texture;
     Texture fence_texture;
     Texture road_texture;
+    TextureRegion textureRegion;
+    TextureRegionDrawable textureRegionDrawable;
     Texture actual;
     Texture chosen; //ezt állítjuk be a gomb lenyomásával.
     Boolean isSelected=false; //ez mondja meg, hogy van-e vmi kiválsztva építésre.
@@ -67,6 +73,8 @@ public class GameScreen implements Screen
         gate_texture = new Texture(Gdx.files.internal("gate.png"));
         fence_texture = new Texture(Gdx.files.internal("fence.png"));
         road_texture = new Texture(Gdx.files.internal("road.png"));
+        textureRegion = new TextureRegion(road_texture);
+        textureRegionDrawable = new TextureRegionDrawable(textureRegion);
 
 
 
@@ -107,34 +115,34 @@ public class GameScreen implements Screen
 
         buildButton = new TextButton("Build", skin);
         buildButton.setSize(buttonWidth, buttonHeight);
-        buildButton.setPosition(10, 48);
+        buildButton.setPosition(10, 40);
         buildButton.addListener(new ClickListener() {
             public void clicked(InputEvent e, float x, float y) {
                 parkButton.setVisible(true);
                 staffButton.setVisible(true);
-                staffButton.setPosition(320, 48);
+                staffButton.setPosition(buttonWidth*2 + 30, 40);
                 guestButton.setVisible(true);
-                guestButton.setPosition(480,48);
-
-                chosen = road_texture;
-                isSelected=true;
+                guestButton.setPosition(buttonWidth*3 + 40,40);
+                roadButton.setVisible(false);
+                rButton.setVisible(false);
             }
         });
 
         parkButton = new TextButton("Park", skin);
         parkButton.setSize(buttonWidth, buttonHeight);
-        parkButton.setPosition(160, 48);
+        parkButton.setPosition(buttonWidth + 20, 40);
         parkButton.addListener(new ClickListener() {
             public void clicked(InputEvent e, float x, float y) {
                 guestButton.setVisible(false);
                 staffButton.setVisible(false);
 
                 gamesButton.setVisible(true);
-                gamesButton.setPosition(320,48);
+                gamesButton.setPosition(buttonWidth*2 + 30,40);
                 plantsButton.setVisible(true);
-                plantsButton.setPosition(480, 48);
+                plantsButton.setPosition(buttonWidth*3 + 40, 40);
                 roadButton.setVisible(true);
-                roadButton.setPosition(640, 48);
+                roadButton.setPosition(buttonWidth*4 + 50, 40);
+                rButton.setVisible(false);
 
 
                 chosen = grass_texture;
@@ -145,7 +153,7 @@ public class GameScreen implements Screen
 
         gamesButton = new TextButton("Games", skin);
         gamesButton.setSize(buttonWidth, buttonHeight);
-        gamesButton.setPosition(320, 48);
+        gamesButton.setPosition(buttonWidth*2 + 30, 40);
         gamesButton.addListener(new ClickListener() {
             public void clicked(InputEvent e, float x, float y) {
                 plantsButton.setVisible(false);
@@ -155,10 +163,10 @@ public class GameScreen implements Screen
 
         plantsButton = new TextButton("Plants", skin);
         plantsButton.setSize(buttonWidth, buttonHeight);
-        plantsButton.setPosition(480, 48);
+        plantsButton.setPosition(buttonWidth * 3 + 40, 40);
         plantsButton.addListener(new ClickListener() {
             public void clicked(InputEvent e, float x, float y) {
-                plantsButton.setPosition(320, 48);
+                plantsButton.setPosition(buttonWidth*2 + 30, 40);
                 gamesButton.setVisible(false);
                 roadButton.setVisible(false);
             }
@@ -166,14 +174,25 @@ public class GameScreen implements Screen
 
         roadButton = new TextButton("Road", skin);
         roadButton.setSize(buttonWidth, buttonHeight);
-        roadButton.setPosition(640, 48);
+        roadButton.setPosition(buttonWidth*4 + 50, 40);
         roadButton.addListener(new ClickListener() {
             public void clicked(InputEvent e, float x, float y) {
-                roadButton.setPosition(320, 48);
+                roadButton.setPosition(buttonWidth*2 + 30, 40);
                 staffButton.setVisible(false);
                 gamesButton.setVisible(false);
                 plantsButton.setVisible(false);
 
+                rButton.setVisible(true);
+                rButton.setPosition(buttonWidth * 3 + 50,40);
+
+
+            }
+        });
+
+        rButton = new ImageButton(textureRegionDrawable);
+        rButton.setSize(50,50);
+        rButton.addListener(new ClickListener() {
+            public void clicked(InputEvent e, float x, float y) {
                 chosen = road_texture;
                 isSelected=true;
             }
@@ -181,25 +200,25 @@ public class GameScreen implements Screen
 
         staffButton = new TextButton("Staff", skin);
         staffButton.setSize(buttonWidth, buttonHeight);
-        staffButton.setPosition(320, 48);
+        staffButton.setPosition(buttonWidth* 2 +30, 40);
         staffButton.addListener(new ClickListener() {
             public void clicked(InputEvent e, float x, float y) {
                 parkButton.setVisible(false);
                 guestButton.setVisible(false);
 
-                staffButton.setPosition(160, 48);
+                staffButton.setPosition(buttonWidth + 20, 40);
             }
         });
 
         guestButton = new TextButton("Guest", skin);
         guestButton.setSize(buttonWidth, buttonHeight);
-        guestButton.setPosition(480, 48);
+        guestButton.setPosition(buttonWidth*3 + 40, 40);
         guestButton.addListener(new ClickListener() {
             public void clicked(InputEvent e, float x, float y) {
                 parkButton.setVisible(false);
                 staffButton.setVisible(false);
 
-                guestButton.setPosition(160, 48);
+                guestButton.setPosition(buttonWidth + 20, 40);
             }
         });
 
@@ -211,12 +230,14 @@ public class GameScreen implements Screen
         stage.addActor(gamesButton);
         stage.addActor(plantsButton);
         stage.addActor(roadButton);
+        stage.addActor(rButton);
         parkButton.setVisible(false);
         staffButton.setVisible(false);
         guestButton.setVisible(false);
         gamesButton.setVisible(false);
         plantsButton.setVisible(false);
         roadButton.setVisible(false);
+        rButton.setVisible(false);
 
     }
 
