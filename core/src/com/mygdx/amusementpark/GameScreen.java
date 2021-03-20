@@ -11,7 +11,6 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
@@ -38,6 +37,7 @@ public class GameScreen implements Screen
     private ImageButton rButton;
     private TextButton staffButton;
     private TextButton guestButton;
+    private TextButton closeButton;
     private final int buttonWidth = 150;
     private final int buttonHeight = 50;
 
@@ -125,11 +125,36 @@ public class GameScreen implements Screen
                 guestButton.setPosition(buttonWidth*3 + 40,40);
                 roadButton.setVisible(false);
                 rButton.setVisible(false);
+                closeButton.setVisible(true);
 
                 if (isSelected)
                     isSelected = false;
             }
         });
+
+        closeButton = new TextButton("Close menu", skin);
+        closeButton.setSize(buttonWidth, buttonHeight);
+        closeButton.setPosition(1000, 40);
+        closeButton.addListener(new ClickListener() {
+            public void clicked(InputEvent e, float x, float y) {
+                closeButton.setVisible(false);
+                //ide minden gombot be kell majd írni kivéve a buildet
+
+                parkButton.setVisible(false);
+                gamesButton.setVisible(false);
+                plantsButton.setVisible(false);
+                roadButton.setVisible(false);
+                rButton.setVisible(false);
+                staffButton.setVisible(false);
+                guestButton.setVisible(false);
+
+                if (isSelected)
+                    isSelected = false;
+
+            }
+
+        });
+
 
         parkButton = new TextButton("Park", skin);
         parkButton.setSize(buttonWidth, buttonHeight);
@@ -247,6 +272,7 @@ public class GameScreen implements Screen
         stage.addActor(plantsButton);
         stage.addActor(roadButton);
         stage.addActor(rButton);
+        stage.addActor(closeButton);
         parkButton.setVisible(false);
         staffButton.setVisible(false);
         guestButton.setVisible(false);
@@ -254,6 +280,7 @@ public class GameScreen implements Screen
         plantsButton.setVisible(false);
         roadButton.setVisible(false);
         rButton.setVisible(false);
+        closeButton.setVisible(false);
 
     }
 
