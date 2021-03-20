@@ -78,7 +78,7 @@ public class GameScreen implements Screen
     Texture actual;
     Texture chosen; //ezt állítjuk be a gomb lenyomásával.
     Boolean isSelected=false; //ez mondja meg, hogy van-e vmi kiválsztva építésre.
-
+    Skin skin;
 
     private final Array<Array<Buildable>> tiles = new Array<Array<Buildable>>();
     //Ebben tárolódnak
@@ -90,75 +90,103 @@ public class GameScreen implements Screen
         this.game = game;
         stage = new Stage();
         Gdx.input.setInputProcessor(stage);
-        Skin skin = new Skin(Gdx.files.internal("uiskin.json"));
+        this.skin = new Skin(Gdx.files.internal("uiskin.json"));
 
         camera = new OrthographicCamera();
         camera.setToOrtho(false, window_width, window_height+100);
-        wall_texture = new Texture(Gdx.files.internal("tile.png"));
-        grass_texture = new Texture(Gdx.files.internal("grass.png"));
-        gate_texture = new Texture(Gdx.files.internal("gate.png"));
-        fence_texture = new Texture(Gdx.files.internal("fence.png"));
-        road_texture = new Texture(Gdx.files.internal("road.png"));
 
-        korhinta_texture = new Texture(Gdx.files.internal("korhinta.png"));
-        bush_texture = new Texture(Gdx.files.internal("bush.png"));
-        hamburger_texture = new Texture(Gdx.files.internal("hamburger.png"));
-        water_texture = new Texture(Gdx.files.internal("water.png"));
-        trash_texture = new Texture(Gdx.files.internal("trashcan.png"));
-        staff_texture = new Texture(Gdx.files.internal("staff.png"));
+        texturesInit();
+        mapInit();
+        buttonManagment();
 
-        textureRegionRoad = new TextureRegion(road_texture);
-        textureRegionDrawableRoad = new TextureRegionDrawable(textureRegionRoad);
-        textureRegionGameKorhinta = new TextureRegion(korhinta_texture);
-        textureRegionDrawableGameKorhinta = new TextureRegionDrawable(textureRegionGameKorhinta);
-        textureRegionPlantBush = new TextureRegion(bush_texture);
-        textureRegionDrawablePlantBush = new TextureRegionDrawable(textureRegionPlantBush);
-        textureRegionHamburger = new TextureRegion(hamburger_texture);
-        textureRegionDrawableHamburger = new TextureRegionDrawable(textureRegionHamburger);
-        textureRegionWater = new TextureRegion(water_texture);
-        textureRegionDrawableWater = new TextureRegionDrawable(textureRegionWater);
-        textureRegionTrash = new TextureRegion(trash_texture);
-        textureRegionDrawableTrash = new TextureRegionDrawable(textureRegionTrash);
-        textureRegionStaff = new TextureRegion(staff_texture);
-        textureRegionDrawableStaff = new TextureRegionDrawable(textureRegionStaff);
+    }
+
+    @Override
+    public void render(float delta)
+    {
 
 
+        ScreenUtils.clear(.135f, .206f, .235f, 1);
 
-        for(int i = 0; i < y_size; i++)
+        camera.update();
+        game.batch.setProjectionMatrix(camera.combined);
+        game.batch.begin();
+        //draw dolgok
+
+        for(int i = 0; i < tiles.size; i++)
         {
-            Array<Buildable> asd = new Array<Buildable>();
-            tiles.add(asd);
-            for(int j = 0; j < x_size; j++)
+            for(int j = 0; j< tiles.get(i).size; j++)
             {
-                if(j==1)
-                {
-                    if(i == 8 || i==12)
-                    {
-                        actual = gate_texture;
-                    }
-                    else if(i>8 && i<12)
-                    {
-                        actual = grass_texture;
-                    }
-                    else
-                    {
-                        actual = fence_texture;
-                    }
+                Buildable act = tiles.get(i).get(j);
+                game.batch.draw(act.texture,act.x,act.y+100,act.width,act.height);
 
-                }
-                else if (i == 0|| i == x_size - 1 || j == y_size - 1)
+
+            }
+        }
+        game.batch.end();
+
+        stage.act(delta);
+        stage.draw();
+
+        //user inputok Gdx.input.isKeyPressed(Keys.LEFT)
+
+        if(Gdx.input.justTouched())
+        {
+            System.out.println(isSelected);
+            System.out.println(chosen);
+            Vector3 touch = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
+            camera.unproject(touch);
+            for (Array<Buildable> arr_buildable : tiles)
+            {
+                for(Buildable build : arr_buildable)
                 {
-                    actual = wall_texture;
+                    if(build.contains(touch.x,touch.y-100))
+                    {
+                        if(isSelected==true)
+                        {
+                            build.texture = chosen;
+                        }
+                    }
+                    else{
+                        Gdx.app.setLogLevel(Application.LOG_DEBUG);
+                        Gdx.app.debug("POSITION", "X touched: " + touch.x + " Y touched: " + touch.y);
+                    }
                 }
-                else
-                {
-                    actual = grass_texture;
-                }
-                tile = new Buildable((i)*tile_width,(j)*tile_height,tile_width,tile_height,actual,10);
-                tiles.get(i).add(tile);
             }
         }
 
+    }
+    @Override
+    public void resize(int width, int height) {
+    }
+
+    @Override
+    public void show() {
+
+    }
+
+    @Override
+    public void hide() {
+    }
+
+    @Override
+    public void pause()
+    {
+    }
+
+    @Override
+    public void resume()
+    {
+    }
+
+    @Override
+    public void dispose()
+    {
+
+    }
+
+    public void buttonManagment()
+    {
         buildButton = new TextButton("Build", skin);
         buildButton.setSize(buttonWidth, buttonHeight);
         buildButton.setPosition(10, 40);
@@ -426,92 +454,75 @@ public class GameScreen implements Screen
         trashButton.setVisible(false);
         hamburgerButton.setVisible(false);
         waterButton.setVisible(false);
-
-
     }
 
-    @Override
-    public void render(float delta)
+    public void texturesInit()
     {
+        wall_texture = new Texture(Gdx.files.internal("tile.png"));
+        grass_texture = new Texture(Gdx.files.internal("grass.png"));
+        gate_texture = new Texture(Gdx.files.internal("gate.png"));
+        fence_texture = new Texture(Gdx.files.internal("fence.png"));
+        road_texture = new Texture(Gdx.files.internal("road.png"));
 
+        korhinta_texture = new Texture(Gdx.files.internal("korhinta.png"));
+        bush_texture = new Texture(Gdx.files.internal("bush.png"));
+        hamburger_texture = new Texture(Gdx.files.internal("hamburger.png"));
+        water_texture = new Texture(Gdx.files.internal("water.png"));
+        trash_texture = new Texture(Gdx.files.internal("trashcan.png"));
+        staff_texture = new Texture(Gdx.files.internal("staff.png"));
 
-        ScreenUtils.clear(.135f, .206f, .235f, 1);
+        textureRegionRoad = new TextureRegion(road_texture);
+        textureRegionDrawableRoad = new TextureRegionDrawable(textureRegionRoad);
+        textureRegionGameKorhinta = new TextureRegion(korhinta_texture);
+        textureRegionDrawableGameKorhinta = new TextureRegionDrawable(textureRegionGameKorhinta);
+        textureRegionPlantBush = new TextureRegion(bush_texture);
+        textureRegionDrawablePlantBush = new TextureRegionDrawable(textureRegionPlantBush);
+        textureRegionHamburger = new TextureRegion(hamburger_texture);
+        textureRegionDrawableHamburger = new TextureRegionDrawable(textureRegionHamburger);
+        textureRegionWater = new TextureRegion(water_texture);
+        textureRegionDrawableWater = new TextureRegionDrawable(textureRegionWater);
+        textureRegionTrash = new TextureRegion(trash_texture);
+        textureRegionDrawableTrash = new TextureRegionDrawable(textureRegionTrash);
+        textureRegionStaff = new TextureRegion(staff_texture);
+        textureRegionDrawableStaff = new TextureRegionDrawable(textureRegionStaff);
+    }
 
-        camera.update();
-        game.batch.setProjectionMatrix(camera.combined);
-        game.batch.begin();
-        //draw dolgok
-
-        for(int i = 0; i < tiles.size; i++)
+    public void mapInit()
+    {
+        for(int i = 0; i < y_size; i++)
         {
-            for(int j = 0; j< tiles.get(i).size; j++)
+            Array<Buildable> asd = new Array<Buildable>();
+            tiles.add(asd);
+            for(int j = 0; j < x_size; j++)
             {
-                Buildable act = tiles.get(i).get(j);
-                game.batch.draw(act.texture,act.x,act.y+100,act.width,act.height);
-
-
-            }
-        }
-        game.batch.end();
-
-        stage.act(delta);
-        stage.draw();
-
-        //user inputok Gdx.input.isKeyPressed(Keys.LEFT)
-
-        if(Gdx.input.justTouched())
-        {
-            System.out.println(isSelected);
-            System.out.println(chosen);
-            Vector3 touch = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
-            camera.unproject(touch);
-            for (Array<Buildable> arr_buildable : tiles)
-            {
-                for(Buildable build : arr_buildable)
+                if(j==1)
                 {
-                    if(build.contains(touch.x,touch.y-100))
+                    if(i == 8 || i==12)
                     {
-                        if(isSelected==true)
-                        {
-                            build.texture = chosen;
-                        }
+                        actual = gate_texture;
                     }
-                    else{
-                        Gdx.app.setLogLevel(Application.LOG_DEBUG);
-                        Gdx.app.debug("POSITION", "X touched: " + touch.x + " Y touched: " + touch.y);
+                    else if(i>8 && i<12)
+                    {
+                        actual = grass_texture;
                     }
+                    else
+                    {
+                        actual = fence_texture;
+                    }
+
                 }
+                else if (i == 0|| i == x_size - 1 || j == y_size - 1)
+                {
+                    actual = wall_texture;
+                }
+                else
+                {
+                    actual = grass_texture;
+                }
+                tile = new Buildable((i)*tile_width,(j)*tile_height,tile_width,tile_height,actual,10);
+                tiles.get(i).add(tile);
             }
         }
-
-    }
-    @Override
-    public void resize(int width, int height) {
-    }
-
-    @Override
-    public void show() {
-
-    }
-
-    @Override
-    public void hide() {
-    }
-
-    @Override
-    public void pause()
-    {
-    }
-
-    @Override
-    public void resume()
-    {
-    }
-
-    @Override
-    public void dispose()
-    {
-
     }
 
 }
