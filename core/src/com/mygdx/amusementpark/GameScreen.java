@@ -125,6 +125,8 @@ public class GameScreen implements Screen
                 guestButton.setPosition(buttonWidth*3 + 40,40);
                 roadButton.setVisible(false);
                 rButton.setVisible(false);
+                gamesButton.setVisible(false);
+                plantsButton.setVisible(false);
                 closeButton.setVisible(true);
 
                 if (isSelected)

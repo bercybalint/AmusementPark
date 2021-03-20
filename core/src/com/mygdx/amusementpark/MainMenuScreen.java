@@ -14,7 +14,6 @@ import sun.tools.jconsole.Tab;
 
 
 public class MainMenuScreen implements Screen {
-    private int x = 0;
     private AmusementPark game;
     private final Stage stage;
     private OrthographicCamera camera;
