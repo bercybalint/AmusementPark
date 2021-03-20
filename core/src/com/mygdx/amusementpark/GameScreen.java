@@ -19,6 +19,7 @@ import com.badlogic.gdx.utils.ScreenUtils;
 
 public class GameScreen implements Screen
 {
+    private int x = 0;
     final AmusementPark game;
     OrthographicCamera camera;
     private final Stage stage;
