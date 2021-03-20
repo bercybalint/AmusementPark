@@ -19,7 +19,6 @@ import com.badlogic.gdx.utils.ScreenUtils;
 
 public class GameScreen implements Screen
 {
-    private int x = 0;
     final AmusementPark game;
     OrthographicCamera camera;
     private final Stage stage;
@@ -33,11 +32,17 @@ public class GameScreen implements Screen
     private TextButton buildButton;
     private TextButton parkButton;
     private TextButton gamesButton;
+    private ImageButton korhintaButton;
     private TextButton plantsButton;
+    private ImageButton bushButton;
     private TextButton roadButton;
     private ImageButton rButton;
     private TextButton staffButton;
+    private  ImageButton sButton;
     private TextButton guestButton;
+    private ImageButton trashButton;
+    private ImageButton hamburgerButton;
+    private ImageButton waterButton;
     private TextButton closeButton;
     private final int buttonWidth = 150;
     private final int buttonHeight = 50;
@@ -48,8 +53,28 @@ public class GameScreen implements Screen
     Texture gate_texture;
     Texture fence_texture;
     Texture road_texture;
-    TextureRegion textureRegion;
-    TextureRegionDrawable textureRegionDrawable;
+    Texture korhinta_texture;
+    Texture staff_texture;
+    Texture bush_texture;
+    Texture water_texture;
+    Texture hamburger_texture;
+    Texture trash_texture;
+
+    TextureRegion textureRegionRoad;
+    TextureRegionDrawable textureRegionDrawableRoad;
+    TextureRegion textureRegionGameKorhinta;
+    TextureRegionDrawable textureRegionDrawableGameKorhinta;
+    TextureRegion textureRegionPlantBush;
+    TextureRegionDrawable textureRegionDrawablePlantBush;
+    TextureRegion textureRegionStaff;
+    TextureRegionDrawable textureRegionDrawableStaff;
+    TextureRegion textureRegionTrash;
+    TextureRegionDrawable textureRegionDrawableTrash;
+    TextureRegion textureRegionHamburger;
+    TextureRegionDrawable textureRegionDrawableHamburger;
+    TextureRegion textureRegionWater;
+    TextureRegionDrawable textureRegionDrawableWater;
+
     Texture actual;
     Texture chosen; //ezt állítjuk be a gomb lenyomásával.
     Boolean isSelected=false; //ez mondja meg, hogy van-e vmi kiválsztva építésre.
@@ -74,8 +99,28 @@ public class GameScreen implements Screen
         gate_texture = new Texture(Gdx.files.internal("gate.png"));
         fence_texture = new Texture(Gdx.files.internal("fence.png"));
         road_texture = new Texture(Gdx.files.internal("road.png"));
-        textureRegion = new TextureRegion(road_texture);
-        textureRegionDrawable = new TextureRegionDrawable(textureRegion);
+
+        korhinta_texture = new Texture(Gdx.files.internal("korhinta.png"));
+        bush_texture = new Texture(Gdx.files.internal("bush.png"));
+        hamburger_texture = new Texture(Gdx.files.internal("hamburger.png"));
+        water_texture = new Texture(Gdx.files.internal("water.png"));
+        trash_texture = new Texture(Gdx.files.internal("trashcan.png"));
+        staff_texture = new Texture(Gdx.files.internal("staff.png"));
+
+        textureRegionRoad = new TextureRegion(road_texture);
+        textureRegionDrawableRoad = new TextureRegionDrawable(textureRegionRoad);
+        textureRegionGameKorhinta = new TextureRegion(korhinta_texture);
+        textureRegionDrawableGameKorhinta = new TextureRegionDrawable(textureRegionGameKorhinta);
+        textureRegionPlantBush = new TextureRegion(bush_texture);
+        textureRegionDrawablePlantBush = new TextureRegionDrawable(textureRegionPlantBush);
+        textureRegionHamburger = new TextureRegion(hamburger_texture);
+        textureRegionDrawableHamburger = new TextureRegionDrawable(textureRegionHamburger);
+        textureRegionWater = new TextureRegion(water_texture);
+        textureRegionDrawableWater = new TextureRegionDrawable(textureRegionWater);
+        textureRegionTrash = new TextureRegion(trash_texture);
+        textureRegionDrawableTrash = new TextureRegionDrawable(textureRegionTrash);
+        textureRegionStaff = new TextureRegion(staff_texture);
+        textureRegionDrawableStaff = new TextureRegionDrawable(textureRegionStaff);
 
 
 
@@ -129,6 +174,12 @@ public class GameScreen implements Screen
                 gamesButton.setVisible(false);
                 plantsButton.setVisible(false);
                 closeButton.setVisible(true);
+                korhintaButton.setVisible(false);
+                bushButton.setVisible(false);
+                sButton.setVisible(false);
+                trashButton.setVisible(false);
+                hamburgerButton.setVisible(false);
+                waterButton.setVisible(false);
 
                 if (isSelected)
                     isSelected = false;
@@ -150,6 +201,12 @@ public class GameScreen implements Screen
                 rButton.setVisible(false);
                 staffButton.setVisible(false);
                 guestButton.setVisible(false);
+                korhintaButton.setVisible(false);
+                bushButton.setVisible(false);
+                sButton.setVisible(false);
+                trashButton.setVisible(false);
+                hamburgerButton.setVisible(false);
+                waterButton.setVisible(false);
 
                 if (isSelected)
                     isSelected = false;
@@ -174,7 +231,8 @@ public class GameScreen implements Screen
                 roadButton.setVisible(true);
                 roadButton.setPosition(buttonWidth*4 + 50, 40);
                 rButton.setVisible(false);
-
+                bushButton.setVisible(false);
+                sButton.setVisible(false);
 
                 chosen = grass_texture;
                 isSelected=true;
@@ -190,8 +248,20 @@ public class GameScreen implements Screen
                 plantsButton.setVisible(false);
                 roadButton.setVisible(false);
 
+                korhintaButton.setVisible(true);
+                korhintaButton.setPosition(buttonWidth * 3 + 50,40);
+
                 if (isSelected)
                     isSelected = false;
+            }
+        });
+
+        korhintaButton = new ImageButton(textureRegionDrawableGameKorhinta);
+        korhintaButton.setSize(50,50);
+        korhintaButton.addListener(new ClickListener() {
+            public void clicked(InputEvent e, float x, float y) {
+                chosen = korhinta_texture;
+                isSelected=true;
             }
         });
 
@@ -204,8 +274,20 @@ public class GameScreen implements Screen
                 gamesButton.setVisible(false);
                 roadButton.setVisible(false);
 
+                bushButton.setVisible(true);
+                bushButton.setPosition(buttonWidth*3 + 50, 40);
+
                 if (isSelected)
                     isSelected = false;
+            }
+        });
+
+        bushButton = new ImageButton(textureRegionDrawablePlantBush);
+        bushButton.setSize(50,50);
+        bushButton.addListener(new ClickListener() {
+            public void clicked(InputEvent e, float x, float y) {
+                chosen = bush_texture;
+                isSelected=true;
             }
         });
 
@@ -228,7 +310,7 @@ public class GameScreen implements Screen
             }
         });
 
-        rButton = new ImageButton(textureRegionDrawable);
+        rButton = new ImageButton(textureRegionDrawableRoad);
         rButton.setSize(50,50);
         rButton.addListener(new ClickListener() {
             public void clicked(InputEvent e, float x, float y) {
@@ -246,8 +328,20 @@ public class GameScreen implements Screen
                 guestButton.setVisible(false);
                 staffButton.setPosition(buttonWidth + 20, 40);
 
+                sButton.setVisible(true);
+                sButton.setPosition(buttonWidth*2 + 50,40);
+
                 if (isSelected)
                     isSelected = false;
+            }
+        });
+
+        sButton = new ImageButton(textureRegionDrawableStaff);
+        sButton.setSize(50,50);
+        sButton.addListener(new ClickListener() {
+            public void clicked(InputEvent e, float x, float y) {
+                chosen = staff_texture;
+                isSelected=true;
             }
         });
 
@@ -256,13 +350,47 @@ public class GameScreen implements Screen
         guestButton.setPosition(buttonWidth*3 + 40, 40);
         guestButton.addListener(new ClickListener() {
             public void clicked(InputEvent e, float x, float y) {
+                guestButton.setPosition(buttonWidth + 20, 40);
                 parkButton.setVisible(false);
                 staffButton.setVisible(false);
+                trashButton.setVisible(true);
+                trashButton.setPosition(buttonWidth*2 + 50, 40);
+                waterButton.setVisible(true);
+                waterButton.setPosition(buttonWidth*2 + 110, 40);
+                hamburgerButton.setVisible(true);
+                hamburgerButton.setPosition(buttonWidth*2 + 170, 40);
 
-                guestButton.setPosition(buttonWidth + 20, 40);
+
 
                 if (isSelected)
                     isSelected = false;
+            }
+        });
+
+        trashButton = new ImageButton(textureRegionDrawableTrash);
+        trashButton.setSize(50,50);
+        trashButton.addListener(new ClickListener() {
+            public void clicked(InputEvent e, float x, float y) {
+                chosen = trash_texture;
+                isSelected=true;
+            }
+        });
+
+        waterButton = new ImageButton(textureRegionDrawableWater);
+        waterButton.setSize(50,50);
+        waterButton.addListener(new ClickListener() {
+            public void clicked(InputEvent e, float x, float y) {
+                chosen = water_texture;
+                isSelected=true;
+            }
+        });
+
+        hamburgerButton = new ImageButton(textureRegionDrawableHamburger);
+        hamburgerButton.setSize(50,50);
+        hamburgerButton.addListener(new ClickListener() {
+            public void clicked(InputEvent e, float x, float y) {
+                chosen = hamburger_texture;
+                isSelected=true;
             }
         });
 
@@ -271,11 +399,19 @@ public class GameScreen implements Screen
         stage.addActor(parkButton);
         stage.addActor(staffButton);
         stage.addActor(guestButton);
+        stage.addActor(korhintaButton);
         stage.addActor(gamesButton);
         stage.addActor(plantsButton);
         stage.addActor(roadButton);
         stage.addActor(rButton);
         stage.addActor(closeButton);
+        stage.addActor(bushButton);
+        stage.addActor(sButton);
+        stage.addActor(trashButton);
+        stage.addActor(hamburgerButton);
+        stage.addActor(waterButton);
+
+
         parkButton.setVisible(false);
         staffButton.setVisible(false);
         guestButton.setVisible(false);
@@ -284,6 +420,13 @@ public class GameScreen implements Screen
         roadButton.setVisible(false);
         rButton.setVisible(false);
         closeButton.setVisible(false);
+        korhintaButton.setVisible(false);
+        bushButton.setVisible(false);
+        sButton.setVisible(false);
+        trashButton.setVisible(false);
+        hamburgerButton.setVisible(false);
+        waterButton.setVisible(false);
+
 
     }
 
