@@ -1,4 +1,4 @@
-package com.mygdx.amusementpark;
+package com.mygdx.amusementpark.gui;
 
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
@@ -16,6 +16,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
+import com.mygdx.amusementpark.buildable.Buildable;
 
 public class GameScreen implements Screen
 {
@@ -98,8 +99,13 @@ public class GameScreen implements Screen
         texturesInit();
         mapInit();
         buttonManagment();
-
     }
+
+    /**
+     * minden kirajzolása
+     * egy batchen belül.
+     * inputok kezelése
+     */
 
     @Override
     public void render(float delta)
@@ -118,7 +124,7 @@ public class GameScreen implements Screen
             for(int j = 0; j< tiles.get(i).size; j++)
             {
                 Buildable act = tiles.get(i).get(j);
-                game.batch.draw(act.texture,act.x,act.y+100,act.width,act.height);
+                game.batch.draw(act.getTexture(),act.x,act.y+100,act.width,act.height);
 
 
             }
@@ -144,7 +150,7 @@ public class GameScreen implements Screen
                     {
                         if(isSelected==true)
                         {
-                            build.texture = chosen;
+                            build.setTexture(chosen);
                         }
                     }
                     else{
@@ -154,7 +160,6 @@ public class GameScreen implements Screen
                 }
             }
         }
-
     }
     @Override
     public void resize(int width, int height) {
@@ -185,6 +190,9 @@ public class GameScreen implements Screen
 
     }
 
+    /**
+     * gombok létrehozáse, kezelése, eventListenerek beállítása.
+     */
     public void buttonManagment()
     {
         buildButton = new TextButton("Build", skin);
@@ -456,6 +464,9 @@ public class GameScreen implements Screen
         waterButton.setVisible(false);
     }
 
+    /**
+     * terxtúrák beállítása.
+     */
     public void texturesInit()
     {
         wall_texture = new Texture(Gdx.files.internal("tile.png"));

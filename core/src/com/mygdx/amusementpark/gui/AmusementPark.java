@@ -1,4 +1,4 @@
-package com.mygdx.amusementpark;
+package com.mygdx.amusementpark.gui;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
