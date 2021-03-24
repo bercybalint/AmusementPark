@@ -1,4 +1,4 @@
-package com.mygdx.amusementpark.persons;
+package com.mygdx.amusementpark.people;
 
 import java.awt.*;
 
