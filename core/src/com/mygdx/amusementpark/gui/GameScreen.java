@@ -451,8 +451,9 @@ public class GameScreen implements Screen
                 bushButton.setVisible(false);
                 sButton.setVisible(false);
 
-                chosen = Tiles.EMPTY;
-                isSelected=true;
+                //chosen = Tiles.EMPTY;
+                if (isSelected)
+                    isSelected = false;
 
             }
         });
@@ -517,6 +518,7 @@ public class GameScreen implements Screen
                 staffButton.setVisible(false);
                 gamesButton.setVisible(false);
                 plantsButton.setVisible(false);
+                korhintaButton.setVisible(false);
 
                 rButton.setVisible(true);
                 rButton.setPosition(buttonWidth * 3 + 50,40);
