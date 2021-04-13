@@ -3,6 +3,10 @@ package com.mygdx.amusementpark.buildable;
 import com.badlogic.gdx.graphics.Texture;
 import com.mygdx.amusementpark.buildable.Buildable;
 
+/**
+ * neighbours - a szomszédok száma
+ * majd, hogy van-e bizonyos irányba szomszéd út
+ */
 public class Road extends Buildable
 {
     private int neighbours;

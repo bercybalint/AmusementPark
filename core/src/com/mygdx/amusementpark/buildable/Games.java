@@ -17,6 +17,6 @@ public class Games extends Buildable
      */
     public Games(int x, int y, int width, int height, Texture texture, int prizeToBuild, Tiles type)
     {
-        super(x, y, width, height, texture, prizeToBuild, type);
+        super(x-width, y-height, width*3, height*3, texture, prizeToBuild, type);
     }
 }

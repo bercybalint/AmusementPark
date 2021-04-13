@@ -19,6 +19,11 @@ import com.mygdx.amusementpark.buildable.*;
 
 public class GameScreen implements Screen
 {
+
+    /**
+     * Ablak, tile-ok méreteineek beállítása
+     * Camera, felület létrehozása.
+     */
     final AmusementPark game;
     OrthographicCamera camera;
     private final Stage stage;
@@ -26,9 +31,12 @@ public class GameScreen implements Screen
     private final int window_width = 1200;
     private final int x_size=20;
     private final int y_size=20;
-    private final int tile_width = (window_width)/x_size;
-    private final int tile_height = (window_height)/y_size;
+    final int tile_width = (window_width)/x_size;
+    final int tile_height = (window_height)/y_size;
 
+    /**
+     * Gombok textúrái, méreteinek beállítása.
+     */
     private TextButton buildButton;
     private TextButton parkButton;
     private TextButton gamesButton;
@@ -45,9 +53,11 @@ public class GameScreen implements Screen
     private ImageButton waterButton;
     private TextButton closeButton;
     private final int buttonWidth = 150;
-    private final int buttonHeight = 50;
+    private  int buttonHeight = 50;
 
-
+    /**
+     * Alap elemek textúrái.
+     */
     Texture wall_texture;
     Texture grass_texture;
     Texture gate_texture;
@@ -59,6 +69,10 @@ public class GameScreen implements Screen
     Texture hamburger_texture;
     Texture trash_texture;
 
+
+    /**
+     * Különböző út textúrák beállítása, szomszédoktól függően.
+     */
     Texture road_down_to_up;
     Texture road_down_to_left;
     Texture road_down_to_right;
@@ -86,11 +100,16 @@ public class GameScreen implements Screen
     TextureRegion textureRegionWater;
     TextureRegionDrawable textureRegionDrawableWater;
 
-    Texture actual;
+    /**
+     * chosen - a kiválaszott textúrát ebben tárojuk, és ezzel rakjuk le.
+     */
     Tiles chosen; //ezt állítjuk be a gomb lenyomásával.
     Boolean isSelected=false; //ez mondja meg, hogy van-e vmi kiválsztva építésre.
     Skin skin;
 
+    /**
+     * Tiles tárolja az összes pályán található, lerakott elemet.
+     */
     private final Array<Array<Buildable>> tiles = new Array<Array<Buildable>>();
     //Ebben tárolódnak
 
@@ -120,13 +139,14 @@ public class GameScreen implements Screen
     @Override
     public void render(float delta)
     {
+        ScreenUtils.clear(.181f, .230f, .29f, 0.5f);
 
-
-        ScreenUtils.clear(.135f, .206f, .235f, 1);
+        //Gdx.gl.glClearColor(0, 0, 0, 1);
 
         camera.update();
         game.batch.setProjectionMatrix(camera.combined);
         game.batch.begin();
+        game.batch.draw(grass_texture,0,0,window_width,window_height);
         //draw dolgok
 
         for(int i = 0; i < tiles.size; i++)
@@ -142,59 +162,89 @@ public class GameScreen implements Screen
         stage.act(delta);
         stage.draw();
 
-        //user inputok Gdx.input.isKeyPressed(Keys.LEFT)
 
+        /**
+         * Inputok kezelése
+         */
         if(Gdx.input.justTouched())
         {
-            //System.out.println(isSelected);
-            //System.out.println(chosen);
             Vector3 touch = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
             camera.unproject(touch);
-            for (Array<Buildable> arr_buildable : tiles)
+
+            for(int i = 0; i < tiles.size; i++)
             {
-                for(int i = 0; i < arr_buildable.size; i++)
+                for(int j = 0; j < tiles.get(i).size; j++)
                 {
-                    if(arr_buildable.get(i).contains(touch.x,touch.y-100))
+                    if(tiles.get(i).get(j).contains(touch.x,touch.y-100))
                     {
                         if(isSelected==true)
                         {
-                            if(arr_buildable.get(i).getType()==Tiles.EMPTY)
+                            if(tiles.get(i).get(j).getType()==Tiles.EMPTY)
                             {
                                 Buildable actual;
+                                actual = new Road(tiles.get(i).get(j).x,tiles.get(i).get(j).y, tiles.get(i).get(j).width,tiles.get(i).get(j).height, road_down_to_up,10,Tiles.ROAD);
                                 switch (chosen)
                                 {
                                    // ROAD,BORDER,EMPTY,GAMES,STAFF,BUSH,TREE,TRASH,WATER,FOOD
                                     case ROAD:
-                                        actual = new Road(arr_buildable.get(i).x,arr_buildable.get(i).y, arr_buildable.get(i).width,arr_buildable.get(i).height, road_down_to_up,10,Tiles.ROAD);
+                                        actual = new Road(tiles.get(i).get(j).x,tiles.get(i).get(j).y, tiles.get(i).get(j).width,tiles.get(i).get(j).height, road_down_to_up,10,Tiles.ROAD);
                                         break;
                                     case GAMES:
-                                        actual = new Games(arr_buildable.get(i).x,arr_buildable.get(i).y, arr_buildable.get(i).width,arr_buildable.get(i).height,korhinta_texture,10,Tiles.GAMES);
+                                        if((i>0 && j>0))
+                                        {
+                                            if (tiles.get(i + 1).get(j + 1).getType() == Tiles.EMPTY &&
+                                                    tiles.get(i).get(j + 1).getType() == Tiles.EMPTY &&
+                                                    tiles.get(i - 1).get(j + 1).getType() == Tiles.EMPTY &&
+                                                    tiles.get(i).get(j + 1).getType() == Tiles.EMPTY &&
+                                                    tiles.get(i).get(j - 1).getType() == Tiles.EMPTY &&
+                                                    tiles.get(i - 1).get(j - 1).getType() == Tiles.EMPTY &&
+                                                    tiles.get(i - 1).get(j).getType() == Tiles.EMPTY &&
+                                                    tiles.get(i - 1).get(j + 1).getType() == Tiles.EMPTY
+                                            )
+                                            {
+                                                actual = new Games(tiles.get(i).get(j).x,
+                                                        tiles.get(i).get(j).y,
+                                                        tiles.get(i).get(j).width,
+                                                        tiles.get(i).get(j).height,
+                                                        korhinta_texture, 10, Tiles.GAMES);
+
+                                                tiles.get(i + 1).set(j + 1, actual);
+                                                tiles.get(i + 1).set(j, actual);
+                                                tiles.get(i + 1).set(j - 1, actual);
+                                                tiles.get(i).set(j + 1, actual);
+                                                tiles.get(i).set(j - 1, actual);
+                                                tiles.get(i - 1).set(j + 1, actual);
+                                                tiles.get(i - 1).set(j - 1, actual);
+                                                tiles.get(i - 1).set(j, actual);
+
+                                            } else
+                                            {
+                                                return;
+                                            }
+                                        }
                                         break;
                                     case STAFF:
-                                        actual = new StaffBuilding(arr_buildable.get(i).x,arr_buildable.get(i).y, arr_buildable.get(i).width,arr_buildable.get(i).height,staff_texture,10,Tiles.STAFF);
+                                        actual = new StaffBuilding(tiles.get(i).get(j).x,tiles.get(i).get(j).y, tiles.get(i).get(j).width,tiles.get(i).get(j).height,staff_texture,10,Tiles.STAFF);
                                         break;
                                     case FOOD:
-                                        actual = new Catering(arr_buildable.get(i).x,arr_buildable.get(i).y, arr_buildable.get(i).width,arr_buildable.get(i).height,hamburger_texture,10,Tiles.FOOD);
+                                        actual = new Catering(tiles.get(i).get(j).x,tiles.get(i).get(j).y, tiles.get(i).get(j).width,tiles.get(i).get(j).height,hamburger_texture,10,Tiles.FOOD);
                                         break;
                                     case BUSH:
-                                        actual = new Park(arr_buildable.get(i).x,arr_buildable.get(i).y, arr_buildable.get(i).width,arr_buildable.get(i).height,bush_texture,10,Tiles.BUSH);
+                                        actual = new Park(tiles.get(i).get(j).x,tiles.get(i).get(j).y, tiles.get(i).get(j).width,tiles.get(i).get(j).height,bush_texture,10,Tiles.BUSH);
                                         break;
                                     case TREE:
-                                        actual = new Park(arr_buildable.get(i).x,arr_buildable.get(i).y, arr_buildable.get(i).width,arr_buildable.get(i).height,bush_texture,10,Tiles.TREE);
+                                        actual = new Park(tiles.get(i).get(j).x,tiles.get(i).get(j).y, tiles.get(i).get(j).width,tiles.get(i).get(j).height,bush_texture,10,Tiles.TREE);
                                         break;
                                     case TRASH:
-                                        actual = new Park(arr_buildable.get(i).x,arr_buildable.get(i).y, arr_buildable.get(i).width,arr_buildable.get(i).height,trash_texture,10,Tiles.TREE);
+                                        actual = new Park(tiles.get(i).get(j).x,tiles.get(i).get(j).y, tiles.get(i).get(j).width,tiles.get(i).get(j).height,trash_texture,10,Tiles.TREE);
                                         break;
                                     case WATER:
-                                        actual = new Park(arr_buildable.get(i).x,arr_buildable.get(i).y, arr_buildable.get(i).width,arr_buildable.get(i).height,water_texture,10,Tiles.BUSH);
+                                        actual = new Park(tiles.get(i).get(j).x,tiles.get(i).get(j).y, tiles.get(i).get(j).width,tiles.get(i).get(j).height,water_texture,10,Tiles.BUSH);
                                         break;
-                                    default: actual = new Road(arr_buildable.get(i).x,arr_buildable.get(i).y, arr_buildable.get(i).width,arr_buildable.get(i).height,road_down_to_up,10,Tiles.TREE);
+                                    default: actual = new Road(tiles.get(i).get(j).x,tiles.get(i).get(j).y, tiles.get(i).get(j).width,tiles.get(i).get(j).height,road_down_to_up,10,Tiles.TREE);
                                 }
-                                arr_buildable.set(i, actual);
-                                if(chosen == Tiles.ROAD)
-                                {
-                                    checkRoadNeighbours();
-                                }
+                                tiles.get(i).set(j,actual);
+                                checkRoadNeighbours();
 
                             }
                         }
@@ -208,6 +258,9 @@ public class GameScreen implements Screen
         }
     }
 
+    /**
+     * Ellenőrzi, hogy egy útnak vannak-e szomszádai, amihez csatlakoznia kell.
+     */
     public void checkRoadNeighbours()
     {
         for(int i = 0; i<tiles.size; i++)
@@ -217,7 +270,7 @@ public class GameScreen implements Screen
                 if(tiles.get(i).get(j).getType() == Tiles.ROAD)
                 {
                     Road road = (Road) tiles.get(i).get(j);
-                    if(tiles.get(i-1).get(j).getType()==Tiles.ROAD)
+                    if(tiles.get(i-1).get(j).getType()!=Tiles.EMPTY)
                     {
                         road.leftNeigh = true;
                     }
@@ -225,7 +278,7 @@ public class GameScreen implements Screen
                     {
                         road.leftNeigh = false;
                     }
-                    if(tiles.get(i+1).get(j).getType()==Tiles.ROAD)
+                    if(tiles.get(i+1).get(j).getType()!=Tiles.EMPTY)
                     {
                         road.rightNeigh = true;
                     }
@@ -233,7 +286,7 @@ public class GameScreen implements Screen
                     {
                         road.rightNeigh = false;
                     }
-                    if(tiles.get(i).get(j-1).getType()==Tiles.ROAD)
+                    if(tiles.get(i).get(j-1).getType()!=Tiles.EMPTY)
                     {
                         road.downNeigh = true;
                     }
@@ -241,7 +294,7 @@ public class GameScreen implements Screen
                     {
                         road.downNeigh = false;
                     }
-                    if(tiles.get(i).get(j+1).getType()==Tiles.ROAD)
+                    if(tiles.get(i).get(j+1).getType()!=Tiles.EMPTY)
                     {
                         road.upNeigh = true;
                     }
@@ -303,8 +356,14 @@ public class GameScreen implements Screen
             }
         }
     }
+
+    /**
+     * Alap pálya feltöltése.
+     *
+     */
     public void mapInit()
     {
+        Buildable tile;
         for(int i = 0; i < y_size; i++)
         {
             Array<Buildable> empty = new Array<Buildable>();
@@ -315,55 +374,48 @@ public class GameScreen implements Screen
             {
                 if(j==0 & i == 10)
                 {
-                    actual = road_down_to_up;
                     type = Tiles.TREE;
-                    tile = new Road((i)*tile_width,(j)*tile_height,tile_width,tile_height,actual,10,type);
+                    tile = new Road((i)*tile_width,(j)*tile_height,tile_width,tile_height,road_down_to_up,10,type);
                     tiles.get(i).add(tile);
                 }
                 else if(j==1 & i == 10)
                 {
-                    actual = road_down_to_up;
                     type = Tiles.ROAD;
-                    tile = new Road((i)*tile_width,(j)*tile_height,tile_width,tile_height,actual,10,type);
+                    tile = new Road((i)*tile_width,(j)*tile_height,tile_width,tile_height,road_down_to_up,10,type);
                     tiles.get(i).add(tile);
                 }
                 else if(j==1)
                 {
                     if(i == 8 || i==12)
                     {
-                        actual = gate_texture;
                         type = Tiles.BORDER;
-                        tile = new Border((i)*tile_width,(j)*tile_height,tile_width,tile_height,actual,10,type);
+                        tile = new Border((i)*tile_width,(j)*tile_height,tile_width,tile_height,gate_texture,10,type);
                         tiles.get(i).add(tile);
                     }
                     else if(i>8 && i<12)
                     {
-                        actual = grass_texture;
                         type = Tiles.EMPTY;
-                        tile = new Buildable((i)*tile_width,(j)*tile_height,tile_width,tile_height,actual,10,type);
+                        tile = new Buildable((i)*tile_width,(j)*tile_height,tile_width,tile_height,grass_texture,10,type);
                         tiles.get(i).add(tile);
                     }
                     else
                     {
-                        actual = fence_texture;
                         type = Tiles.BORDER;
-                        tile = new Border((i)*tile_width,(j)*tile_height,tile_width,tile_height,actual,10,type);
+                        tile = new Border((i)*tile_width,(j)*tile_height,tile_width,tile_height,fence_texture,10,type);
                         tiles.get(i).add(tile);
                     }
 
                 }
                 else if (i == 0|| i == x_size - 1 || j == y_size - 1)
                 {
-                    actual = wall_texture;
                     type = Tiles.BORDER;
-                    tile = new Border((i)*tile_width,(j)*tile_height,tile_width,tile_height,actual,10,type);
+                    tile = new Border((i)*tile_width,(j)*tile_height,tile_width,tile_height,wall_texture,10,type);
                     tiles.get(i).add(tile);
                 }
                 else
                 {
-                    actual = grass_texture;
                     type = Tiles.EMPTY;
-                    tile = new Buildable((i)*tile_width,(j)*tile_height,tile_width,tile_height,actual,10,type);
+                    tile = new Buildable((i)*tile_width,(j)*tile_height,tile_width,tile_height,grass_texture,10,type);
                     tiles.get(i).add(tile);
                 }
 
@@ -719,9 +771,5 @@ public class GameScreen implements Screen
     @Override
     public void dispose()
     {
-
     }
-
-
-
 }
