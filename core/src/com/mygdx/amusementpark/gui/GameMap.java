@@ -9,6 +9,7 @@ import com.badlogic.gdx.utils.Array;
 import com.mygdx.amusementpark.buildable.*;
 import com.mygdx.amusementpark.pathfinding.Mover;
 import com.mygdx.amusementpark.pathfinding.TileBasedMap;
+import com.mygdx.amusementpark.people.Person;
 
 import java.util.Vector;
 
@@ -74,11 +75,14 @@ public class GameMap implements TileBasedMap
     public void mapInit()
     {
         Buildable tile;
+        Tiles type = Tiles.EMPTY;
         for(int i = 0; i < HEIGHT; i++)
         {
             Array<Buildable> empty = new Array<Buildable>();
             units.add(empty);
-            Tiles type = Tiles.EMPTY;
+            Array<Tiles> empty_tiles = new Array<Tiles>();
+            terrain.add(empty_tiles);
+
 
             for(int j = 0; j < WIDTH; j++)
             {
@@ -87,12 +91,14 @@ public class GameMap implements TileBasedMap
                     type = Tiles.TREE;
                     tile = new Road((i)*tile_width,(j)*tile_height,tile_width,tile_height,road_down_to_up,10,type);
                     units.get(i).add(tile);
+                    terrain.get(i).add(type);
                 }
                 else if(j==1 & i == 10)
                 {
                     type = Tiles.ROAD;
                     tile = new Road((i)*tile_width,(j)*tile_height,tile_width,tile_height,road_down_to_up,10,type);
                     units.get(i).add(tile);
+                    terrain.get(i).add(type);
                 }
                 else if(j==1)
                 {
@@ -101,18 +107,21 @@ public class GameMap implements TileBasedMap
                         type = Tiles.BORDER;
                         tile = new Border((i)*tile_width,(j)*tile_height,tile_width,tile_height,gate_texture,10,type);
                         units.get(i).add(tile);
+                        terrain.get(i).add(type);
                     }
                     else if(i>8 && i<12)
                     {
                         type = Tiles.EMPTY;
                         tile = new Buildable((i)*tile_width,(j)*tile_height,tile_width,tile_height,grass_texture,10,type);
                         units.get(i).add(tile);
+                        terrain.get(i).add(type);
                     }
                     else
                     {
                         type = Tiles.BORDER;
                         tile = new Border((i)*tile_width,(j)*tile_height,tile_width,tile_height,fence_texture,10,type);
                         units.get(i).add(tile);
+                        terrain.get(i).add(type);
                     }
 
                 }
@@ -121,12 +130,14 @@ public class GameMap implements TileBasedMap
                     type = Tiles.BORDER;
                     tile = new Border((i)*tile_width,(j)*tile_height,tile_width,tile_height,wall_texture,10,type);
                     units.get(i).add(tile);
+                    terrain.get(i).add(type);
                 }
                 else
                 {
                     type = Tiles.EMPTY;
                     tile = new Buildable((i)*tile_width,(j)*tile_height,tile_width,tile_height,grass_texture,10,type);
                     units.get(i).add(tile);
+                    terrain.get(i).add(type);
                 }
 
             }
@@ -228,8 +239,9 @@ public class GameMap implements TileBasedMap
             }
         }
     }
-    public void touched(Vector3 touch, Tiles chosen, Boolean isSelected)
+    public Boolean touched(Vector3 touch, Tiles chosen, Boolean isSelected)
     {
+        Boolean did_place = false;
         for(int i = 0; i < units.size; i++)
         {
             for(int j = 0; j < units.get(i).size; j++)
@@ -241,17 +253,22 @@ public class GameMap implements TileBasedMap
                         if(units.get(i).get(j).getType()==Tiles.EMPTY)
                         {
                             Buildable actual;
+                            Tiles type;
                             actual = new Road(units.get(i).get(j).x,units.get(i).get(j).y, units.get(i).get(j).width,units.get(i).get(j).height, road_down_to_up,10,Tiles.ROAD);
+                            type = Tiles.ROAD;
                             switch (chosen)
                             {
                                 // ROAD,BORDER,EMPTY,GAMES,STAFF,BUSH,TREE,TRASH,WATER,FOOD
                                 case ROAD:
                                     actual = new Road(units.get(i).get(j).x,units.get(i).get(j).y, units.get(i).get(j).width,units.get(i).get(j).height, road_down_to_up,10,Tiles.ROAD);
+                                    type = Tiles.ROAD;
                                     break;
+
                                 /**
                                  * Játék lerakás, 9 mezőt foglal el a kijelölt mező körül.
                                  */
                                 case GAMES:
+                                    type = Tiles.GAMES;
                                     if((i>0 && j>0))
                                     {
                                         if (units.get(i + 1).get(j + 1).getType() == Tiles.EMPTY &&
@@ -279,36 +296,52 @@ public class GameMap implements TileBasedMap
                                             units.get(i - 1).set(j - 1, actual);
                                             units.get(i - 1).set(j, actual);
 
-                                        } else
-                                        {
-                                            return;
+                                            terrain.get(i + 1).set(j + 1, type);
+                                            terrain.get(i + 1).set(j, type);
+                                            terrain.get(i + 1).set(j - 1, type);
+                                            terrain.get(i).set(j + 1, type);
+                                            terrain.get(i).set(j - 1, type);
+                                            terrain.get(i - 1).set(j + 1, type);
+                                            terrain.get(i - 1).set(j - 1, type);
+                                            terrain.get(i - 1).set(j, type);
                                         }
                                     }
                                     break;
                                 case STAFF:
                                     actual = new StaffBuilding(units.get(i).get(j).x,units.get(i).get(j).y, units.get(i).get(j).width,units.get(i).get(j).height,staff_texture,10,Tiles.STAFF);
+                                    type = Tiles.STAFF;
                                     break;
                                 case FOOD:
                                     actual = new Catering(units.get(i).get(j).x,units.get(i).get(j).y, units.get(i).get(j).width,units.get(i).get(j).height,hamburger_texture,10,Tiles.FOOD);
+                                    type = Tiles.FOOD;
                                     break;
                                 case BUSH:
                                     actual = new Park(units.get(i).get(j).x,units.get(i).get(j).y, units.get(i).get(j).width,units.get(i).get(j).height,bush_texture,10,Tiles.BUSH);
+                                    type = Tiles.BUSH;
                                     break;
                                 case TREE:
                                     actual = new Park(units.get(i).get(j).x,units.get(i).get(j).y, units.get(i).get(j).width,units.get(i).get(j).height,bush_texture,10,Tiles.TREE);
+                                    type = Tiles.TREE;
                                     break;
                                 case TRASH:
                                     actual = new Park(units.get(i).get(j).x,units.get(i).get(j).y, units.get(i).get(j).width,units.get(i).get(j).height,trash_texture,10,Tiles.TREE);
+                                    type = Tiles.TRASH;
                                     break;
                                 case WATER:
                                     actual = new Park(units.get(i).get(j).x,units.get(i).get(j).y, units.get(i).get(j).width,units.get(i).get(j).height,water_texture,10,Tiles.BUSH);
+                                    type = Tiles.WATER;
                                     break;
                                 default: actual = new Road(units.get(i).get(j).x,units.get(i).get(j).y, units.get(i).get(j).width,units.get(i).get(j).height,road_down_to_up,10,Tiles.TREE);
+                                    type = Tiles.ROAD;
+
                             }
                             units.get(i).set(j,actual);
+                            terrain.get(i).set(j,type);
                             checkRoadNeighbours();
 
                         }
+                        did_place = true;
+
                     }
                 }
                 else{
@@ -317,7 +350,44 @@ public class GameMap implements TileBasedMap
                 }
             }
         }
+        return did_place;
     }
+
+    public void clearVisited() {
+        for (int x=0;x<getWidthInTiles();x++) {
+            for (int y=0;y<getHeightInTiles();y++) {
+                visited[x][y] = false;
+            }
+        }
+    }
+
+    public boolean visited(int x, int y) {
+        return visited[x][y];
+    }
+
+    public Tiles getTerrain(int x, int y) {
+        return terrain.get(x).get(y);
+    }
+
+    public Buildable getUnit(int x, int y) {
+        return units.get(x).get(y);
+    }
+
+    public void setUnit(int x, int y, Buildable unit) {
+        units.get(x).set(y,unit);
+    }
+
+    @Override
+    public boolean blocked(Mover mover, int x, int y) {
+        // if theres a unit at the location, then it's blocked
+        if (getTerrain(x,y) == Tiles.ROAD || getTerrain(x,y) == Tiles.GAMES) {
+            return false;
+        }
+        else{
+            return true;
+        }
+    }
+
     /**
      * terxtúrák beállítása.
      */
@@ -353,30 +423,24 @@ public class GameMap implements TileBasedMap
     @Override
     public int getWidthInTiles()
     {
-        return 0;
+        return WIDTH;
     }
 
     @Override
     public int getHeightInTiles()
     {
-        return 0;
+        return WIDTH;
     }
 
     @Override
     public void pathFinderVisited(int x, int y)
     {
-
-    }
-
-    @Override
-    public boolean blocked(Mover mover, int x, int y)
-    {
-        return false;
+        visited[x][y] = true;
     }
 
     @Override
     public float getCost(Mover mover, int sx, int sy, int tx, int ty)
     {
-        return 0;
+        return 1;
     }
 }

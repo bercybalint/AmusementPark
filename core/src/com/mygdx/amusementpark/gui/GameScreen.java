@@ -16,11 +16,21 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.mygdx.amusementpark.buildable.*;
-import com.mygdx.amusementpark.pathfinding.Mover;
-import com.mygdx.amusementpark.pathfinding.TileBasedMap;
+import com.mygdx.amusementpark.pathfinding.*;
+import com.mygdx.amusementpark.people.Person;
 
-public class GameScreen implements Screen, TileBasedMap
+import java.util.Random;
+import java.util.Timer;
+import java.util.TimerTask;
+
+public class GameScreen implements Screen
 {
+
+    Timer timer;
+    int delay = 5000;
+    Boolean first_building_placed=false;
+    Random rand_delad = new Random();
+    private Array<Person> people = new Array<Person>();
 
     /**
      * Ablak, tile-ok méreteineek beállítása
@@ -31,10 +41,6 @@ public class GameScreen implements Screen, TileBasedMap
     private final Stage stage;
     private final int window_height = 800;
     private final int window_width = 1200;
-    private final int x_size=20;
-    private final int y_size=20;
-    final int tile_width = (window_width)/x_size;
-    final int tile_height = (window_height)/y_size;
 
     /**
      * Gombok textúrái, méreteinek beállítása.
@@ -87,6 +93,8 @@ public class GameScreen implements Screen, TileBasedMap
     Texture road_threeway_to_left;
     Texture road_from_all;
 
+    Texture guest_texture;
+
     TextureRegion textureRegionRoad;
     TextureRegionDrawable textureRegionDrawableRoad;
     TextureRegion textureRegionGameKorhinta;
@@ -113,6 +121,7 @@ public class GameScreen implements Screen, TileBasedMap
     private GameMap map = new GameMap();
 
 
+
     public GameScreen(final AmusementPark game)
     {
         this.game = game;
@@ -132,7 +141,6 @@ public class GameScreen implements Screen, TileBasedMap
      * egy batchen belül.
      * inputok kezelése
      */
-
     @Override
     public void render(float delta)
     {
@@ -154,6 +162,12 @@ public class GameScreen implements Screen, TileBasedMap
                 game.batch.draw(act.getTexture(),act.x,act.y+100,act.width,act.height);
             }
         }
+        for(int i = 0; i < people.size; i++)
+        {
+            Person p = people.get(i);
+            p.setMap(map);
+            game.batch.draw(p.getTexture(),p.x,p.y,p.width,p.height);
+        }
         game.batch.end();
 
         stage.act(delta);
@@ -167,7 +181,13 @@ public class GameScreen implements Screen, TileBasedMap
         {
             Vector3 touch = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
             camera.unproject(touch);
-            map.touched(touch,chosen,isSelected);
+            System.out.println(touch.x + " " + " " + touch.y);
+            if(map.touched(touch,chosen,isSelected) && chosen==Tiles.GAMES && first_building_placed==false)
+            {
+                first_building_placed=true;
+                timer = new Timer();
+                timer.schedule(new CreatePerson(),0, delay);
+            }
             //föggvény hívás (touch, chosen, isSelected)
         }
     }
@@ -451,8 +471,14 @@ public class GameScreen implements Screen, TileBasedMap
     /**
      * terxtúrák beállítása.
      */
+    public GameMap getMap()
+    {
+        return map;
+    }
+
     public void texturesInit()
     { //d
+        guest_texture = new Texture(Gdx.files.internal("people.png"));
         wall_texture = new Texture(Gdx.files.internal("tile.png"));
         grass_texture = new Texture(Gdx.files.internal("grass.png"));
         gate_texture = new Texture(Gdx.files.internal("gate.png"));
@@ -524,33 +550,15 @@ public class GameScreen implements Screen, TileBasedMap
     {
     }
 
-    @Override
-    public int getWidthInTiles()
-    {
-        return 0;
+    class CreatePerson extends TimerTask {
+        public void run() {
+            System.out.println(delay + " sec is up");
+            Person p = new Person(map,628,169,20,20, guest_texture);
+            people.add(p);
+            delay = rand_delad.nextInt(5000) + 10000;
+            //timer.cancel(); //Terminate the timer thread
+
+        }
     }
 
-    @Override
-    public int getHeightInTiles()
-    {
-        return 0;
-    }
-
-    @Override
-    public void pathFinderVisited(int x, int y)
-    {
-
-    }
-
-    @Override
-    public boolean blocked(Mover mover, int x, int y)
-    {
-        return false;
-    }
-
-    @Override
-    public float getCost(Mover mover, int sx, int sy, int tx, int ty)
-    {
-        return 0;
-    }
 }
