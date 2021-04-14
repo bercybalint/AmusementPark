@@ -33,8 +33,8 @@ public class GameMap implements TileBasedMap
     public boolean[][] visited = new boolean[WIDTH][HEIGHT];
 
 
-    final int tile_width = (1200)/WIDTH;
-    final int tile_height = (800)/HEIGHT;
+    int tile_width;
+    int tile_height;
 
     /**
      * Alap elemek textúrái. d
@@ -66,8 +66,11 @@ public class GameMap implements TileBasedMap
     Texture road_threeway_to_left;
     Texture road_from_all;
 
-    public GameMap()
+    public GameMap(int window_h, int window_w)
     {
+        this.tile_width=window_w/WIDTH;
+        this.tile_height=window_h/HEIGHT;
+
         texturesInit();
         mapInit();
     }

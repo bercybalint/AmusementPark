@@ -22,23 +22,33 @@ public class Person extends Rectangle implements Mover
      */
     private GameMap map;
     private Texture texture;
-    private Direction dir = Direction.NOTHING;
+    private Direction dir = Direction.UP;
     private Timer timer;
     private int delay = 20000;
+    private int speed = 2;
 
     /** The path finder we'll use to search our map */
     private PathFinder finder;
     /** The last path found for the current unit */
     private Path path;
+    private int pathLength;
+    int window_h;
+    int window_w;
+    int tile_width;
+    int tile_height;
 
-    public Person(GameMap map, int x, int y, int width, int height, Texture texture)
+    public Person(GameMap map, int x, int y, int width, int height, Texture texture, int window_h, int window_w)
     {
         this.map = map;
-        this.x = 628;
-        this.y = 159;
         this.width=width;
         this.height = height;
         this.texture = texture;
+        this.window_h=window_h;
+        this.window_w=window_w;
+        this.tile_width=window_w/20;
+        this.tile_height=window_h/20;
+        this.x = 10*tile_width;
+        this.y = 2*tile_height;
         timer = new Timer();
         timer.schedule(new personBehaviour(), 0, delay);
         finder = new AStarPathFinder(map, 2000, false);
@@ -60,7 +70,6 @@ public class Person extends Rectangle implements Mover
         Point p = new Point();
         for(int i = 0; i < map.terrain.size; i++)
         {
-            System.out.println();
             for (int j = 0; j < map.terrain.get(i).size; j++)
             {
                 if(map.terrain.get(i).get(j) == Tiles.GAMES)
@@ -89,8 +98,33 @@ public class Person extends Rectangle implements Mover
                 }
                 System.out.print(s);
             }
+            System.out.println();
         }
         return p;
+    }
+    public void move()
+    {
+
+        switch (dir)
+        {
+            case UP:
+                y+=speed;
+                break;
+            case DOWN:
+                y-=speed;
+                break;
+            case LEFT:
+                x-=speed;
+                break;
+            case RIGHT:
+                x+=speed;
+                break;
+            case NOTHING:
+                x=x;
+                y=y;
+                break;
+            default:break;
+        }
     }
 
     public void behaviour()
@@ -98,10 +132,14 @@ public class Person extends Rectangle implements Mover
         Point destination = findDestination();
         map.clearVisited();
 
-        path = finder.findPath(this,11,1,destination.x,destination.y);
+        path = finder.findPath(this,(x+50)/60,(y/40)+1,destination.x,destination.y);
+        System.out.println(1/40);
+        System.out.println((x+50)/60);
+
 
         if(path!=null)
         {
+            pathLength = path.getLength();
             for(int i = 0; i < path.getLength(); i++)
             {
                 int x = path.getStep(i).getX();
@@ -111,6 +149,12 @@ public class Person extends Rectangle implements Mover
             System.out.println("találtam utat");
             System.out.println(path);
         }
+        else
+        {
+            System.out.println("nem talalt");
+        }
+        timer.cancel();
+        timer.purge();
     }
 
     class personBehaviour extends TimerTask

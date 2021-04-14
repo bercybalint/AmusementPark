@@ -118,7 +118,7 @@ public class GameScreen implements Screen
     Skin skin;
 
 
-    private GameMap map = new GameMap();
+    private GameMap map = new GameMap(window_height, window_width);
 
 
 
@@ -165,14 +165,14 @@ public class GameScreen implements Screen
         for(int i = 0; i < people.size; i++)
         {
             Person p = people.get(i);
+            p.move();
             p.setMap(map);
-            game.batch.draw(p.getTexture(),p.x,p.y,p.width,p.height);
+            game.batch.draw(p.getTexture(),p.x+20,p.y,p.width,p.height);
         }
         game.batch.end();
 
         stage.act(delta);
         stage.draw();
-
 
         /**
          * Inputok kezelése
@@ -553,7 +553,7 @@ public class GameScreen implements Screen
     class CreatePerson extends TimerTask {
         public void run() {
             System.out.println(delay + " sec is up");
-            Person p = new Person(map,628,169,20,20, guest_texture);
+            Person p = new Person(map,628,169,20,20, guest_texture, window_height, window_width);
             people.add(p);
             delay = rand_delad.nextInt(5000) + 10000;
             //timer.cancel(); //Terminate the timer thread
