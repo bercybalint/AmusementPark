@@ -290,11 +290,11 @@ public class GameMap implements TileBasedMap
                                                 units.get(i - 1).get(j + 1).getType() == Tiles.EMPTY
                                         )
                                         {
-                                            actual = new Games(units.get(i).get(j).x,
-                                                    units.get(i).get(j).y,
-                                                    units.get(i).get(j).width,
-                                                    units.get(i).get(j).height,
-                                                    korhinta_texture, 10, Tiles.GAMES);
+                                            actual = new Games( units.get(i).get(j).x,
+                                                                units.get(i).get(j).y,
+                                                                units.get(i).get(j).width,
+                                                                units.get(i).get(j).height,
+                                                                korhinta_texture, 10, Tiles.GAMES);
 
                                             units.get(i + 1).set(j + 1, actual);
                                             units.get(i + 1).set(j, actual);

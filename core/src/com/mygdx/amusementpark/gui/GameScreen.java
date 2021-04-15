@@ -4,11 +4,13 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
@@ -25,7 +27,6 @@ import java.util.TimerTask;
 
 public class GameScreen implements Screen
 {
-
     Timer timer;
     int delay = 2000;
     Boolean first_building_placed=false;
@@ -110,24 +111,26 @@ public class GameScreen implements Screen
     TextureRegion textureRegionWater;
     TextureRegionDrawable textureRegionDrawableWater;
 
-
-    /**
-     * Különböző elemek árai.
-     */
-    int game_prize = 100;
-
-
     /**
      * chosen - a kiválaszott textúrát ebben tárojuk, és ezzel rakjuk le.
      */
     Tiles chosen; //ezt állítjuk be a gomb lenyomásával.
-    Boolean isSelected=false; //ez mondja meg, hogy van-e vmi kiválsztva építésre.
+    Boolean isSelected=false; //ez mondja meg, hogy van-e vmi kiválasztva építésre.
     Skin skin;
 
+    /**
+     * Különböző elemek árai.
+     */
+    private int money = 100000;
+    private Label label;
+
+    int gamePrice = 2000;
+    int plantPrice = 1000;
+    int buildingPrice = 1500;
+    int trashcanPrice = 1000;
+    int roadPrice = 100;
 
     private GameMap map;
-
-
 
     public GameScreen(final AmusementPark game)
     {
@@ -136,11 +139,18 @@ public class GameScreen implements Screen
         Gdx.input.setInputProcessor(stage);
         this.skin = new Skin(Gdx.files.internal("uiskin.json"));
 
+        BitmapFont labelFont = skin.get("default-font", BitmapFont.class);
+        labelFont.getData().markupEnabled = true;
+        label = new Label("[RED]Money:" + money + "$",skin);
+        stage.addActor(label);
+
         camera = new OrthographicCamera();
         camera.setToOrtho(false, window_width, window_height+100);
         map = new GameMap(window_height, window_width, camera);
         texturesInit();
         buttonManagment();
+        moneyHeist(0);
+        map.writeOut();
     }
 
     /**
@@ -194,13 +204,28 @@ public class GameScreen implements Screen
                 /**
                  * pénz levonás, elem lerakásánál.
                  */
-                /*if(chosen == Tiles.GAMES)
-                {
-                    player_money-=game_prize;
+                switch (chosen){
+                    case ROAD:
+                        moneyHeist(roadPrice);
+                        break;
+                    case GAMES:
+                        moneyHeist(gamePrice);
+                        break;
+                    case FOOD:
+                    case WATER:
+                    case STAFF:
+                        moneyHeist(buildingPrice);
+                        break;
+                    case BUSH:
+                    case TREE:
+                        moneyHeist(plantPrice);
+                        break;
+                    case TRASH:
+                        moneyHeist(trashcanPrice);
+                        break;
+                    default:
+                        moneyHeist(0);
                 }
-
-                 * player-money = player-money-chosen.
-                 */
 
                 if(chosen==Tiles.GAMES && first_building_placed==false)
                 {
@@ -209,7 +234,7 @@ public class GameScreen implements Screen
                     timer.schedule(new CreatePerson(), 0, delay);
                 }
             }
-            //föggvény hívás (touch, chosen, isSelected)
+            //függvény hívás (touch, chosen, isSelected)
         }
     }
 
@@ -541,6 +566,13 @@ public class GameScreen implements Screen
         textureRegionDrawableTrash = new TextureRegionDrawable(textureRegionTrash);
         textureRegionStaff = new TextureRegion(staff_texture);
         textureRegionDrawableStaff = new TextureRegionDrawable(textureRegionStaff);
+    }
+
+    public void moneyHeist(int price){
+
+        money = money - price;
+        label.setText("[BLACK]Money: " + money + "$");
+        label.setPosition(70,820);
     }
 
     @Override
