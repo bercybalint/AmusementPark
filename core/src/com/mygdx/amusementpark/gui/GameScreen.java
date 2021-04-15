@@ -27,7 +27,7 @@ public class GameScreen implements Screen
 {
 
     Timer timer;
-    int delay = 20000;
+    int delay = 2000;
     Boolean first_building_placed=false;
     Random rand_delad = new Random();
     private Array<Person> people = new Array<Person>();
@@ -125,7 +125,7 @@ public class GameScreen implements Screen
     Skin skin;
 
 
-    private GameMap map = new GameMap(window_height, window_width);
+    private GameMap map;
 
 
 
@@ -138,10 +138,9 @@ public class GameScreen implements Screen
 
         camera = new OrthographicCamera();
         camera.setToOrtho(false, window_width, window_height+100);
-
+        map = new GameMap(window_height, window_width, camera);
         texturesInit();
         buttonManagment();
-        map.writeOut();
     }
 
     /**
@@ -175,7 +174,7 @@ public class GameScreen implements Screen
             Person p = people.get(i);
             p.move();
             p.setMap(map);
-            game.batch.draw(p.getTexture(),p.x+20,p.y,p.width,p.height);
+            game.batch.draw(p.getTexture(),p.x+20,p.y+110,p.width,p.height);
         }
         game.batch.end();
 
@@ -577,7 +576,7 @@ public class GameScreen implements Screen
             System.out.println(delay + " sec is up");
             Person p = new Person(map,0,0,20,20, guest_texture, window_height, window_width);
             people.add(p);
-            delay = rand_delad.nextInt(5000) + 10000;
+            delay = rand_delad.nextInt(10000) + 1000;
             //timer.cancel(); //Terminate the timer thread
 
         }

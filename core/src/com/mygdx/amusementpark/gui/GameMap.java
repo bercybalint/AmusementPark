@@ -1,6 +1,7 @@
 package com.mygdx.amusementpark.gui;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector3;
@@ -66,7 +67,9 @@ public class GameMap implements TileBasedMap
     Texture road_threeway_to_left;
     Texture road_from_all;
 
-    public GameMap(int window_h, int window_w)
+    Camera camera;
+
+    public GameMap(int window_h, int window_w, Camera camera)
     {
         this.tile_width=window_w/WIDTH;
         this.tile_height=window_h/HEIGHT;

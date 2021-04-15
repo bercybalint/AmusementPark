@@ -38,6 +38,8 @@ public class Person extends Rectangle implements Mover
     int window_w;
     int tile_width;
     int tile_height;
+    int ind_x=10;
+    int ind_y=1;
 
     public Person(GameMap map, int x, int y, int width, int height, Texture texture, int window_h, int window_w)
     {
@@ -49,22 +51,11 @@ public class Person extends Rectangle implements Mover
         this.window_w=window_w;
         this.tile_width=window_w/20;
         this.tile_height=window_h/20;
-        this.x = 10*tile_width;
-        this.y = 3*tile_height;
+        this.x = ind_x*tile_width;
+        this.y = ind_y*tile_height;
         finder = new AStarPathFinder(map, 2000, false);
         timer = new Timer();
         timer.schedule(new personBehaviour(), 0, delay);
-
-    }
-
-    public Texture getTexture()
-    {
-        return texture;
-    }
-
-    public void setMap(GameMap map)
-    {
-        this.map = map;
     }
 
     public Point findDestination()
@@ -89,29 +80,35 @@ public class Person extends Rectangle implements Mover
         {
             int curr_x = (x / tile_width);
             int curr_y = (y / tile_height);
+
+            int go_to_x = currentStep.getX()*tile_width;
+            int go_to_y = currentStep.getY()*tile_height;
+
+
             System.out.println();
             System.out.println("actual_position:" + x + " , " + y);
             System.out.println("coordinates:" + curr_x + " , " + curr_y);
             System.out.println("step:" + currentStep.getX() + " , " + currentStep.getY());
-            if (curr_x < currentStep.getX() && curr_y == currentStep.getY())
+
+            if (x < go_to_x && y == go_to_y)
             {
                 dir = Direction.RIGHT;
             }
-            if (curr_x > currentStep.getX() && curr_y == currentStep.getY())
+            if (x > go_to_x && y == go_to_y)
             {
                 dir = Direction.LEFT;
             }
-            if (curr_x == currentStep.getX() && curr_y > currentStep.getY())
+            if (x == go_to_x && y > go_to_y)
             {
                 dir = Direction.DOWN;
             }
-            if (curr_x == currentStep.getX() && curr_y < currentStep.getY())
+            if (x == go_to_x && y < go_to_y)
             {
                 dir = Direction.UP;
             }
-            if (curr_x == currentStep.getX() && curr_y == currentStep.getY())
+            if (x == go_to_x && y == go_to_y)
             {
-                if (stepIndex == 14)
+                if (stepIndex == pathLength-1)
                 {
                     dir = Direction.NOTHING;
                 } else if (stepIndex < pathLength - 1)
@@ -150,8 +147,8 @@ public class Person extends Rectangle implements Mover
     {
         Point destination = findDestination();
         map.clearVisited();
-
-        path = finder.findPath(this,(x/tile_width),(y/tile_height),destination.x,destination.y);
+        map.writeOut();
+        path = finder.findPath(this,(ind_x),(ind_y),destination.x,destination.y);
 
         if(path!=null)
         {
@@ -182,6 +179,16 @@ public class Person extends Rectangle implements Mover
 
             //timer.cancel(); //Terminate the timer thread
         }
+    }
+
+    public Texture getTexture()
+    {
+        return texture;
+    }
+
+    public void setMap(GameMap map)
+    {
+        this.map = map;
     }
 
 }
