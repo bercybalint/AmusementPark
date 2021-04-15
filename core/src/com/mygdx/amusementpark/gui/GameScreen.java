@@ -27,7 +27,7 @@ public class GameScreen implements Screen
 {
 
     Timer timer;
-    int delay = 5000;
+    int delay = 20000;
     Boolean first_building_placed=false;
     Random rand_delad = new Random();
     private Array<Person> people = new Array<Person>();
@@ -134,6 +134,7 @@ public class GameScreen implements Screen
 
         texturesInit();
         buttonManagment();
+        map.writeOut();
     }
 
     /**
@@ -553,7 +554,7 @@ public class GameScreen implements Screen
     class CreatePerson extends TimerTask {
         public void run() {
             System.out.println(delay + " sec is up");
-            Person p = new Person(map,628,169,20,20, guest_texture, window_height, window_width);
+            Person p = new Person(map,0,0,20,20, guest_texture, window_height, window_width);
             people.add(p);
             delay = rand_delad.nextInt(5000) + 10000;
             //timer.cancel(); //Terminate the timer thread

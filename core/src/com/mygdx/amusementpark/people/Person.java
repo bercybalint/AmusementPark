@@ -22,7 +22,7 @@ public class Person extends Rectangle implements Mover
      */
     private GameMap map;
     private Texture texture;
-    private Direction dir = Direction.UP;
+    private Direction dir = Direction.NOTHING;
     private Timer timer;
     private int delay = 20000;
     private int speed = 2;
@@ -32,6 +32,8 @@ public class Person extends Rectangle implements Mover
     /** The last path found for the current unit */
     private Path path;
     private int pathLength;
+    private int stepIndex=0;
+    private Path.Step currentStep;
     int window_h;
     int window_w;
     int tile_width;
@@ -74,56 +76,70 @@ public class Person extends Rectangle implements Mover
             {
                 if(map.terrain.get(i).get(j) == Tiles.GAMES)
                 {
-                    p.x=i;
-                    p.y=j;
+                    p.x=j;
+                    p.y=i;
                 }
-                String s;
-                switch (map.terrain.get(i).get(j))
-                {
-                    case ROAD:
-                        s="R";
-                        break;
-                    case BORDER:
-                        s="B";
-                        break;
-                    case EMPTY:
-                        s="E";
-                        break;
-                    case GAMES:
-                        s="G";
-                        break;
-                    default:
-                        s="O";
-                        break;
-                }
-                System.out.print(s);
             }
-            System.out.println();
         }
         return p;
     }
     public void move()
     {
-
-        switch (dir)
+        if(path!=null)
         {
-            case UP:
-                y+=speed;
-                break;
-            case DOWN:
-                y-=speed;
-                break;
-            case LEFT:
-                x-=speed;
-                break;
-            case RIGHT:
-                x+=speed;
-                break;
-            case NOTHING:
-                x=x;
-                y=y;
-                break;
-            default:break;
+            int curr_x = (x) / tile_width;
+            int curr_y = (y / tile_height);
+            System.out.println(curr_x + " , " + curr_y);
+            System.out.println(currentStep.getX() + " , " + currentStep.getY());
+            if (curr_x < currentStep.getX() && curr_y == currentStep.getY())
+            {
+                dir = Direction.RIGHT;
+            }
+            if (curr_x > currentStep.getX() && curr_y == currentStep.getY())
+            {
+                dir = Direction.LEFT;
+            }
+            if (curr_x == currentStep.getX() && curr_y > currentStep.getY())
+            {
+                dir = Direction.DOWN;
+            }
+            if (curr_x == currentStep.getX() && curr_y < currentStep.getY())
+            {
+                dir = Direction.UP;
+            }
+            if (curr_x == currentStep.getX() && curr_y == currentStep.getY())
+            {
+                if (stepIndex == 14)
+                {
+                    dir = Direction.NOTHING;
+                } else if (stepIndex < pathLength - 1)
+                {
+                    stepIndex++;
+                    currentStep = path.getStep(stepIndex);
+                }
+
+            }
+            switch (dir)
+            {
+                case UP:
+                    y += speed;
+                    break;
+                case DOWN:
+                    y -= speed;
+                    break;
+                case LEFT:
+                    x -= speed;
+                    break;
+                case RIGHT:
+                    x += speed;
+                    break;
+                case NOTHING:
+                    x = x;
+                    y = y;
+                    break;
+                default:
+                    break;
+            }
         }
     }
 
@@ -132,20 +148,12 @@ public class Person extends Rectangle implements Mover
         Point destination = findDestination();
         map.clearVisited();
 
-        path = finder.findPath(this,(x+50)/60,(y/40)+1,destination.x,destination.y);
-        System.out.println(1/40);
-        System.out.println((x+50)/60);
-
+        path = finder.findPath(this,(x/tile_width),(y/tile_height),destination.x,destination.y);
 
         if(path!=null)
         {
             pathLength = path.getLength();
-            for(int i = 0; i < path.getLength(); i++)
-            {
-                int x = path.getStep(i).getX();
-                int y = path.getStep(i).getY();
-                System.out.println("x:"+x+",y:"+y);
-            }
+            currentStep=path.getStep(stepIndex);
             System.out.println("találtam utat");
             System.out.println(path);
         }

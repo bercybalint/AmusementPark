@@ -364,6 +364,37 @@ public class GameMap implements TileBasedMap
         }
     }
 
+    public void writeOut()
+    {
+        for (int x=0;x<getWidthInTiles();x++)
+        {
+            for (int y=0;y<getHeightInTiles();y++)
+            {
+                String s;
+                switch (terrain.get(x).get(y))
+                {
+                    case ROAD:
+                        s="R";
+                        break;
+                    case BORDER:
+                        s="B";
+                        break;
+                    case EMPTY:
+                        s="E";
+                        break;
+                    case GAMES:
+                        s="G";
+                        break;
+                    default:
+                        s="O";
+                        break;
+                }
+                System.out.print(s);
+            }
+            System.out.println();
+        }
+    }
+
     public boolean visited(int x, int y) {
         return visited[x][y];
     }
