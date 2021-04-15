@@ -51,9 +51,9 @@ public class Person extends Rectangle implements Mover
         this.tile_height=window_h/20;
         this.x = 10*tile_width;
         this.y = 2*tile_height;
+        finder = new AStarPathFinder(map, 2000, false);
         timer = new Timer();
         timer.schedule(new personBehaviour(), 0, delay);
-        finder = new AStarPathFinder(map, 2000, false);
 
     }
 
@@ -76,8 +76,8 @@ public class Person extends Rectangle implements Mover
             {
                 if(map.terrain.get(i).get(j) == Tiles.GAMES)
                 {
-                    p.x=j;
-                    p.y=i;
+                    p.x=i;
+                    p.y=j;
                 }
             }
         }
@@ -85,8 +85,6 @@ public class Person extends Rectangle implements Mover
     }
     public void move()
     {
-        if(path!=null)
-        {
             int curr_x = (x) / tile_width;
             int curr_y = (y / tile_height);
             System.out.println(curr_x + " , " + curr_y);
@@ -116,6 +114,7 @@ public class Person extends Rectangle implements Mover
                 {
                     stepIndex++;
                     currentStep = path.getStep(stepIndex);
+                    dir = Direction.NOTHING;
                 }
 
             }
@@ -140,7 +139,6 @@ public class Person extends Rectangle implements Mover
                 default:
                     break;
             }
-        }
     }
 
     public void behaviour()
