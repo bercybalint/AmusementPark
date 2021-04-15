@@ -110,6 +110,13 @@ public class GameScreen implements Screen
     TextureRegion textureRegionWater;
     TextureRegionDrawable textureRegionDrawableWater;
 
+
+    /**
+     * Különböző elemek árai.
+     */
+    int game_prize = 100;
+
+
     /**
      * chosen - a kiválaszott textúrát ebben tárojuk, és ezzel rakjuk le.
      */
@@ -183,11 +190,25 @@ public class GameScreen implements Screen
             Vector3 touch = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
             camera.unproject(touch);
             System.out.println(touch.x + " " + " " + touch.y);
-            if(map.touched(touch,chosen,isSelected) && chosen==Tiles.GAMES && first_building_placed==false)
+            if(map.touched(touch,chosen,isSelected))
             {
-                first_building_placed=true;
-                timer = new Timer();
-                timer.schedule(new CreatePerson(),0, delay);
+                /**
+                 * pénz levonás, elem lerakásánál.
+                 */
+                /*if(chosen == Tiles.GAMES)
+                {
+                    player_money-=game_prize;
+                }
+
+                 * player-money = player-money-chosen.
+                 */
+
+                if(chosen==Tiles.GAMES && first_building_placed==false)
+                {
+                    first_building_placed = true;
+                    timer = new Timer();
+                    timer.schedule(new CreatePerson(), 0, delay);
+                }
             }
             //föggvény hívás (touch, chosen, isSelected)
         }

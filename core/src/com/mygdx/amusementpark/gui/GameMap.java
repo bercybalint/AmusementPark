@@ -92,14 +92,14 @@ public class GameMap implements TileBasedMap
                 if(j==0 & i == 10)
                 {
                     type = Tiles.TREE;
-                    tile = new Road((i)*tile_width,(j)*tile_height,tile_width,tile_height,road_down_to_up,10,type);
+                    tile = new Road((i)*tile_width,(j)*tile_height,tile_width,tile_height,road_down_to_up,30,type);
                     units.get(i).add(tile);
                     terrain.get(i).add(type);
                 }
                 else if(j==1 & i == 10)
                 {
                     type = Tiles.ROAD;
-                    tile = new Road((i)*tile_width,(j)*tile_height,tile_width,tile_height,road_down_to_up,10,type);
+                    tile = new Road((i)*tile_width,(j)*tile_height,tile_width,tile_height,road_down_to_up,20,type);
                     units.get(i).add(tile);
                     terrain.get(i).add(type);
                 }
@@ -108,21 +108,21 @@ public class GameMap implements TileBasedMap
                     if(i == 8 || i==12)
                     {
                         type = Tiles.BORDER;
-                        tile = new Border((i)*tile_width,(j)*tile_height,tile_width,tile_height,gate_texture,10,type);
+                        tile = new Border((i)*tile_width,(j)*tile_height,tile_width,tile_height,gate_texture,20,type);
                         units.get(i).add(tile);
                         terrain.get(i).add(type);
                     }
                     else if(i>8 && i<12)
                     {
                         type = Tiles.EMPTY;
-                        tile = new Buildable((i)*tile_width,(j)*tile_height,tile_width,tile_height,grass_texture,10,type);
+                        tile = new Buildable((i)*tile_width,(j)*tile_height,tile_width,tile_height,grass_texture,20,type);
                         units.get(i).add(tile);
                         terrain.get(i).add(type);
                     }
                     else
                     {
                         type = Tiles.BORDER;
-                        tile = new Border((i)*tile_width,(j)*tile_height,tile_width,tile_height,fence_texture,10,type);
+                        tile = new Border((i)*tile_width,(j)*tile_height,tile_width,tile_height,fence_texture,20,type);
                         units.get(i).add(tile);
                         terrain.get(i).add(type);
                     }
@@ -147,6 +147,9 @@ public class GameMap implements TileBasedMap
         }
     }
 
+    /**
+     *
+     */
     public void checkRoadNeighbours()
     {
         for(int i = 0; i<units.size; i++)

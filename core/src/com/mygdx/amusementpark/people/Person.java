@@ -50,7 +50,7 @@ public class Person extends Rectangle implements Mover
         this.tile_width=window_w/20;
         this.tile_height=window_h/20;
         this.x = 10*tile_width;
-        this.y = 2*tile_height;
+        this.y = 3*tile_height;
         finder = new AStarPathFinder(map, 2000, false);
         timer = new Timer();
         timer.schedule(new personBehaviour(), 0, delay);
@@ -85,10 +85,14 @@ public class Person extends Rectangle implements Mover
     }
     public void move()
     {
-            int curr_x = (x) / tile_width;
+        if(path!=null)
+        {
+            int curr_x = (x / tile_width);
             int curr_y = (y / tile_height);
-            System.out.println(curr_x + " , " + curr_y);
-            System.out.println(currentStep.getX() + " , " + currentStep.getY());
+            System.out.println();
+            System.out.println("actual_position:" + x + " , " + y);
+            System.out.println("coordinates:" + curr_x + " , " + curr_y);
+            System.out.println("step:" + currentStep.getX() + " , " + currentStep.getY());
             if (curr_x < currentStep.getX() && curr_y == currentStep.getY())
             {
                 dir = Direction.RIGHT;
@@ -139,6 +143,7 @@ public class Person extends Rectangle implements Mover
                 default:
                     break;
             }
+        }
     }
 
     public void behaviour()
@@ -152,8 +157,14 @@ public class Person extends Rectangle implements Mover
         {
             pathLength = path.getLength();
             currentStep=path.getStep(stepIndex);
-            System.out.println("találtam utat");
-            System.out.println(path);
+            System.out.println("A talalt ut:");
+
+            for(int i =0; i < pathLength; i++)
+            {
+                System.out.println(path.getStep(i).getX() + " ," +path.getStep(i).getY());
+            }
+            System.out.println("A talalt ut vege");
+
         }
         else
         {
