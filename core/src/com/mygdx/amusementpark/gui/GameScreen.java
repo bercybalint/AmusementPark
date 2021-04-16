@@ -232,6 +232,32 @@ public class GameScreen implements Screen
                     first_building_placed = true;
                     timer = new Timer();
                     timer.schedule(new CreatePerson(), 0, delay);
+
+                }else if(chosen==Tiles.FOOD && first_building_placed==false)
+                {
+                    first_building_placed = true;
+                    timer = new Timer();
+                    timer.schedule(new CreatePerson(), 0, delay);
+                }else if(chosen==Tiles.WATER && first_building_placed==false)
+                {
+                    first_building_placed = true;
+                    timer = new Timer();
+                    timer.schedule(new CreatePerson(), 0, delay);
+                }else if(chosen==Tiles.BUSH && first_building_placed==false)
+                {
+                    first_building_placed = true;
+                    timer = new Timer();
+                    timer.schedule(new CreatePerson(), 0, delay);
+                }else if(chosen==Tiles.TRASH && first_building_placed==false)
+                {
+                    first_building_placed = true;
+                    timer = new Timer();
+                    timer.schedule(new CreatePerson(), 0, delay);
+                }else if(chosen==Tiles.STAFF && first_building_placed==false)
+                {
+                    first_building_placed = true;
+                    timer = new Timer();
+                    timer.schedule(new CreatePerson(), 0, delay);
                 }
             }
             //függvény hívás (touch, chosen, isSelected)
@@ -241,8 +267,8 @@ public class GameScreen implements Screen
     /**
      * gombok létrehozáse, kezelése, eventListenerek beállítása.
      */
-    public void buttonManagment()
-    {
+    public void buttonManagment(){
+
         buildButton = new TextButton("Build", skin);
         buildButton.setSize(buttonWidth, buttonHeight);
         buildButton.setPosition(10, 40);
@@ -522,8 +548,7 @@ public class GameScreen implements Screen
         return map;
     }
 
-    public void texturesInit()
-    { //d
+    public void texturesInit(){ //d
         guest_texture = new Texture(Gdx.files.internal("people.png"));
         wall_texture = new Texture(Gdx.files.internal("tile.png"));
         grass_texture = new Texture(Gdx.files.internal("grass.png"));
@@ -605,7 +630,7 @@ public class GameScreen implements Screen
 
     class CreatePerson extends TimerTask {
         public void run() {
-            System.out.println(delay + " sec is up");
+            //System.out.println(delay + " sec is up");
             Person p = new Person(map,0,0,20,20, guest_texture, window_height, window_width);
             people.add(p);
             delay = rand_delad.nextInt(10000) + 1000;

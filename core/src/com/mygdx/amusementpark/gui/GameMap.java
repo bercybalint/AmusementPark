@@ -34,8 +34,11 @@ public class GameMap implements TileBasedMap
     public Array<Point> games = new Array<Point>();
     public Array<Point> food = new Array<Point>();
     public Array<Point> water = new Array<Point>();
+    public Array<Point> plant = new Array<Point>();
     public Array<Point> trash = new Array<Point>();
     public Array<Point> staffBuilding = new Array<Point>();
+
+    public Array<Point> destinationPoints = new Array<Point>();
 
     Point p = new Point();
 
@@ -308,9 +311,9 @@ public class GameMap implements TileBasedMap
                                                                 units.get(i).get(j).height,
                                                                 korhinta_texture, 10, Tiles.GAMES);
 
-                                            p.x = units.get(i).get(j).x/60;
-                                            p.y = units.get(i).get(j).y/40;
-                                            games.add(p);
+                                            p.x = units.get(i).get(j).x/units.get(i).get(j).width;
+                                            p.y = units.get(i).get(j).y/units.get(i).get(j).height;
+                                            destinationPoints.add(new Point(p.x, p.y));
 
                                             units.get(i + 1).set(j + 1, actual);
                                             units.get(i + 1).set(j, actual);
@@ -333,28 +336,122 @@ public class GameMap implements TileBasedMap
                                     }
                                     break;
                                 case STAFF:
-                                    actual = new StaffBuilding(units.get(i).get(j).x,units.get(i).get(j).y, units.get(i).get(j).width,units.get(i).get(j).height,staff_texture,10,Tiles.STAFF);
                                     type = Tiles.STAFF;
+
+                                    if((i>0 && j>0))
+                                    {
+                                        if (units.get(i).get(j).getType() == Tiles.EMPTY) {
+                                            actual = new StaffBuilding(
+                                                                units.get(i).get(j).x,
+                                                                units.get(i).get(j).y,
+                                                                units.get(i).get(j).width,
+                                                                units.get(i).get(j).height,
+                                                                staff_texture,10,Tiles.STAFF);
+
+
+                                            p.x = units.get(i).get(j).x/units.get(i).get(j).width;
+                                            p.y = units.get(i).get(j).y/units.get(i).get(j).height;
+                                            destinationPoints.add(new Point(p.x, p.y));
+
+                                            units.get(i).set(j, actual);
+                                            terrain.get(i).set(j, type);
+                                        }
+                                    }
+
+
                                     break;
                                 case FOOD:
-                                    actual = new Catering(units.get(i).get(j).x,units.get(i).get(j).y, units.get(i).get(j).width,units.get(i).get(j).height,hamburger_texture,10,Tiles.FOOD);
                                     type = Tiles.FOOD;
+
+                                    if((i>0 && j>0))
+                                    {
+                                        if (units.get(i).get(j).getType() == Tiles.EMPTY) {
+                                            actual = new Catering(
+                                                    units.get(i).get(j).x,
+                                                    units.get(i).get(j).y,
+                                                    units.get(i).get(j).width,
+                                                    units.get(i).get(j).height,
+                                                    hamburger_texture,10,Tiles.FOOD);
+
+                                            p.x = units.get(i).get(j).x/units.get(i).get(j).width;
+                                            p.y = units.get(i).get(j).y/units.get(i).get(j).height;
+                                            destinationPoints.add(new Point(p.x, p.y));
+
+                                            units.get(i).set(j, actual);
+                                            terrain.get(i).set(j, type);
+                                        }
+                                    }
+
                                     break;
                                 case BUSH:
-                                    actual = new Park(units.get(i).get(j).x,units.get(i).get(j).y, units.get(i).get(j).width,units.get(i).get(j).height,bush_texture,10,Tiles.BUSH);
                                     type = Tiles.BUSH;
+
+                                    if((i>0 && j>0))
+                                    {
+                                        if (units.get(i).get(j).getType() == Tiles.EMPTY) {
+                                            actual = new Park(
+                                                        units.get(i).get(j).x,
+                                                        units.get(i).get(j).y,
+                                                        units.get(i).get(j).width,
+                                                        units.get(i).get(j).height,
+                                                        bush_texture,10,Tiles.BUSH);
+
+                                            p.x = units.get(i).get(j).x/units.get(i).get(j).width;
+                                            p.y = units.get(i).get(j).y/units.get(i).get(j).height;
+                                            destinationPoints.add(new Point(p.x, p.y));
+
+                                            units.get(i).set(j, actual);
+                                            terrain.get(i).set(j, type);
+                                        }
+                                    }
                                     break;
                                 case TREE:
                                     actual = new Park(units.get(i).get(j).x,units.get(i).get(j).y, units.get(i).get(j).width,units.get(i).get(j).height,bush_texture,10,Tiles.TREE);
                                     type = Tiles.TREE;
                                     break;
                                 case TRASH:
-                                    actual = new Park(units.get(i).get(j).x,units.get(i).get(j).y, units.get(i).get(j).width,units.get(i).get(j).height,trash_texture,10,Tiles.TREE);
+
                                     type = Tiles.TRASH;
+                                    if((i>0 && j>0))
+                                    {
+                                        if (units.get(i).get(j).getType() == Tiles.EMPTY) {
+                                            actual = new Park(
+                                                    units.get(i).get(j).x,
+                                                    units.get(i).get(j).y,
+                                                    units.get(i).get(j).width,
+                                                    units.get(i).get(j).height,
+                                                    trash_texture,10,Tiles.TRASH);
+
+                                            p.x = units.get(i).get(j).x/units.get(i).get(j).width;
+                                            p.y = units.get(i).get(j).y/units.get(i).get(j).height;
+                                            destinationPoints.add(new Point(p.x, p.y));
+
+                                            units.get(i).set(j, actual);
+                                            terrain.get(i).set(j, type);
+                                        }
+                                    }
                                     break;
                                 case WATER:
-                                    actual = new Park(units.get(i).get(j).x,units.get(i).get(j).y, units.get(i).get(j).width,units.get(i).get(j).height,water_texture,10,Tiles.BUSH);
+
                                     type = Tiles.WATER;
+                                    if((i>0 && j>0))
+                                    {
+                                        if (units.get(i).get(j).getType() == Tiles.EMPTY) {
+                                            actual = new Park(
+                                                    units.get(i).get(j).x,
+                                                    units.get(i).get(j).y,
+                                                    units.get(i).get(j).width,
+                                                    units.get(i).get(j).height,
+                                                    water_texture,10,Tiles.WATER);
+
+                                            p.x = units.get(i).get(j).x/units.get(i).get(j).width;
+                                            p.y = units.get(i).get(j).y/units.get(i).get(j).height;
+                                            destinationPoints.add(new Point(p.x, p.y));
+
+                                            units.get(i).set(j, actual);
+                                            terrain.get(i).set(j, type);
+                                        }
+                                    }
                                     break;
                                 default: actual = new Road(units.get(i).get(j).x,units.get(i).get(j).y, units.get(i).get(j).width,units.get(i).get(j).height,road_down_to_up,10,Tiles.TREE);
                                     type = Tiles.ROAD;
@@ -407,13 +504,28 @@ public class GameMap implements TileBasedMap
                     case GAMES:
                         s="G";
                         break;
+                    case FOOD:
+                        s="F";
+                        break;
+                    case WATER:
+                        s="W";
+                        break;
+                    case BUSH:
+                        s="BU";
+                        break;
+                    case TRASH:
+                        s="T";
+                        break;
+                    case STAFF:
+                        s="S";
+                        break;
                     default:
                         s="O";
                         break;
                 }
-                System.out.print(s);
+                //System.out.print(s);
             }
-            System.out.println();
+            //System.out.println();
         }
     }
 
@@ -436,7 +548,13 @@ public class GameMap implements TileBasedMap
     @Override
     public boolean blocked(Mover mover, int x, int y) {
         // if theres a unit at the location, then it's blocked
-        if (getTerrain(x,y) == Tiles.ROAD || getTerrain(x,y) == Tiles.GAMES) {
+        if (getTerrain(x,y) == Tiles.ROAD ||
+            getTerrain(x,y) == Tiles.GAMES ||
+            getTerrain(x,y) == Tiles.FOOD ||
+            getTerrain(x,y) == Tiles.BUSH ||
+            getTerrain(x,y) == Tiles.WATER ||
+            getTerrain(x,y) == Tiles.TRASH ||
+            getTerrain(x,y) == Tiles.STAFF) {
             return false;
         }
         else{

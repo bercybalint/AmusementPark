@@ -12,6 +12,7 @@ import com.mygdx.amusementpark.pathfinding.Path;
 import com.mygdx.amusementpark.pathfinding.PathFinder;
 
 import java.awt.*;
+import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -24,7 +25,7 @@ public class Person extends Rectangle implements Mover
     private Texture texture;
     private Direction dir = Direction.NOTHING;
     private Timer timer;
-    private int delay = 20000;
+    private int delay = 50000;
     private int speed = 2;
 
     /** The path finder we'll use to search our map */
@@ -58,25 +59,6 @@ public class Person extends Rectangle implements Mover
         timer.schedule(new personBehaviour(), 0, delay);
     }
 
-    public Point findDestination()
-    {
-        Point p = new Point();
-        for(int i = 0; i < map.terrain.size; i++)
-        {
-            for (int j = 0; j < map.terrain.get(i).size; j++)
-            {
-                if(map.terrain.get(i).get(j) == Tiles.GAMES)
-                {
-                    p.x=map.games.get(0).x;
-                    p.y=map.games.get(0).y;
-                    System.out.println(p.x + " " + p.y);
-
-                }
-            }
-        }
-        return p;
-    }
-
     public void move()
     {
         if(path!=null)
@@ -88,10 +70,10 @@ public class Person extends Rectangle implements Mover
             int go_to_y = currentStep.getY()*tile_height;
 
 
-            System.out.println();
-            System.out.println("actual_position:" + x + " , " + y);
-            System.out.println("coordinates:" + curr_x + " , " + curr_y);
-            System.out.println("step:" + currentStep.getX() + " , " + currentStep.getY());
+            //System.out.println();
+            //System.out.println("actual_position:" + x + " , " + y);
+            //System.out.println("coordinates:" + curr_x + " , " + curr_y);
+            //System.out.println("step:" + currentStep.getX() + " , " + currentStep.getY());
 
             if (x < go_to_x && y == go_to_y)
             {
@@ -148,8 +130,18 @@ public class Person extends Rectangle implements Mover
 
     public void behaviour()
     {
-        Point destination = findDestination(); //itt kéne random destinationt adni vagy ez utan itt tombot atadni
-        //Point destination = map.games.get(0);
+        Random random = new Random();
+        int randInt = random.nextInt(map.destinationPoints.size);
+        System.out.println(map.destinationPoints.size);
+        System.out.println(randInt);
+        //System.out.println(map.destinationPoints.get(randInt));
+
+        for (int i = 0; i<map.destinationPoints.size; i++) {
+        System.out.println(map.destinationPoints.get(i));
+    }
+
+        //itt valami nem jo => rosszul addolok a tombbe
+        Point destination = map.destinationPoints.get(randInt);
         map.clearVisited();
         map.writeOut();
         path = finder.findPath(this,(ind_x),(ind_y),destination.x,destination.y);
@@ -158,18 +150,18 @@ public class Person extends Rectangle implements Mover
         {
             pathLength = path.getLength();
             currentStep=path.getStep(stepIndex);
-            System.out.println("A talalt ut:");
+            //System.out.println("A talalt ut:");
 
             for(int i =0; i < pathLength; i++)
             {
-                System.out.println(path.getStep(i).getX() + " ," +path.getStep(i).getY());
+                //System.out.println(path.getStep(i).getX() + " ," +path.getStep(i).getY());
             }
-            System.out.println("A talalt ut vege");
+            //System.out.println("A talalt ut vege");
 
         }
         else
         {
-            System.out.println("nem talalt");
+            //System.out.println("nem talalt");
         }
         timer.cancel();
         timer.purge();
@@ -178,7 +170,7 @@ public class Person extends Rectangle implements Mover
     class personBehaviour extends TimerTask
     {
         public void run() {
-            System.out.println("Person Timer");
+            //System.out.println("Person Timer");
             behaviour();
 
             //timer.cancel(); //Terminate the timer thread
