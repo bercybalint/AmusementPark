@@ -227,37 +227,14 @@ public class GameScreen implements Screen
                         moneyHeist(0);
                 }
 
-                if(chosen==Tiles.GAMES && first_building_placed==false)
+                if(first_building_placed==false &&
+                    (chosen==Tiles.GAMES || chosen==Tiles.FOOD || chosen==Tiles.WATER || chosen==Tiles.BUSH
+                        || chosen==Tiles.TRASH || chosen==Tiles.STAFF))
                 {
                     first_building_placed = true;
                     timer = new Timer();
                     timer.schedule(new CreatePerson(), 0, delay);
 
-                }else if(chosen==Tiles.FOOD && first_building_placed==false)
-                {
-                    first_building_placed = true;
-                    timer = new Timer();
-                    timer.schedule(new CreatePerson(), 0, delay);
-                }else if(chosen==Tiles.WATER && first_building_placed==false)
-                {
-                    first_building_placed = true;
-                    timer = new Timer();
-                    timer.schedule(new CreatePerson(), 0, delay);
-                }else if(chosen==Tiles.BUSH && first_building_placed==false)
-                {
-                    first_building_placed = true;
-                    timer = new Timer();
-                    timer.schedule(new CreatePerson(), 0, delay);
-                }else if(chosen==Tiles.TRASH && first_building_placed==false)
-                {
-                    first_building_placed = true;
-                    timer = new Timer();
-                    timer.schedule(new CreatePerson(), 0, delay);
-                }else if(chosen==Tiles.STAFF && first_building_placed==false)
-                {
-                    first_building_placed = true;
-                    timer = new Timer();
-                    timer.schedule(new CreatePerson(), 0, delay);
                 }
             }
             //függvény hívás (touch, chosen, isSelected)

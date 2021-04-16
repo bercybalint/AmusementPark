@@ -30,22 +30,12 @@ public class GameMap implements TileBasedMap
     /** The unit in each tile of the map */
     public Array<Array<Buildable>> units = new Array<Array<Buildable>>();
 
-    /** The arrays of all types   */
-    public Array<Point> games = new Array<Point>();
-    public Array<Point> food = new Array<Point>();
-    public Array<Point> water = new Array<Point>();
-    public Array<Point> plant = new Array<Point>();
-    public Array<Point> trash = new Array<Point>();
-    public Array<Point> staffBuilding = new Array<Point>();
-
+    /** The array of all destination points   */
     public Array<Point> destinationPoints = new Array<Point>();
-
     Point p = new Point();
-
 
     /** Indicator if a given tile has been visited during the search */
     public boolean[][] visited = new boolean[WIDTH][HEIGHT];
-
 
     int tile_width;
     int tile_height;
