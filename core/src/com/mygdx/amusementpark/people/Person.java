@@ -67,13 +67,16 @@ public class Person extends Rectangle implements Mover
             {
                 if(map.terrain.get(i).get(j) == Tiles.GAMES)
                 {
-                    p.x=i;
-                    p.y=j;
+                    p.x=map.games.get(0).x;
+                    p.y=map.games.get(0).y;
+                    System.out.println(p.x + " " + p.y);
+
                 }
             }
         }
         return p;
     }
+
     public void move()
     {
         if(path!=null)
@@ -145,7 +148,8 @@ public class Person extends Rectangle implements Mover
 
     public void behaviour()
     {
-        Point destination = findDestination();
+        Point destination = findDestination(); //itt kéne random destinationt adni vagy ez utan itt tombot atadni
+        //Point destination = map.games.get(0);
         map.clearVisited();
         map.writeOut();
         path = finder.findPath(this,(ind_x),(ind_y),destination.x,destination.y);

@@ -12,6 +12,7 @@ import com.mygdx.amusementpark.pathfinding.Mover;
 import com.mygdx.amusementpark.pathfinding.TileBasedMap;
 import com.mygdx.amusementpark.people.Person;
 
+import java.awt.*;
 import java.util.Vector;
 
 public class GameMap implements TileBasedMap
@@ -28,6 +29,15 @@ public class GameMap implements TileBasedMap
 
     /** The unit in each tile of the map */
     public Array<Array<Buildable>> units = new Array<Array<Buildable>>();
+
+    /** The arrays of all types   */
+    public Array<Point> games = new Array<Point>();
+    public Array<Point> food = new Array<Point>();
+    public Array<Point> water = new Array<Point>();
+    public Array<Point> trash = new Array<Point>();
+    public Array<Point> staffBuilding = new Array<Point>();
+
+    Point p = new Point();
 
 
     /** Indicator if a given tile has been visited during the search */
@@ -248,10 +258,11 @@ public class GameMap implements TileBasedMap
             }
         }
     }
+
     public Boolean touched(Vector3 touch, Tiles chosen, Boolean isSelected)
     {
         Boolean did_place = false;
-        for(int i = 0; i < units.size; i++)
+        for(int i = 0; i < units.size; i++)  //units.size => mennyi buildable van a tombben eppen
         {
             for(int j = 0; j < units.get(i).size; j++)
             {
@@ -278,16 +289,17 @@ public class GameMap implements TileBasedMap
                                  */
                                 case GAMES:
                                     type = Tiles.GAMES;
+
                                     if((i>0 && j>0))
                                     {
                                         if (units.get(i + 1).get(j + 1).getType() == Tiles.EMPTY &&
-                                                units.get(i).get(j + 1).getType() == Tiles.EMPTY &&
-                                                units.get(i - 1).get(j + 1).getType() == Tiles.EMPTY &&
-                                                units.get(i).get(j + 1).getType() == Tiles.EMPTY &&
-                                                units.get(i).get(j - 1).getType() == Tiles.EMPTY &&
-                                                units.get(i - 1).get(j - 1).getType() == Tiles.EMPTY &&
-                                                units.get(i - 1).get(j).getType() == Tiles.EMPTY &&
-                                                units.get(i - 1).get(j + 1).getType() == Tiles.EMPTY
+                                            units.get(i).get(j + 1).getType() == Tiles.EMPTY &&
+                                            units.get(i - 1).get(j + 1).getType() == Tiles.EMPTY &&
+                                            units.get(i+1).get(j).getType() == Tiles.EMPTY &&
+                                            units.get(i).get(j - 1).getType() == Tiles.EMPTY &&
+                                            units.get(i - 1).get(j - 1).getType() == Tiles.EMPTY &&
+                                            units.get(i - 1).get(j).getType() == Tiles.EMPTY &&
+                                            units.get(i + 1).get(j - 1).getType() == Tiles.EMPTY
                                         )
                                         {
                                             actual = new Games( units.get(i).get(j).x,
@@ -295,6 +307,10 @@ public class GameMap implements TileBasedMap
                                                                 units.get(i).get(j).width,
                                                                 units.get(i).get(j).height,
                                                                 korhinta_texture, 10, Tiles.GAMES);
+
+                                            p.x = units.get(i).get(j).x/60;
+                                            p.y = units.get(i).get(j).y/40;
+                                            games.add(p);
 
                                             units.get(i + 1).set(j + 1, actual);
                                             units.get(i + 1).set(j, actual);
