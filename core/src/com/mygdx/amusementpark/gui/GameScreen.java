@@ -161,7 +161,7 @@ public class GameScreen implements Screen
         task = new TimerTask() {
             public void run() {
                 String time = getTime(ido);
-                timelabel.setText("[BLACK]ido: "+time);
+                timelabel.setText("[BLACK]Time: "+time);
                 timelabel.setPosition(220,832);
                 ido++;
 
@@ -342,7 +342,7 @@ public class GameScreen implements Screen
      */
     public void buttonManagment(){
 
-        startButton = new TextButton("Start", skin);
+        startButton = new TextButton("Open Park", skin);
         startButton.setSize(100, 30);
         startButton.setPosition(550, 870);
         startButton.addListener(new ClickListener() {
@@ -719,15 +719,13 @@ public class GameScreen implements Screen
 
     class CreatePerson extends TimerTask {
         public void run() {
-            /*
+
             //System.out.println(delay + " sec is up");
             int delay = (new Random().nextInt(10))*1000;
             timer.schedule(new GameScreen.CreatePerson(), delay);
             Guest p = new Guest(map,0,0,20,20, guest_texture, window_height, window_width,happy_texture,annoyed_texture,angry_texture);
             guests.add(p);
-*/
-            Guest p = new Guest(map,0,0,20,20, guest_texture, window_height, window_width,happy_texture,annoyed_texture,angry_texture);
-            guests.add(p);
+
 
         }
     }
