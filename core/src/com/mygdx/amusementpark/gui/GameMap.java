@@ -267,7 +267,11 @@ public class GameMap implements TileBasedMap
                         {
                             Buildable actual;
                             Tiles type;
-                            actual = new Road(units.get(i).get(j).x,units.get(i).get(j).y, units.get(i).get(j).width,units.get(i).get(j).height, road_down_to_up,10,Tiles.ROAD);
+                            actual = new Buildable(units.get(i).get(j).x,
+                                    units.get(i).get(j).y,
+                                    units.get(i).get(j).width,
+                                    units.get(i).get(j).height,grass_texture,0, Tiles.EMPTY,0);
+
                             type = Tiles.ROAD;
                             switch (chosen)
                             {
@@ -299,7 +303,7 @@ public class GameMap implements TileBasedMap
                                                                 units.get(i).get(j).y,
                                                                 units.get(i).get(j).width,
                                                                 units.get(i).get(j).height,
-                                                                korhinta_texture, 10, Tiles.GAMES,20);
+                                                                korhinta_texture, 10, Tiles.GAMES,5);
 
                                             p.x = units.get(i).get(j).x/units.get(i).get(j).width;
                                             p.y = units.get(i).get(j).y/units.get(i).get(j).height;
