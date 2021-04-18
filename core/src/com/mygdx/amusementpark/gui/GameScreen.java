@@ -19,7 +19,7 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.mygdx.amusementpark.buildable.*;
 import com.mygdx.amusementpark.pathfinding.*;
-import com.mygdx.amusementpark.people.Person;
+import com.mygdx.amusementpark.people.Guest;
 
 import java.util.Random;
 import java.util.Timer;
@@ -31,7 +31,7 @@ public class GameScreen implements Screen
     int delay = 2000;
     Boolean first_building_placed=false;
     Random rand_delad = new Random();
-    private Array<Person> people = new Array<Person>();
+    private Array<Guest> guests = new Array<Guest>();
 
     /**
      * Ablak, tile-ok méreteineek beállítása
@@ -179,9 +179,9 @@ public class GameScreen implements Screen
                 game.batch.draw(act.getTexture(),act.x,act.y+100,act.width,act.height);
             }
         }
-        for(int i = 0; i < people.size; i++)
+        for(int i = 0; i < guests.size; i++)
         {
-            Person p = people.get(i);
+            Guest p = guests.get(i);
             p.move();
             p.setMap(map);
             game.batch.draw(p.getTexture(),p.x+20,p.y+110,p.width,p.height);
@@ -608,12 +608,10 @@ public class GameScreen implements Screen
     class CreatePerson extends TimerTask {
         public void run() {
             //System.out.println(delay + " sec is up");
-            Person p = new Person(map,0,0,20,20, guest_texture, window_height, window_width);
-            people.add(p);
+            Guest p = new Guest(map,0,0,20,20, guest_texture, window_height, window_width);
+            guests.add(p);
             delay = rand_delad.nextInt(10000) + 1000;
             //timer.cancel(); //Terminate the timer thread
-
         }
     }
-
 }

@@ -16,25 +16,25 @@ import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class Person extends Rectangle implements Mover
+abstract class Person extends Rectangle implements Mover
 {
     /**
      * Create a new mover to be used while path finder
      */
-    private GameMap map;
+    public GameMap map;
     private Texture texture;
     private Direction dir = Direction.NOTHING;
-    private Timer timer;
+
     private int delay = 50000;
     private int speed = 2;
 
     /** The path finder we'll use to search our map */
-    private PathFinder finder;
+    public PathFinder finder;
     /** The last path found for the current unit */
-    private Path path;
-    private int pathLength;
-    private int stepIndex=0;
-    private Path.Step currentStep;
+    public Path path;
+    public int pathLength;
+    public int stepIndex=0;
+    public Path.Step currentStep;
     int window_h;
     int window_w;
     int tile_width;
@@ -54,9 +54,7 @@ public class Person extends Rectangle implements Mover
         this.tile_height=window_h/20;
         this.x = ind_x*tile_width;
         this.y = ind_y*tile_height;
-        finder = new AStarPathFinder(map, 2000, false);
-        timer = new Timer();
-        timer.schedule(new personBehaviour(), 0, delay);
+
     }
 
     public void move()
@@ -68,12 +66,6 @@ public class Person extends Rectangle implements Mover
 
             int go_to_x = currentStep.getX()*tile_width;
             int go_to_y = currentStep.getY()*tile_height;
-
-
-            //System.out.println();
-            //System.out.println("actual_position:" + x + " , " + y);
-            //System.out.println("coordinates:" + curr_x + " , " + curr_y);
-            //System.out.println("step:" + currentStep.getX() + " , " + currentStep.getY());
 
             if (x < go_to_x && y == go_to_y)
             {
@@ -128,54 +120,7 @@ public class Person extends Rectangle implements Mover
         }
     }
 
-    public void behaviour()
-    {
-        Random random = new Random();
-        int randInt = random.nextInt(map.destinationPoints.size);
-        System.out.println(map.destinationPoints.size);
-        System.out.println(randInt);
-        //System.out.println(map.destinationPoints.get(randInt));
 
-        for (int i = 0; i<map.destinationPoints.size; i++) {
-        System.out.println(map.destinationPoints.get(i));
-    }
-
-        //itt valami nem jo => rosszul addolok a tombbe
-        Point destination = map.destinationPoints.get(randInt);
-        map.clearVisited();
-        map.writeOut();
-        path = finder.findPath(this,(ind_x),(ind_y),destination.x,destination.y);
-
-        if(path!=null)
-        {
-            pathLength = path.getLength();
-            currentStep=path.getStep(stepIndex);
-            //System.out.println("A talalt ut:");
-
-            for(int i =0; i < pathLength; i++)
-            {
-                //System.out.println(path.getStep(i).getX() + " ," +path.getStep(i).getY());
-            }
-            //System.out.println("A talalt ut vege");
-
-        }
-        else
-        {
-            //System.out.println("nem talalt");
-        }
-        timer.cancel();
-        timer.purge();
-    }
-
-    class personBehaviour extends TimerTask
-    {
-        public void run() {
-            //System.out.println("Person Timer");
-            behaviour();
-
-            //timer.cancel(); //Terminate the timer thread
-        }
-    }
 
     public Texture getTexture()
     {
