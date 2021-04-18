@@ -31,7 +31,7 @@ public class GameMap implements TileBasedMap
     public Array<Array<Buildable>> units = new Array<Array<Buildable>>();
 
     /** The array of all destination points   */
-    public Array<Point> destinationPoints = new Array<Point>();
+    public Array<Buildable> destinationPoints = new Array<Buildable>();
     Point p = new Point();
 
     /** Indicator if a given tile has been visited during the search */
@@ -303,7 +303,7 @@ public class GameMap implements TileBasedMap
 
                                             p.x = units.get(i).get(j).x/units.get(i).get(j).width;
                                             p.y = units.get(i).get(j).y/units.get(i).get(j).height;
-                                            destinationPoints.add(new Point(p.x, p.y));
+                                            destinationPoints.add(actual);
 
                                             units.get(i + 1).set(j + 1, actual);
                                             units.get(i + 1).set(j, actual);
@@ -341,7 +341,8 @@ public class GameMap implements TileBasedMap
 
                                             p.x = units.get(i).get(j).x/units.get(i).get(j).width;
                                             p.y = units.get(i).get(j).y/units.get(i).get(j).height;
-                                            destinationPoints.add(new Point(p.x, p.y));
+
+                                            destinationPoints.add(actual);
 
                                             units.get(i).set(j, actual);
                                             terrain.get(i).set(j, type);
@@ -365,7 +366,7 @@ public class GameMap implements TileBasedMap
 
                                             p.x = units.get(i).get(j).x/units.get(i).get(j).width;
                                             p.y = units.get(i).get(j).y/units.get(i).get(j).height;
-                                            destinationPoints.add(new Point(p.x, p.y));
+                                            destinationPoints.add(actual);
 
                                             units.get(i).set(j, actual);
                                             terrain.get(i).set(j, type);
@@ -388,7 +389,7 @@ public class GameMap implements TileBasedMap
 
                                             p.x = units.get(i).get(j).x/units.get(i).get(j).width;
                                             p.y = units.get(i).get(j).y/units.get(i).get(j).height;
-                                            destinationPoints.add(new Point(p.x, p.y));
+                                            destinationPoints.add(actual);
 
                                             units.get(i).set(j, actual);
                                             terrain.get(i).set(j, type);
@@ -414,7 +415,7 @@ public class GameMap implements TileBasedMap
 
                                             p.x = units.get(i).get(j).x/units.get(i).get(j).width;
                                             p.y = units.get(i).get(j).y/units.get(i).get(j).height;
-                                            destinationPoints.add(new Point(p.x, p.y));
+                                            destinationPoints.add(actual);
 
                                             units.get(i).set(j, actual);
                                             terrain.get(i).set(j, type);
@@ -436,7 +437,7 @@ public class GameMap implements TileBasedMap
 
                                             p.x = units.get(i).get(j).x/units.get(i).get(j).width;
                                             p.y = units.get(i).get(j).y/units.get(i).get(j).height;
-                                            destinationPoints.add(new Point(p.x, p.y));
+                                            destinationPoints.add(actual);
 
                                             units.get(i).set(j, actual);
                                             terrain.get(i).set(j, type);

@@ -188,6 +188,7 @@ public class GameScreen implements Screen
             p.move();
             p.setMap(map);
             game.batch.draw(p.getTexture(),p.x+20,p.y+110,p.width,p.height);
+            
         }
         game.batch.end();
         stage.act(delta);

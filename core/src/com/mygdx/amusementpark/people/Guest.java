@@ -2,6 +2,7 @@ package com.mygdx.amusementpark.people;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
+import com.mygdx.amusementpark.buildable.Buildable;
 import com.mygdx.amusementpark.gui.GameMap;
 import com.mygdx.amusementpark.pathfinding.AStarPathFinder;
 import com.mygdx.amusementpark.pathfinding.Mover;
@@ -56,10 +57,10 @@ public class Guest extends Person implements Mover
         }
 
         //itt valami nem jo => rosszul addolok a tombbe
-        Point destination = map.destinationPoints.get(randInt);
+        Buildable destination = map.destinationPoints.get(randInt);
         map.clearVisited();
         map.writeOut();
-        path = finder.findPath(this,(ind_x),(ind_y),destination.x,destination.y);
+        path = finder.findPath(this,(ind_x),(ind_y),destination.x/60,destination.y/40);
 
         if(path!=null)
         {
