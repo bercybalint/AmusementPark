@@ -48,6 +48,7 @@ public class GameScreen implements Screen
     /**
      * Gombok textúrái, méreteinek beállítása.
      */
+    private TextButton startButton;
     private TextButton buildButton;
     private TextButton parkButton;
     private TextButton gamesButton;
@@ -212,14 +213,22 @@ public class GameScreen implements Screen
             p.move();
             p.setMap(map);
             game.batch.draw(p.getTexture(),p.x+20,p.y+110,p.width,p.height);
-            
+            for(int j = 0; j < map.destinationPoints.size; j++)
+            {
+                if(p.intersects(map.destinationPoints.get(j)))
+                {
+                    if(!p.isGoing && !p.isWaiting)
+                    {
+                        p.isWaiting=true;
+                        System.out.println("megjottem");
+                        p.reachedDestination(map.destinationPoints.get(j).timeToUse);
+                    }
+                }
+            }
         }
         game.batch.end();
         stage.act(delta);
         stage.draw();
-
-        //collide
-
 
         /**
          * Inputok kezelése
@@ -256,27 +265,9 @@ public class GameScreen implements Screen
                     default:
                         moneyHeist(0);
                 }
-
-                if(first_building_placed==false &&
-                    (chosen==Tiles.GAMES || chosen==Tiles.FOOD || chosen==Tiles.WATER || chosen==Tiles.BUSH
-                        || chosen==Tiles.TRASH || chosen==Tiles.STAFF))
-                {
-                    first_building_placed = true;
-                    timer = new Timer();
-                    new CreatePerson().run();
-
-                }
             }
-            //függvény hívás (touch, chosen, isSelected)
         }
     }
-
-
-
-
-
-
-
 
         public void runTimer(){
             gametimer.schedule(task, 0, 1000 );
@@ -350,6 +341,16 @@ public class GameScreen implements Screen
      * gombok létrehozáse, kezelése, eventListenerek beállítása.
      */
     public void buttonManagment(){
+
+        startButton = new TextButton("Start", skin);
+        startButton.setSize(100, 30);
+        startButton.setPosition(550, 870);
+        startButton.addListener(new ClickListener() {
+                                    public void clicked(InputEvent e, float x, float y) {
+                                        timer = new Timer();
+                                        new CreatePerson().run();
+                                    }
+                                });
 
         buildButton = new TextButton("Build", skin);
         buildButton.setSize(buttonWidth, buttonHeight);
@@ -589,6 +590,7 @@ public class GameScreen implements Screen
         });
 
 
+        stage.addActor(startButton);
         stage.addActor(buildButton);
         stage.addActor(parkButton);
         stage.addActor(staffButton);
@@ -604,6 +606,7 @@ public class GameScreen implements Screen
         stage.addActor(trashButton);
         stage.addActor(hamburgerButton);
         stage.addActor(waterButton);
+
 
 
         parkButton.setVisible(false);
@@ -716,13 +719,16 @@ public class GameScreen implements Screen
 
     class CreatePerson extends TimerTask {
         public void run() {
+            /*
             //System.out.println(delay + " sec is up");
-            int delay = (new Random().nextInt(10000));
+            int delay = (new Random().nextInt(10))*1000;
             timer.schedule(new GameScreen.CreatePerson(), delay);
             Guest p = new Guest(map,0,0,20,20, guest_texture, window_height, window_width,happy_texture,annoyed_texture,angry_texture);
             guests.add(p);
+*/
+            Guest p = new Guest(map,0,0,20,20, guest_texture, window_height, window_width,happy_texture,annoyed_texture,angry_texture);
+            guests.add(p);
 
-            //timer.cancel(); //Terminate the timer thread
         }
     }
 }

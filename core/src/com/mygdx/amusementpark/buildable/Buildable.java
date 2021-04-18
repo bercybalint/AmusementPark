@@ -11,7 +11,6 @@ public class Buildable extends Rectangle {
     public Texture texture;
     public int timeToUse;
 
-
     public Buildable(Texture texture)
     {
         this.texture = texture;

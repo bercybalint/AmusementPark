@@ -23,10 +23,8 @@ abstract class Person extends Rectangle implements Mover
      */
     public GameMap map;
     public Texture texture;
-    private Direction dir = Direction.NOTHING;
-
-    private int delay = 50000;
-    private int speed = 1;
+    public Direction dir = Direction.NOTHING;
+    public int speed = 1;
 
     /** The path finder we'll use to search our map */
     public PathFinder finder;
@@ -35,6 +33,7 @@ abstract class Person extends Rectangle implements Mover
     public int pathLength;
     public int stepIndex=0;
     public Path.Step currentStep;
+
     int window_h;
     int window_w;
     int tile_width;
@@ -54,7 +53,7 @@ abstract class Person extends Rectangle implements Mover
         this.tile_height=window_h/20;
         this.x = ind_x*tile_width;
         this.y = ind_y*tile_height;
-
+        finder = new AStarPathFinder(map, 2000, false);
     }
 
     public void move()
