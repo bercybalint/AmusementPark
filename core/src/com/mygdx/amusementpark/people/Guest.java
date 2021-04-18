@@ -15,13 +15,14 @@ public class Guest extends Person implements Mover
 
     private Timer timer;
     private int delay = 50000;
+    private Random rand;
 
     public Guest(GameMap map, int x, int y, int width, int height, Texture texture, int window_h, int window_w)
     {
         super(map, x, y, width, height, texture, window_h, window_w);
         finder = new AStarPathFinder(map, 2000, false);
         timer = new Timer();
-        timer.schedule(new personBehaviour(), 0, delay);
+        new personBehaviour().run();
     }
 
     public void behaviour()
@@ -59,6 +60,8 @@ public class Guest extends Person implements Mover
     {
         public void run() {
             //System.out.println("Person Timer");
+            int delay = (5 + new Random().nextInt(10)) * 1000;
+            timer.schedule(new personBehaviour(), delay);
             behaviour();
 
             //timer.cancel(); //Terminate the timer thread

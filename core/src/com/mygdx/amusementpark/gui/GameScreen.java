@@ -28,9 +28,7 @@ import java.util.TimerTask;
 public class GameScreen implements Screen
 {
     Timer timer;
-    int delay = 2000;
     Boolean first_building_placed=false;
-    Random rand_delad = new Random();
     private Array<Guest> guests = new Array<Guest>();
 
     /**
@@ -233,7 +231,7 @@ public class GameScreen implements Screen
                 {
                     first_building_placed = true;
                     timer = new Timer();
-                    timer.schedule(new CreatePerson(), 0, delay);
+                    new CreatePerson().run();
 
                 }
             }
@@ -608,9 +606,11 @@ public class GameScreen implements Screen
     class CreatePerson extends TimerTask {
         public void run() {
             //System.out.println(delay + " sec is up");
+            int delay = (new Random().nextInt(10000));
+            timer.schedule(new GameScreen.CreatePerson(), delay);
             Guest p = new Guest(map,0,0,20,20, guest_texture, window_height, window_width);
             guests.add(p);
-            delay = rand_delad.nextInt(10000) + 1000;
+
             //timer.cancel(); //Terminate the timer thread
         }
     }

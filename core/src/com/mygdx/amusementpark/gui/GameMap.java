@@ -10,7 +10,7 @@ import com.badlogic.gdx.utils.Array;
 import com.mygdx.amusementpark.buildable.*;
 import com.mygdx.amusementpark.pathfinding.Mover;
 import com.mygdx.amusementpark.pathfinding.TileBasedMap;
-import com.mygdx.amusementpark.people.Person;
+
 
 import java.awt.*;
 import java.util.Vector;

@@ -26,7 +26,7 @@ abstract class Person extends Rectangle implements Mover
     private Direction dir = Direction.NOTHING;
 
     private int delay = 50000;
-    private int speed = 2;
+    private int speed = 1;
 
     /** The path finder we'll use to search our map */
     public PathFinder finder;
