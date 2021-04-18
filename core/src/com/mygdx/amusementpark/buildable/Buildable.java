@@ -6,9 +6,10 @@ import java.awt.*;
 
 public class Buildable extends Rectangle {
 
-    private int prizeToUse;
-    private Tiles type;
-    private Texture texture;
+    public int prizeToUse;
+    public Tiles type;
+    public Texture texture;
+    public int timeToUse;
 
 
     public Buildable(Texture texture)
@@ -24,12 +25,13 @@ public class Buildable extends Rectangle {
      * @param texture -textúrája
      * @param prizeToUse - mennyibeerül, a megépítése.
      */
-    public Buildable(int x, int y, int width, int height, Texture texture, int prizeToUse, Tiles type)
+    public Buildable(int x, int y, int width, int height, Texture texture, int prizeToUse, Tiles type, int timeToUse)
     {
         super(x,y,width,height);
         this.texture=texture;
         this.prizeToUse=prizeToUse;
         this.type = type;
+        this.timeToUse=timeToUse;
     }
 
     public Texture getTexture()

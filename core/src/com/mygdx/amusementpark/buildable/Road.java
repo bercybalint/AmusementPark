@@ -30,7 +30,7 @@ public class Road extends Buildable
      */
     public Road(int x, int y, int width, int height, Texture texture, int prizeToBuild, Tiles type)
     {
-        super(x, y, width, height, texture, prizeToBuild, type);
+        super(x, y, width, height, texture, prizeToBuild, type,0);
         upNeigh = false;
         downNeigh = false;
         leftNeigh = false;

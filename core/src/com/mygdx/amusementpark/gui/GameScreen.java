@@ -109,6 +109,10 @@ public class GameScreen implements Screen
     TextureRegion textureRegionWater;
     TextureRegionDrawable textureRegionDrawableWater;
 
+    Texture happy_texture;
+    Texture annoyed_texture;
+    Texture angry_texture;
+
     /**
      * chosen - a kiválaszott textúrát ebben tárojuk, és ezzel rakjuk le.
      */
@@ -167,6 +171,7 @@ public class GameScreen implements Screen
         game.batch.setProjectionMatrix(camera.combined);
         game.batch.begin();
         game.batch.draw(grass_texture,0,0,window_width,window_height);
+
         //draw dolgok
 
         for(int i = 0; i < map.units.size; i++)
@@ -185,9 +190,11 @@ public class GameScreen implements Screen
             game.batch.draw(p.getTexture(),p.x+20,p.y+110,p.width,p.height);
         }
         game.batch.end();
-
         stage.act(delta);
         stage.draw();
+
+        //collide
+
 
         /**
          * Inputok kezelése
@@ -566,6 +573,10 @@ public class GameScreen implements Screen
         textureRegionDrawableTrash = new TextureRegionDrawable(textureRegionTrash);
         textureRegionStaff = new TextureRegion(staff_texture);
         textureRegionDrawableStaff = new TextureRegionDrawable(textureRegionStaff);
+
+        happy_texture = new Texture(Gdx.files.internal("guestHappy.png"));
+        annoyed_texture = new Texture(Gdx.files.internal("guestAnnoyed.png"));
+        angry_texture = new Texture(Gdx.files.internal("guestAngry.png"));
     }
 
     public void moneyHeist(int price){
@@ -608,7 +619,7 @@ public class GameScreen implements Screen
             //System.out.println(delay + " sec is up");
             int delay = (new Random().nextInt(10000));
             timer.schedule(new GameScreen.CreatePerson(), delay);
-            Guest p = new Guest(map,0,0,20,20, guest_texture, window_height, window_width);
+            Guest p = new Guest(map,0,0,20,20, guest_texture, window_height, window_width,happy_texture,annoyed_texture,angry_texture);
             guests.add(p);
 
             //timer.cancel(); //Terminate the timer thread

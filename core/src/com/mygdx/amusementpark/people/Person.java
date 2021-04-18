@@ -22,7 +22,7 @@ abstract class Person extends Rectangle implements Mover
      * Create a new mover to be used while path finder
      */
     public GameMap map;
-    private Texture texture;
+    public Texture texture;
     private Direction dir = Direction.NOTHING;
 
     private int delay = 50000;

@@ -22,6 +22,6 @@ public class StaffBuilding extends Buildable
      */
     public StaffBuilding(int x, int y, int width, int height, Texture texture, int prizeToBuild, Tiles type)
     {
-        super(x, y, width, height, texture, prizeToBuild, type);
+        super(x, y, width, height, texture, prizeToBuild, type,0);
     }
 }

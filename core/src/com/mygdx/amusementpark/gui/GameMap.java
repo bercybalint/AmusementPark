@@ -121,7 +121,7 @@ public class GameMap implements TileBasedMap
                     else if(i>8 && i<12)
                     {
                         type = Tiles.EMPTY;
-                        tile = new Buildable((i)*tile_width,(j)*tile_height,tile_width,tile_height,grass_texture,20,type);
+                        tile = new Buildable((i)*tile_width,(j)*tile_height,tile_width,tile_height,grass_texture,20,type,10);
                         units.get(i).add(tile);
                         terrain.get(i).add(type);
                     }
@@ -144,7 +144,7 @@ public class GameMap implements TileBasedMap
                 else
                 {
                     type = Tiles.EMPTY;
-                    tile = new Buildable((i)*tile_width,(j)*tile_height,tile_width,tile_height,grass_texture,10,type);
+                    tile = new Buildable((i)*tile_width,(j)*tile_height,tile_width,tile_height,grass_texture,10,type,10);
                     units.get(i).add(tile);
                     terrain.get(i).add(type);
                 }
@@ -299,7 +299,7 @@ public class GameMap implements TileBasedMap
                                                                 units.get(i).get(j).y,
                                                                 units.get(i).get(j).width,
                                                                 units.get(i).get(j).height,
-                                                                korhinta_texture, 10, Tiles.GAMES);
+                                                                korhinta_texture, 10, Tiles.GAMES,20);
 
                                             p.x = units.get(i).get(j).x/units.get(i).get(j).width;
                                             p.y = units.get(i).get(j).y/units.get(i).get(j).height;

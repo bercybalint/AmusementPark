@@ -1,5 +1,6 @@
 package com.mygdx.amusementpark.people;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.mygdx.amusementpark.gui.GameMap;
 import com.mygdx.amusementpark.pathfinding.AStarPathFinder;
@@ -14,24 +15,41 @@ public class Guest extends Person implements Mover
 {
 
     private Timer timer;
-    private int delay = 50000;
+    private int delay = 1000;
     private Random rand;
+    private int mood;
+    private int maxMood=100;
 
-    public Guest(GameMap map, int x, int y, int width, int height, Texture texture, int window_h, int window_w)
+    Timer behavTimer;
+
+    Texture happy_texture;
+    Texture annoyed_texture;
+    Texture angry_texture;
+
+
+    public Guest(GameMap map, int x, int y, int width, int height, Texture texture, int window_h, int window_w, Texture happy, Texture annoyed, Texture angry)
     {
         super(map, x, y, width, height, texture, window_h, window_w);
         finder = new AStarPathFinder(map, 2000, false);
         timer = new Timer();
-        new personBehaviour().run();
+        timer.schedule(new moodTimer(),0,delay);
+
+        behavTimer = new Timer();
+        behavTimer.schedule(new personBehaviour(), 0);
+
+        this.mood = this.maxMood;
+        this.happy_texture=happy;
+        this.annoyed_texture=annoyed;
+        this.angry_texture=angry;
+        this.texture=happy_texture;
     }
 
-    public void behaviour()
+    public void goToNewPlace()
     {
         Random random = new Random();
         int randInt = random.nextInt(map.destinationPoints.size);
         System.out.println(map.destinationPoints.size);
         System.out.println(randInt);
-        //System.out.println(map.destinationPoints.get(randInt));
 
         for (int i = 0; i<map.destinationPoints.size; i++) {
             System.out.println(map.destinationPoints.get(i));
@@ -52,19 +70,52 @@ public class Guest extends Person implements Mover
         {
             //System.out.println("nem talalt");
         }
-        timer.cancel();
-        timer.purge();
+
+    }
+    public void behaviour()
+    {
+        goToNewPlace();
+    }
+
+    public void moodChange()
+    {
+        mood--;
+        if(mood>=70)
+        {
+            this.texture=happy_texture;
+        }
+        else if(mood>=20 && mood<=50)
+        {
+            this.texture=annoyed_texture;
+        }
+        else if(mood<20) {
+            this.texture = angry_texture;
+        }
+        if(mood<=0)
+        {
+            //leave the park
+        }
+        System.out.println(mood);
     }
 
     class personBehaviour extends TimerTask
     {
         public void run() {
             //System.out.println("Person Timer");
-            int delay = (5 + new Random().nextInt(10)) * 1000;
-            timer.schedule(new personBehaviour(), delay);
             behaviour();
 
             //timer.cancel(); //Terminate the timer thread
         }
+    }
+    class moodTimer extends TimerTask
+    {
+        public void run() {
+            moodChange();
+        }
+    }
+
+
+    public int getMood() {
+        return mood;
     }
 }

@@ -15,8 +15,9 @@ public class Games extends Buildable
      * @param prizeToBuild - mennyibeerül, a megépítése.
      * @param type
      */
-    public Games(int x, int y, int width, int height, Texture texture, int prizeToBuild, Tiles type)
+
+    public Games(int x, int y, int width, int height, Texture texture, int prizeToBuild, Tiles type, int timeToUse)
     {
-        super(x-width, y-height, width*3, height*3, texture, prizeToBuild, type);
+        super(x-width, y-height, width*3, height*3, texture, prizeToBuild, type, timeToUse);
     }
 }
