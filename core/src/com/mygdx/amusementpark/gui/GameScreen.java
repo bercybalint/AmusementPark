@@ -338,7 +338,6 @@ public class GameScreen implements Screen
             gametimer.schedule(task, 0, 1000 );
         }
 
-
         public String getTime(int sec)
         {
             int hours = 0;

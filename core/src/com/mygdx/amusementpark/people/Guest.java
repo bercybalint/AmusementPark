@@ -127,7 +127,6 @@ public class Guest extends Person implements Mover {
     @Override
     public void move() {
         if (path != null) {
-            System.out.println("mozgok");
             int go_to_x = currentStep.getX() * tile_width;
             int go_to_y = currentStep.getY() * tile_height;
             if (x < go_to_x && y == go_to_y) {
