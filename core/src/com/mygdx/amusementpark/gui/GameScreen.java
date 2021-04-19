@@ -36,7 +36,6 @@ public class GameScreen implements Screen
     Timer gametimer = new Timer();
     Boolean first_building_placed=false;
     private Array<Guest> guests = new Array<Guest>();
-    public int usePrice;
     public int ticketPrice = 50;
 
 
@@ -46,6 +45,7 @@ public class GameScreen implements Screen
      * Camera, felület létrehozása.
      */
     final AmusementPark game;
+    public GameOverScreen gameOver;
     OrthographicCamera camera;
     private final Stage stage;
     private final int window_height = 800;
@@ -135,9 +135,10 @@ public class GameScreen implements Screen
     /**
      * Különböző elemek árai.
      */
-    private int money = 100000;
-    private Label label;
-    private Label timelabel;
+    private int money = 10000;
+    private Label moneyLabel;
+    private Label timeLabel;
+    private Label guestsLabel;
     private TimerTask task;
 
     int gamePrice = 2000;
@@ -159,17 +160,24 @@ public class GameScreen implements Screen
 
         BitmapFont labelFont = skin.get("default-font", BitmapFont.class);
         labelFont.getData().markupEnabled = true;
-        label = new Label("[BLACK]Money:" + money + "$",skin);
-        timelabel = new Label("",skin);
-        stage.addActor(label);
-        stage.addActor(timelabel);
+        moneyLabel = new Label("", skin);
+        moneyLabel.setPosition(70,872);
+
+        timeLabel = new Label("", skin);
+        timeLabel.setPosition(220,872);
+
+        guestsLabel = new Label("[WHITE]Guests: 0", skin);
+        guestsLabel.setPosition(370,860);
+
+        stage.addActor(moneyLabel);
+        stage.addActor(timeLabel);
+        stage.addActor(guestsLabel);
 
 
         task = new TimerTask() {
             public void run() {
                 String time = getTime(ido);
-                timelabel.setText("[WHITE]Time: "+time);
-                timelabel.setPosition(220,872);
+                timeLabel.setText("[WHITE]Time: "+time);
                 ido++;
 
             }
@@ -754,8 +762,12 @@ public class GameScreen implements Screen
     public void moneyHeist(int price){
 
         money = money - price;
-        label.setText("[WHITE]Money: " + money + "$");
-        label.setPosition(70,860);
+        if (money > 0) {
+            moneyLabel.setText("[WHITE]Money: " + money + "$");
+        }else{
+            game.setScreen(new GameOverScreen(game));
+        }
+
     }
 
     @Override
@@ -795,17 +807,9 @@ public class GameScreen implements Screen
             timer.schedule(new GameScreen.CreatePerson(), delay);
             Guest p = new Guest(map,0,0,20,20, guest_texture, window_height, window_width,happy_texture,annoyed_texture,angry_texture,trash_texture);
             guests.add(p);
+            guestsLabel.setText("[WHITE]Guests: " + guests.size);
             money = money + ticketPrice;
-            label.setText("[BLACK]Money:" + money + "$");
-            /*
-            Guest p = new Guest(map,0,0,20,20, guest_texture, window_height, window_width,happy_texture,annoyed_texture,angry_texture,trash_texture);
-            guests.add(p);
-*/
-            /*for(int i =0; i<3; i++)
-            {
-                Guest p = new Guest(map, 0, 0, 20, 20, guest_texture, window_height, window_width, happy_texture, annoyed_texture, angry_texture, trash_texture);
-                guests.add(p);
-            }*/
+            moneyLabel.setText("[WHITE]Money:" + money + "$");
         }
     }
 }
