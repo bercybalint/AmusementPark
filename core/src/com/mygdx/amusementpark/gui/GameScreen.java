@@ -746,7 +746,6 @@ public class GameScreen implements Screen
         textureRegionDrawableTrash = new TextureRegionDrawable(textureRegionTrash);
         textureRegionStaff = new TextureRegion(staff_texture);
         textureRegionDrawableStaff = new TextureRegionDrawable(textureRegionStaff);
-
         happy_texture = new Texture(Gdx.files.internal("guestHappy.png"));
         annoyed_texture = new Texture(Gdx.files.internal("guestAnnoyed.png"));
         angry_texture = new Texture(Gdx.files.internal("guestAngry.png"));

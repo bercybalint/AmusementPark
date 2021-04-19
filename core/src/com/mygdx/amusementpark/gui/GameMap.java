@@ -11,6 +11,8 @@ import com.mygdx.amusementpark.buildable.*;
 import com.mygdx.amusementpark.pathfinding.Mover;
 import com.mygdx.amusementpark.pathfinding.TileBasedMap;
 import com.mygdx.amusementpark.people.Cleaner;
+import com.mygdx.amusementpark.people.Cleaner;
+import com.mygdx.amusementpark.people.Guest;
 
 
 import java.awt.*;
@@ -40,13 +42,19 @@ public class GameMap implements TileBasedMap
 
     public Array<Cleaner> cleaners = new Array<Cleaner>();
 
+
+
+
+
     Point p = new Point();
+
 
     /** Indicator if a given tile has been visited during the search */
     public boolean[][] visited = new boolean[WIDTH][HEIGHT];
 
     public int tile_width;
     public int tile_height;
+
 
     /**
      * Alap elemek textúrái. d
@@ -62,6 +70,7 @@ public class GameMap implements TileBasedMap
     Texture hamburger_texture;
     Texture trashcan_texture;
     Texture trash_texture;
+    Texture cleaner_texture;
 
 
     /**
@@ -349,7 +358,8 @@ public class GameMap implements TileBasedMap
                                                                 units.get(i).get(j).width,
                                                                 units.get(i).get(j).height,
                                                                 staff_texture,10,Tiles.STAFF);
-
+                                            Cleaner c = new Cleaner(this, units.get(i).get(j).x,units.get(i).get(j).y,20,20, cleaner_texture, units.get(i).get(j).height,  units.get(i).get(j).width);
+                                            cleaners.add(c);
 
                                             p.x = units.get(i).get(j).x/units.get(i).get(j).width;
                                             p.y = units.get(i).get(j).y/units.get(i).get(j).height;
@@ -599,6 +609,8 @@ public class GameMap implements TileBasedMap
         trashcan_texture = new Texture(Gdx.files.internal("trashcan.png"));
         trash_texture = new Texture(Gdx.files.internal("trash.png"));
         staff_texture = new Texture(Gdx.files.internal("staff.png"));
+        cleaner_texture = new Texture(Gdx.files.internal("cleaner.png"));
+
 
     }
 
