@@ -14,14 +14,15 @@ import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class Guest extends Person implements Mover {
+public class Guest extends Person implements Mover
+{
 
     private Timer timer;
+    private Timer parkTimer;
     private int delay = 1000;
     private int mood;
     private int maxMood = 100;
     public PathFinder finder;
-    public Buildable destination;
 
     Timer moodTimer;
 
@@ -35,119 +36,141 @@ public class Guest extends Person implements Mover {
     public Boolean isWaiting = false;
     public Boolean throwingTrash = false;
 
-
-
-    public Guest(GameMap map, int x, int y, int width, int height, Texture texture, int window_h, int window_w, Texture happy, Texture annoyed, Texture angry, Texture trash) {
+    public Guest(GameMap map, int x, int y, int width, int height, Texture texture, int window_h, int window_w, Texture happy, Texture annoyed, Texture angry, Texture trash)
+    {
         super(map, x, y, width, height, texture, window_h, window_w);
         this.moodTimer = new Timer();
         this.moodTimer.schedule(new moodTask(), 0, delay);
-
+        this.parkTimer = new Timer();
+        this.parkTimer.schedule(new parkBehaviour(),0,1000);
         this.mood = this.maxMood;
         this.happy_texture = happy;
         this.annoyed_texture = annoyed;
         this.angry_texture = angry;
         this.texture = happy_texture;
-        this.trash_texture=trash;
+        this.trash_texture = trash;
         finder = new AStarPathFinder(map, 200, false);
 
         behaviour();
     }
 
-    public void gainMood(int moodGain) {
+    public void gainMood(int moodGain)
+    {
         this.mood += moodGain;
-        if (this.mood >= maxMood) {
+        if (this.mood >= maxMood)
+        {
             this.mood = maxMood;
         }
     }
 
     public void goHere(Point p)
     {
+        this.p = p;
         map.clearVisited();
         path = finder.findPath(this, (ind_x), (ind_y), p.x / 60, p.y / 40);
 
         if (path != null)
         {
             isGoing = true;
-            isWaiting = false;
-            System.out.println("Talaltam utat");
             //System.out.println("ide:" + destination.x / 60 + "," + destination.y / 40);
             pathLength = path.getLength();
             stepIndex = 0;
             currentStep = path.getStep(stepIndex);
-            System.out.println("----------");
-            for(int i = 0; i < pathLength; i++)
+            /*System.out.println("----------");
+            for (int i = 0; i < pathLength; i++)
             {
-                System.out.println(path.getStep(i).getX()+","+path.getStep(i).getY());
+                System.out.println(path.getStep(i).getX() + "," + path.getStep(i).getY());
             }
-            System.out.println("----------");
-        } else {
+            System.out.println("----------");*/
+        } else
+        {
             timer = new Timer();
-            System.out.println("ujra probalom");
-            timer.schedule(new personBehaviour(), 2000);
-
+            //System.out.println("ujra probalom");
+            timer.schedule(new Guest.personBehaviour(), 2000);
         }
-
     }
-    public void goToNewPlace() {
+
+    public void goToNewPlace()
+    {
         Random random = new Random();
         int randInt = 0;
         if (map.destinationPoints.size > 0)
         {
             randInt = random.nextInt(map.destinationPoints.size);
             destination = map.destinationPoints.get(randInt);
-            System.out.println("db:" + map.destinationPoints.size);
-            Point p = new Point(destination.x,destination.y);
+
+            Point p = new Point(destination.x, destination.y);
             goHere(p);
+        } else
+        {
+            timer = new Timer();
+            timer.schedule(new Guest.personBehaviour(), 2000);
         }
+
     }
 
-    public void behaviour() {
+    public void behaviour()
+    {
         goToNewPlace();
     }
 
-    public void reachedDestination(int time_length) {
+    public void reachedDestination(int time_length)
+    {
         timer = new Timer();
-        System.out.println("varok: " + time_length * 1000);
         timer.schedule(new personBehaviour(), time_length * 1000);
     }
 
-    public void moodChange() {
+    public void moodChange()
+    {
         mood--;
-        if (mood >= 70) {
+        if (mood >= 70)
+        {
             this.texture = happy_texture;
-        } else if (mood >= 20 && mood <= 50) {
+        } else if (mood >= 20 && mood <= 50)
+        {
             this.texture = annoyed_texture;
-        } else if (mood < 20) {
+        } else if (mood < 20)
+        {
             this.texture = angry_texture;
         }
-        if (mood <= 0) {
+        if (mood <= 0)
+        {
             //leave the park
         }
     }
 
     @Override
-    public void move() {
-        if (path != null) {
+    public void move()
+    {
+        if (path != null)
+        {
             int go_to_x = currentStep.getX() * tile_width;
             int go_to_y = currentStep.getY() * tile_height;
-            if (x < go_to_x && y == go_to_y) {
+            if (x < go_to_x && y == go_to_y)
+            {
                 dir = Direction.RIGHT;
             }
-            if (x > go_to_x && y == go_to_y) {
+            if (x > go_to_x && y == go_to_y)
+            {
                 dir = Direction.LEFT;
             }
-            if (x == go_to_x && y > go_to_y) {
+            if (x == go_to_x && y > go_to_y)
+            {
                 dir = Direction.DOWN;
             }
-            if (x == go_to_x && y < go_to_y) {
+            if (x == go_to_x && y < go_to_y)
+            {
                 dir = Direction.UP;
             }
-            if (x == go_to_x && y == go_to_y) {
-                if (stepIndex == pathLength - 1) {
+            if (x == go_to_x && y == go_to_y)
+            {
+                if (stepIndex == pathLength - 1)
+                {
                     dir = Direction.NOTHING;
                     isGoing = false;
                     path = null;
-                } else if (stepIndex < pathLength - 1) {
+                } else if (stepIndex < pathLength - 1)
+                {
                     stepIndex++;
                     currentStep = path.getStep(stepIndex);
                     dir = Direction.NOTHING;
@@ -155,32 +178,31 @@ public class Guest extends Person implements Mover {
                     ind_y = y / 40;
 
                     Random to_trash_r = new Random();
-                    if(!throwingTrash);
+                    if (!throwingTrash) ;
                     {
                         int to_trash = to_trash_r.nextInt(15);
-                        if (to_trash == 9) {
+                        if (to_trash == 9)
+                        {
                             throwingTrash = true;
-                            System.out.println("keresek kukat");
-                            Point trash_p = findTrash();
-                            //System.out.println("legközelebbi kuka "+trash_p.x+","+trash_p.y);
+                            Point trash_p = findTrashCan();
+                            System.out.println("Kidobom a szemet");
 
                             double distance = Math.sqrt((y - trash_p.y) * (y - trash_p.y) + (x - trash_p.x) * (x - trash_p.x));
-                            System.out.println("kuka tavolsage" + distance);
-                            if (distance < 300) {
-                                System.out.println("van a kozelben kuka");
-                                path = null;
+                            if (distance < 300)
+                            {
                                 goHere(trash_p);
-                            } else {
+                            } else
+                            {
                                 System.out.println("Szemetelek");
                                 map.trashes.add(new Trash(x, y, 10, 10, trash_texture, 0, Tiles.TRASH));
                                 throwingTrash = false;
-                                //ide kell valahogy hívni a takarítót
                             }
                         }
                     }
                 }
             }
-            switch (dir) {
+            switch (dir)
+            {
                 case UP:
                     y += speed;
                     break;
@@ -201,12 +223,33 @@ public class Guest extends Person implements Mover {
                     break;
             }
         }
-        if (path == null) {
+        if (path == null)
+        {
             isGoing = false;
         }
     }
 
-    public Point findTrash()
+    public Boolean isParkNearby()
+    {
+        Boolean retu = false;
+        for(int i = 0; i< map.terrain.size; i++)
+        {
+            for(int j = 0; j < map.terrain.get(i).size; j++)
+            {
+                if(map.terrain.get(i).get(j)==Tiles.BUSH||map.terrain.get(i).get(j)==Tiles.TREE)
+                {
+                    double distance = Math.sqrt(((j*40) - y) * ((j*40) - y) + ((i*60) - x) * ((i*60) - x));
+                    if(distance<100)
+                    {
+                        retu = true;
+                    }
+                }
+            }
+        }
+        return retu;
+    }
+
+    public Point findTrashCan()
     {
         double minDistance = 10000;
         Point trash_point = new Point(-100,-100);
@@ -238,18 +281,32 @@ public class Guest extends Person implements Mover {
         return mood;
     }
 
-    class personBehaviour extends TimerTask
-    {
-        public void run() {
-            System.out.println("Utat keresek");
-            behaviour();
-            //timer.cancel(); //Terminate the timer thread
-        }
-    }
     class moodTask extends TimerTask
     {
         public void run() {
             moodChange();
         }
     }
+
+    class personBehaviour extends TimerTask
+    {
+        public void run() {
+            isWaiting=false;
+            behaviour();
+            //timer.cancel(); //Terminate the timer thread
+        }
+    }
+
+    class parkBehaviour extends TimerTask
+    {
+        public void run()
+        {
+            if(isParkNearby())
+            {
+                System.out.println("van termeszet a kozelben");
+                gainMood(2);
+            }
+        }
+    }
+
 }

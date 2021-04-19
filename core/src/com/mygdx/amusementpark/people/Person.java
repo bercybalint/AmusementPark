@@ -2,6 +2,7 @@ package com.mygdx.amusementpark.people;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.Texture;
+import com.mygdx.amusementpark.buildable.Buildable;
 import com.mygdx.amusementpark.buildable.Direction;
 import com.mygdx.amusementpark.buildable.Tiles;
 import com.mygdx.amusementpark.gui.GameMap;
@@ -33,6 +34,7 @@ abstract class Person extends Rectangle implements Mover
     public int pathLength;
     public int stepIndex=0;
     public Path.Step currentStep;
+    public Point p;
 
     int window_h;
     int window_w;
@@ -40,6 +42,9 @@ abstract class Person extends Rectangle implements Mover
     int tile_height;
     int ind_x=10;
     int ind_y=1;
+
+    private Timer timer;
+    public Buildable destination;
 
     public Person(GameMap map, int x, int y, int width, int height, Texture texture, int window_h, int window_w)
     {
@@ -60,9 +65,6 @@ abstract class Person extends Rectangle implements Mover
     {
         if(path!=null)
         {
-            int curr_x = (x / tile_width);
-            int curr_y = (y / tile_height);
-
             int go_to_x = currentStep.getX()*tile_width;
             int go_to_y = currentStep.getY()*tile_height;
 
@@ -130,5 +132,7 @@ abstract class Person extends Rectangle implements Mover
     {
         this.map = map;
     }
+
+
 
 }

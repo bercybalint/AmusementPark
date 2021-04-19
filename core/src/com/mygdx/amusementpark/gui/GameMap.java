@@ -10,6 +10,7 @@ import com.badlogic.gdx.utils.Array;
 import com.mygdx.amusementpark.buildable.*;
 import com.mygdx.amusementpark.pathfinding.Mover;
 import com.mygdx.amusementpark.pathfinding.TileBasedMap;
+import com.mygdx.amusementpark.people.Cleaner;
 
 
 import java.awt.*;
@@ -36,6 +37,9 @@ public class GameMap implements TileBasedMap
     public Array<Buildable> trashCans = new Array<Buildable>();
 
     public Array<Trash> trashes = new Array<Trash>();
+
+    public Array<Cleaner> cleaners = new Array<Cleaner>();
+
     Point p = new Point();
 
     /** Indicator if a given tile has been visited during the search */
@@ -86,6 +90,7 @@ public class GameMap implements TileBasedMap
         mapInit();
     }
 
+
     public void mapInit()
     {
         Buildable tile;
@@ -102,7 +107,7 @@ public class GameMap implements TileBasedMap
             {
                 if(j==0 & i == 10)
                 {
-                    type = Tiles.TREE;
+                    type = Tiles.EMPTY;
                     tile = new Road((i)*tile_width,(j)*tile_height,tile_width,tile_height,road_down_to_up,30,type);
                     units.get(i).add(tile);
                     terrain.get(i).add(type);
@@ -153,13 +158,11 @@ public class GameMap implements TileBasedMap
                     units.get(i).add(tile);
                     terrain.get(i).add(type);
                 }
-
             }
         }
     }
-
     /**
-     *
+     *  Megnézi, hogy egy útnak vannak-e szomszédai
      */
     public void checkRoadNeighbours()
     {
@@ -471,15 +474,9 @@ public class GameMap implements TileBasedMap
                             units.get(i).set(j,actual);
                             terrain.get(i).set(j,type);
                             checkRoadNeighbours();
-
+                            did_place = true;
                         }
-                        did_place = true;
-
                     }
-                }
-                else{
-                    //Gdx.app.setLogLevel(Application.LOG_DEBUG);
-                    //Gdx.app.debug("POSITION", "X touched: " + touch.x + " Y touched: " + touch.y);
                 }
             }
         }
@@ -562,7 +559,6 @@ public class GameMap implements TileBasedMap
         if (getTerrain(x,y) == Tiles.ROAD ||
             getTerrain(x,y) == Tiles.GAMES ||
             getTerrain(x,y) == Tiles.FOOD ||
-            getTerrain(x,y) == Tiles.BUSH ||
             getTerrain(x,y) == Tiles.WATER ||
             getTerrain(x,y) == Tiles.TRASH ||
             getTerrain(x,y) == Tiles.STAFF || getTerrain(x,y) == Tiles.TRASHCAN) {

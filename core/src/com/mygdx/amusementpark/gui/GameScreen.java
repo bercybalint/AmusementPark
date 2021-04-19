@@ -225,6 +225,7 @@ public class GameScreen implements Screen
                         guest.isWaiting=true;
                         System.out.println("megjottem");
                         guest.reachedDestination(map.destinationPoints.get(j).timeToUse);
+                        money+=map.destinationPoints.get(j).prizeToUse;
                         guest.gainMood(map.destinationPoints.get(j).moodGain);
                     }
                 }
@@ -792,14 +793,16 @@ public class GameScreen implements Screen
         public void run() {
 
             //System.out.println(delay + " sec is up");
+
             int delay = (new Random().nextInt(10))*1000;
             timer.schedule(new GameScreen.CreatePerson(), delay);
             Guest p = new Guest(map,0,0,20,20, guest_texture, window_height, window_width,happy_texture,annoyed_texture,angry_texture,trash_texture);
             guests.add(p);
-            /*
-            Guest p = new Guest(map,0,0,20,20, guest_texture, window_height, window_width,happy_texture,annoyed_texture,angry_texture,trash_texture);
-            guests.add(p);
-*/
+            /*for(int i =0; i<3; i++)
+            {
+                Guest p = new Guest(map, 0, 0, 20, 20, guest_texture, window_height, window_width, happy_texture, annoyed_texture, angry_texture, trash_texture);
+                guests.add(p);
+            }*/
         }
     }
 }
