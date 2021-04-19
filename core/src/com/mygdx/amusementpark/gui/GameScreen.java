@@ -24,6 +24,7 @@ import com.mygdx.amusementpark.pathfinding.*;
 import com.mygdx.amusementpark.people.Guest;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
+import java.awt.*;
 import java.sql.Time;
 import java.util.Random;
 import java.util.Timer;
@@ -212,21 +213,28 @@ public class GameScreen implements Screen
         }
         for(int i = 0; i < guests.size; i++)
         {
-            Guest p = guests.get(i);
-            p.move();
-            p.setMap(map);
-            game.batch.draw(p.getTexture(),p.x+20,p.y+110,p.width,p.height);
+            Guest guest = guests.get(i);
+            guest.move();
+            guest.setMap(map);
+            game.batch.draw(guest.getTexture(),guest.x+20,guest.y+110,guest.width,guest.height);
             for(int j = 0; j < map.destinationPoints.size; j++)
             {
-                if(p.intersects(map.destinationPoints.get(j)))
+                if(guest.intersects(map.destinationPoints.get(j)))
                 {
-                    if(!p.isGoing && !p.isWaiting)
+                    if(!guest.isGoing && !guest.isWaiting)
                     {
-                        p.isWaiting=true;
+                        guest.isWaiting=true;
                         System.out.println("megjottem");
-                        p.reachedDestination(map.destinationPoints.get(j).timeToUse);
-                        p.gainMood(map.destinationPoints.get(j).moodGain);
+                        guest.reachedDestination(map.destinationPoints.get(j).timeToUse);
+                        guest.gainMood(map.destinationPoints.get(j).moodGain);
                     }
+                }
+            }
+            for(int j = 0; j < map.trashCans.size; j++)
+            {
+                if(guest.intersects(map.trashCans.get(j)))
+                {
+                    guest.goHere(new Point(guest.destination.x,guest.destination.y));
                 }
             }
         }
@@ -757,11 +765,13 @@ public class GameScreen implements Screen
         public void run() {
 
             //System.out.println(delay + " sec is up");
-            int delay = (new Random().nextInt(10))*1000;
+            /*int delay = (new Random().nextInt(10))*1000;
             timer.schedule(new GameScreen.CreatePerson(), delay);
             Guest p = new Guest(map,0,0,20,20, guest_texture, window_height, window_width,happy_texture,annoyed_texture,angry_texture,trash_texture);
             guests.add(p);
-
+            */
+            Guest p = new Guest(map,0,0,20,20, guest_texture, window_height, window_width,happy_texture,annoyed_texture,angry_texture,trash_texture);
+            guests.add(p);
 
         }
     }

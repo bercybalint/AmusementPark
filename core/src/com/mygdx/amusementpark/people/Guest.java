@@ -22,7 +22,7 @@ public class Guest extends Person implements Mover {
     private int mood;
     private int maxMood = 100;
     public PathFinder finder;
-    Buildable destination;
+    public Buildable destination;
 
     Timer moodTimer;
 
@@ -35,14 +35,6 @@ public class Guest extends Person implements Mover {
     public Boolean isGoing = false;
     public Boolean isWaiting = false;
 
-    public PathFinder trash_finder;
-    /**
-     * The last path found for the current unit
-     */
-    public Path trash_path;
-    public int trash_pathLength;
-    public int trash_stepIndex = 0;
-    public Path.Step trash_currentStep;
 
 
     public Guest(GameMap map, int x, int y, int width, int height, Texture texture, int window_h, int window_w, Texture happy, Texture annoyed, Texture angry, Texture trash) {
@@ -57,7 +49,6 @@ public class Guest extends Person implements Mover {
         this.texture = happy_texture;
         this.trash_texture=trash;
         finder = new AStarPathFinder(map, 200, false);
-        trash_finder = new AStarPathFinder(map, 20, false);
 
         behaviour();
     }
@@ -69,17 +60,13 @@ public class Guest extends Person implements Mover {
         }
     }
 
-    public void goToNewPlace() {
-        Random random = new Random();
-        int randInt = 0;
-        if (map.destinationPoints.size > 0) {
-            randInt = random.nextInt(map.destinationPoints.size);
-            destination = map.destinationPoints.get(randInt);
-            System.out.println("db:" + map.destinationPoints.size);
-            map.clearVisited();
-            path = finder.findPath(this, (ind_x), (ind_y), destination.x / 60, destination.y / 40);
-        }
-        if (path != null) {
+    public void goHere(Point p)
+    {
+        map.clearVisited();
+        path = finder.findPath(this, (ind_x), (ind_y), p.x / 60, p.y / 40);
+
+        if (path != null)
+        {
             isGoing = true;
             isWaiting = false;
             System.out.println("new path");
@@ -87,6 +74,11 @@ public class Guest extends Person implements Mover {
             pathLength = path.getLength();
             stepIndex = 0;
             currentStep = path.getStep(stepIndex);
+            System.out.println("path:");
+            for(int i = 0; i < pathLength; i++)
+            {
+                System.out.println(path.getStep(i).getX()+","+path.getStep(i).getY());
+            }
         } else {
             timer = new Timer();
             System.out.println("ujra probalom");
@@ -94,6 +86,18 @@ public class Guest extends Person implements Mover {
 
         }
 
+    }
+    public void goToNewPlace() {
+        Random random = new Random();
+        int randInt = 0;
+        if (map.destinationPoints.size > 0)
+        {
+            randInt = random.nextInt(map.destinationPoints.size);
+            destination = map.destinationPoints.get(randInt);
+            System.out.println("db:" + map.destinationPoints.size);
+            Point p = new Point(destination.x,destination.y);
+            goHere(p);
+        }
     }
 
     public void behaviour() {
@@ -123,6 +127,7 @@ public class Guest extends Person implements Mover {
     @Override
     public void move() {
         if (path != null) {
+            System.out.println("mozgok");
             int go_to_x = currentStep.getX() * tile_width;
             int go_to_y = currentStep.getY() * tile_height;
             if (x < go_to_x && y == go_to_y) {
@@ -146,27 +151,23 @@ public class Guest extends Person implements Mover {
                     stepIndex++;
                     currentStep = path.getStep(stepIndex);
                     dir = Direction.NOTHING;
-                    ind_x = destination.x / 60;
-                    ind_y = destination.y / 40;
+                    ind_x = x / 60;
+                    ind_y = y / 40;
 
                     Random to_trash_r = new Random();
-                    int to_trash = to_trash_r.nextInt(10);
+                    int to_trash = to_trash_r.nextInt(15);
                     if (to_trash == 9) {
                         System.out.println("keresek kukat");
                         Point trash_p = findTrash();
+                        System.out.println("legközelebbi kuka "+trash_p.x+","+trash_p.y);
+
                         double distance = Math.sqrt((y - trash_p.y) * (y - trash_p.y) + (x - trash_p.x) * (x - trash_p.x));
                         System.out.println("kuka tavolsage"+distance);
-                        if(distance<8)
+                        if(distance<300)
                         {
-                            map.clearVisited();
-                            trash_path = trash_finder.findPath(this, (ind_x), (ind_y), destination.x / 60, destination.y / 40);
-                            if(path!=null)
-                            {
-                                trash_pathLength = trash_path.getLength();
-                                trash_stepIndex = 0;
-                                trash_currentStep = trash_path.getStep(trash_stepIndex);
-                                System.out.println("talaltam kukahoz utat");
-                            }
+                            System.out.println("van a kozelben kuka");
+                            path = null;
+                            goHere(trash_p);
                         }
                         else
                         {
@@ -212,18 +213,21 @@ public class Guest extends Person implements Mover {
         {
             for(int i = 0; i < map.trashCans.size; i++) {
                 double y2 = map.trashCans.get(i).y;
-                double y1 = ind_y;
+                double y1 = y;
 
                 double x2 = map.trashCans.get(i).x;
-                double x1 = ind_x;
+                double x1 = x;
                 double distance = Math.sqrt((y2 - y1) * (y2 - y1) + (x2 - x1) * (x2 - x1));
 
                 if(minDistance>distance)
                 {
-                    trash_point = new Point(map.trashCans.get(i).x/map.tile_width,map.trashCans.get(i).y/tile_height);
+                    minDistance=distance;
+                    trash_point = new Point(map.trashCans.get(i).x,map.trashCans.get(i).y);
                 }
+                System.out.println("tavolsag:"+distance);
             }
         }
+
         return trash_point;
     }
 

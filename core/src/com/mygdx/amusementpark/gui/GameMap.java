@@ -565,7 +565,7 @@ public class GameMap implements TileBasedMap
             getTerrain(x,y) == Tiles.BUSH ||
             getTerrain(x,y) == Tiles.WATER ||
             getTerrain(x,y) == Tiles.TRASH ||
-            getTerrain(x,y) == Tiles.STAFF) {
+            getTerrain(x,y) == Tiles.STAFF || getTerrain(x,y) == Tiles.TRASHCAN) {
             return false;
         }
         else{
