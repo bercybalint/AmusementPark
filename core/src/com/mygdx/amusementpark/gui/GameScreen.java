@@ -231,7 +231,9 @@ public class GameScreen implements Screen
         }
 
 
-
+        /**
+         * Az aktuálisan lerakásra kiválaszott elem privewjának a kirajzolása az egér pozíciójára.
+        */
         if(isSelected)
         {
             Vector3 mouse_pos = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
@@ -239,8 +241,8 @@ public class GameScreen implements Screen
 
             if(chosen == Tiles.GAMES)
             {
-                game.batch.draw(korhinta_texture,mouse_pos.x-map.tile_width,
-                        mouse_pos.y-map.tile_height,map.tile_width*3,map.tile_height*3);
+                game.batch.draw(korhinta_texture,mouse_pos.x-((3*map.tile_width)/2),
+                        mouse_pos.y-((3*map.tile_height)/2),map.tile_width*3,map.tile_height*3);
             }
             else
             {
@@ -253,7 +255,6 @@ public class GameScreen implements Screen
 
         stage.act(delta);
         stage.draw();
-
         /**
          * Inputok kezelése
          */
