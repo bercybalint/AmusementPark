@@ -180,7 +180,6 @@ public class GameScreen implements Screen
         texturesInit();
         buttonManagment();
         moneyHeist(0);
-        runTimer();
     }
 
     /**
@@ -251,6 +250,31 @@ public class GameScreen implements Screen
             {
                 game.batch.draw(korhinta_texture,mouse_pos.x-((3*map.tile_width)/2),
                         mouse_pos.y-((3*map.tile_height)/2),map.tile_width*3,map.tile_height*3);
+            }
+            else if(chosen == Tiles.FOOD)
+            {
+                game.batch.draw(hamburger_texture,mouse_pos.x-((map.tile_width)/2),
+                        mouse_pos.y-((map.tile_height)/2),map.tile_width,map.tile_height);
+            }
+            else if(chosen == Tiles.WATER)
+            {
+                game.batch.draw(water_texture,mouse_pos.x-((map.tile_width)/2),
+                        mouse_pos.y-((map.tile_height)/2),map.tile_width,map.tile_height);
+            }
+            else if(chosen == Tiles.STAFF)
+            {
+                game.batch.draw(staff_texture,mouse_pos.x-((map.tile_width)/2),
+                        mouse_pos.y-((map.tile_height)/2),map.tile_width,map.tile_height);
+            }
+            else if(chosen == Tiles.TRASHCAN)
+            {
+                game.batch.draw(trashcan_texture,mouse_pos.x-((map.tile_width)/2),
+                        mouse_pos.y-((map.tile_height)/2),map.tile_width,map.tile_height);
+            }
+            else if(chosen == Tiles.BUSH)
+            {
+                game.batch.draw(bush_texture,mouse_pos.x-((map.tile_width)/2),
+                        mouse_pos.y-((map.tile_height)/2),map.tile_width,map.tile_height);
             }
             else
             {
@@ -383,6 +407,7 @@ public class GameScreen implements Screen
                                         timer.cancel();
                                         timer = new Timer();
                                         new CreatePerson().run();
+                                        runTimer();
                                     }
                                 });
 
