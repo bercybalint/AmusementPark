@@ -2,10 +2,12 @@ package com.mygdx.amusementpark.gui;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -20,6 +22,7 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.mygdx.amusementpark.buildable.*;
 import com.mygdx.amusementpark.pathfinding.*;
 import com.mygdx.amusementpark.people.Guest;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 import java.sql.Time;
 import java.util.Random;
@@ -28,7 +31,7 @@ import java.util.TimerTask;
 
 public class GameScreen implements Screen
 {
-    Timer timer;
+    Timer timer = new Timer();
     Timer gametimer = new Timer();
     Boolean first_building_placed=false;
     private Array<Guest> guests = new Array<Guest>();
@@ -141,6 +144,8 @@ public class GameScreen implements Screen
     int trashcanPrice = 1000;
     int roadPrice = 100;
 
+    ShapeRenderer shapeRenderer = new ShapeRenderer();
+
     private GameMap map;
     int ido = 0;
     public GameScreen(final AmusementPark game)
@@ -175,9 +180,6 @@ public class GameScreen implements Screen
         buttonManagment();
         moneyHeist(0);
         runTimer();
-        map.writeOut();
-
-
     }
 
     /**
@@ -222,11 +224,33 @@ public class GameScreen implements Screen
                         p.isWaiting=true;
                         System.out.println("megjottem");
                         p.reachedDestination(map.destinationPoints.get(j).timeToUse);
+                        p.gainMood(map.destinationPoints.get(j).moodGain);
                     }
                 }
             }
         }
+
+
+
+        if(isSelected)
+        {
+            Vector3 mouse_pos = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
+            camera.unproject(mouse_pos);
+
+            if(chosen == Tiles.GAMES)
+            {
+                game.batch.draw(korhinta_texture,mouse_pos.x-map.tile_width,
+                        mouse_pos.y-map.tile_height,map.tile_width*3,map.tile_height*3);
+            }
+            else
+            {
+                game.batch.draw(road_down_to_up,mouse_pos.x-map.tile_width/2,
+                        mouse_pos.y-map.tile_height/2,map.tile_width ,map.tile_height);
+            }
+        }
+
         game.batch.end();
+
         stage.act(delta);
         stage.draw();
 
@@ -347,6 +371,7 @@ public class GameScreen implements Screen
         startButton.setPosition(550, 870);
         startButton.addListener(new ClickListener() {
                                     public void clicked(InputEvent e, float x, float y) {
+                                        timer.cancel();
                                         timer = new Timer();
                                         new CreatePerson().run();
                                     }
