@@ -21,6 +21,6 @@ public class Trash extends Buildable
      */
     public Trash(int x, int y, int width, int height, Texture texture, int prizeToBuild, Tiles type)
     {
-        super(x, y, width, height, texture, prizeToBuild, type,0);
+        super(x, y, width, height, texture, 0, type,0);
     }
 }

@@ -32,13 +32,17 @@ public class GameMap implements TileBasedMap
 
     /** The array of all destination points   */
     public Array<Buildable> destinationPoints = new Array<Buildable>();
+
+    public Array<Buildable> trashCans = new Array<Buildable>();
+
+    public Array<Trash> trashes = new Array<Trash>();
     Point p = new Point();
 
     /** Indicator if a given tile has been visited during the search */
     public boolean[][] visited = new boolean[WIDTH][HEIGHT];
 
-    int tile_width;
-    int tile_height;
+    public int tile_width;
+    public int tile_height;
 
     /**
      * Alap elemek textúrái. d
@@ -52,6 +56,7 @@ public class GameMap implements TileBasedMap
     Texture bush_texture;
     Texture water_texture;
     Texture hamburger_texture;
+    Texture trashcan_texture;
     Texture trash_texture;
 
 
@@ -393,7 +398,6 @@ public class GameMap implements TileBasedMap
 
                                             p.x = units.get(i).get(j).x/units.get(i).get(j).width;
                                             p.y = units.get(i).get(j).y/units.get(i).get(j).height;
-                                            destinationPoints.add(actual);
 
                                             units.get(i).set(j, actual);
                                             terrain.get(i).set(j, type);
@@ -401,8 +405,16 @@ public class GameMap implements TileBasedMap
                                     }
                                     break;
                                 case TREE:
-                                    actual = new Park(units.get(i).get(j).x,units.get(i).get(j).y, units.get(i).get(j).width,units.get(i).get(j).height,bush_texture,10,Tiles.TREE);
+                                    actual = new Park(units.get(i).get(j).x,
+                                            units.get(i).get(j).y,
+                                            units.get(i).get(j).width,
+                                            units.get(i).get(j).height,
+                                            bush_texture,10,
+                                            Tiles.TREE);
                                     type = Tiles.TREE;
+
+                                    units.get(i).set(j, actual);
+                                    terrain.get(i).set(j, type);
                                     break;
                                 case TRASH:
 
@@ -410,16 +422,17 @@ public class GameMap implements TileBasedMap
                                     if((i>0 && j>0))
                                     {
                                         if (units.get(i).get(j).getType() == Tiles.EMPTY) {
-                                            actual = new Park(
+                                            actual = new TrashCan(
                                                     units.get(i).get(j).x,
                                                     units.get(i).get(j).y,
                                                     units.get(i).get(j).width,
                                                     units.get(i).get(j).height,
-                                                    trash_texture,10,Tiles.TRASH);
+                                                    trashcan_texture,10,Tiles.TRASHCAN);
 
                                             p.x = units.get(i).get(j).x/units.get(i).get(j).width;
                                             p.y = units.get(i).get(j).y/units.get(i).get(j).height;
-                                            destinationPoints.add(actual);
+
+                                            trashCans.add(actual);
 
                                             units.get(i).set(j, actual);
                                             terrain.get(i).set(j, type);
@@ -448,8 +461,11 @@ public class GameMap implements TileBasedMap
                                         }
                                     }
                                     break;
-                                default: actual = new Road(units.get(i).get(j).x,units.get(i).get(j).y, units.get(i).get(j).width,units.get(i).get(j).height,road_down_to_up,10,Tiles.TREE);
-                                    type = Tiles.ROAD;
+                                default: actual = new Buildable(units.get(i).get(j).x,
+                                        units.get(i).get(j).y,
+                                        units.get(i).get(j).width,
+                                        units.get(i).get(j).height,grass_texture,0, Tiles.EMPTY,0);
+                                    type = Tiles.EMPTY;
 
                             }
                             units.get(i).set(j,actual);
@@ -584,7 +600,8 @@ public class GameMap implements TileBasedMap
         bush_texture = new Texture(Gdx.files.internal("bush.png"));
         hamburger_texture = new Texture(Gdx.files.internal("hamburger.png"));
         water_texture = new Texture(Gdx.files.internal("water.png"));
-        trash_texture = new Texture(Gdx.files.internal("trashcan.png"));
+        trashcan_texture = new Texture(Gdx.files.internal("trashcan.png"));
+        trash_texture = new Texture(Gdx.files.internal("trash.png"));
         staff_texture = new Texture(Gdx.files.internal("staff.png"));
 
     }

@@ -82,6 +82,7 @@ public class GameScreen implements Screen
     Texture bush_texture;
     Texture water_texture;
     Texture hamburger_texture;
+    Texture trashcan_texture;
     Texture trash_texture;
 
 
@@ -229,7 +230,14 @@ public class GameScreen implements Screen
                 }
             }
         }
-
+        if(map.trashes.size>0)
+        {
+            for (int i = 0; i < map.trashes.size; i++)
+            {
+                Trash t = map.trashes.get(i);
+                game.batch.draw(t.texture,t.x+20,t.y+110,t.width,t.height);
+            }
+        }
 
         /**
          * Az aktuálisan lerakásra kiválaszott elem privewjának a kirajzolása az egér pozíciójára.
@@ -683,7 +691,9 @@ public class GameScreen implements Screen
         bush_texture = new Texture(Gdx.files.internal("bush.png"));
         hamburger_texture = new Texture(Gdx.files.internal("hamburger.png"));
         water_texture = new Texture(Gdx.files.internal("water.png"));
-        trash_texture = new Texture(Gdx.files.internal("trashcan.png"));
+        trash_texture = new Texture(Gdx.files.internal("trash.png"));
+        trashcan_texture = new Texture(Gdx.files.internal("trashcan.png"));
+
         staff_texture = new Texture(Gdx.files.internal("staff.png"));
 
         //-d
@@ -698,7 +708,7 @@ public class GameScreen implements Screen
         textureRegionDrawableHamburger = new TextureRegionDrawable(textureRegionHamburger);
         textureRegionWater = new TextureRegion(water_texture);
         textureRegionDrawableWater = new TextureRegionDrawable(textureRegionWater);
-        textureRegionTrash = new TextureRegion(trash_texture);
+        textureRegionTrash = new TextureRegion(trashcan_texture);
         textureRegionDrawableTrash = new TextureRegionDrawable(textureRegionTrash);
         textureRegionStaff = new TextureRegion(staff_texture);
         textureRegionDrawableStaff = new TextureRegionDrawable(textureRegionStaff);
@@ -749,7 +759,7 @@ public class GameScreen implements Screen
             //System.out.println(delay + " sec is up");
             int delay = (new Random().nextInt(10))*1000;
             timer.schedule(new GameScreen.CreatePerson(), delay);
-            Guest p = new Guest(map,0,0,20,20, guest_texture, window_height, window_width,happy_texture,annoyed_texture,angry_texture);
+            Guest p = new Guest(map,0,0,20,20, guest_texture, window_height, window_width,happy_texture,annoyed_texture,angry_texture,trash_texture);
             guests.add(p);
 
 
