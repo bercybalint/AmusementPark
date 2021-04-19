@@ -36,6 +36,8 @@ public class GameScreen implements Screen
     Timer gametimer = new Timer();
     Boolean first_building_placed=false;
     private Array<Guest> guests = new Array<Guest>();
+    public int usePrice;
+    public int ticketPrice = 50;
 
 
 
@@ -138,8 +140,6 @@ public class GameScreen implements Screen
     private Label timelabel;
     private TimerTask task;
 
-
-
     int gamePrice = 2000;
     int plantPrice = 1000;
     int buildingPrice = 1500;
@@ -159,7 +159,7 @@ public class GameScreen implements Screen
 
         BitmapFont labelFont = skin.get("default-font", BitmapFont.class);
         labelFont.getData().markupEnabled = true;
-        label = new Label("[RED]Money:" + money + "$",skin);
+        label = new Label("[BLACK]Money:" + money + "$",skin);
         timelabel = new Label("",skin);
         stage.addActor(label);
         stage.addActor(timelabel);
@@ -168,8 +168,8 @@ public class GameScreen implements Screen
         task = new TimerTask() {
             public void run() {
                 String time = getTime(ido);
-                timelabel.setText("[BLACK]Time: "+time);
-                timelabel.setPosition(220,832);
+                timelabel.setText("[WHITE]Time: "+time);
+                timelabel.setPosition(220,872);
                 ido++;
 
             }
@@ -181,6 +181,7 @@ public class GameScreen implements Screen
         texturesInit();
         buttonManagment();
         moneyHeist(0);
+        runTimer();
     }
 
     /**
@@ -192,8 +193,6 @@ public class GameScreen implements Screen
     public void render(float delta)
     {
         ScreenUtils.clear(.181f, .230f, .29f, 0.5f);
-
-        //Gdx.gl.glClearColor(0, 0, 0, 1);
 
         camera.update();
         game.batch.setProjectionMatrix(camera.combined);
@@ -278,7 +277,7 @@ public class GameScreen implements Screen
                 game.batch.draw(staff_texture,mouse_pos.x-((map.tile_width)/2),
                         mouse_pos.y-((map.tile_height)/2),map.tile_width,map.tile_height);
             }
-            else if(chosen == Tiles.TRASHCAN)
+            else if(chosen == Tiles.TRASH)
             {
                 game.batch.draw(trashcan_texture,mouse_pos.x-((map.tile_width)/2),
                         mouse_pos.y-((map.tile_height)/2),map.tile_width,map.tile_height);
@@ -338,71 +337,70 @@ public class GameScreen implements Screen
         }
     }
 
-        public void runTimer(){
-            gametimer.schedule(task, 0, 1000 );
-        }
+    public void runTimer(){
+        gametimer.schedule(task, 0, 1000 );
+    }
 
-        public String getTime(int sec)
+    public String getTime(int sec)
+    {
+        int hours = 0;
+        int remainderOfHours = 0;
+        int minutes = 0;
+        int seconds = 0;
+
+        if (sec >= 3600)
         {
-            int hours = 0;
-            int remainderOfHours = 0;
-            int minutes = 0;
-            int seconds = 0;
+            hours = sec / 3600;
+            remainderOfHours = sec % 3600;
 
-            if (sec >= 3600)
+            if (remainderOfHours >= 60)
             {
-                hours = sec / 3600;
-                remainderOfHours = sec % 3600;        // could be more or less than a min
-
-                if (remainderOfHours >= 60)   //check if remainder is more or equal to a min
-                {
-                    minutes = remainderOfHours / 60;
-                    seconds = remainderOfHours % 60;
-                }
-                else
-                {                       // if it's less than a min
-                    seconds = remainderOfHours;
-                }
+                minutes = remainderOfHours / 60;
+                seconds = remainderOfHours % 60;
             }
-            // if we have a min or more
-            else if (sec >= 60)
+            else
             {
-                hours = 0;               //62
-                minutes = sec / 60;
-                seconds = sec % 60;
+                seconds = remainderOfHours;
             }
-            //if we have just seconds
-            else if (sec < 60)
-            {
-                hours = 0;
-                minutes = 0;
-                seconds = sec;
-            }
-//i get integer hour minuite second. i want to transform them to strings:
-
-            String strHours;
-            String strMins;
-            String strSecs;
-
-            if(seconds < 10)
-                strSecs = "0" + Integer.toString(seconds);
-            else
-                strSecs = Integer.toString(seconds);
-
-            if(minutes < 10)
-                strMins = "0" + Integer.toString(minutes);
-            else
-                strMins = Integer.toString(minutes);
-
-            if(hours < 10)
-                strHours = "0" + Integer.toString(hours);
-            else
-                strHours = Integer.toString(hours);
-
-
-            String time = strHours + ":" + strMins + ":" + strSecs;
-            return time;
         }
+        // if we have a min or more
+        else if (sec >= 60)
+        {
+            hours = 0;               //62
+            minutes = sec / 60;
+            seconds = sec % 60;
+        }
+
+        else if (sec < 60)
+        {
+            hours = 0;
+            minutes = 0;
+            seconds = sec;
+        }
+
+        String strHours;
+        String strMins;
+        String strSecs;
+
+        if(seconds < 10)
+            strSecs = "0" + Integer.toString(seconds);
+        else
+            strSecs = Integer.toString(seconds);
+
+        if(minutes < 10)
+            strMins = "0" + Integer.toString(minutes);
+        else
+            strMins = Integer.toString(minutes);
+
+        if(hours < 10)
+            strHours = "0" + Integer.toString(hours);
+        else
+            strHours = Integer.toString(hours);
+
+
+        String time = strHours + ":" + strMins + ":" + strSecs;
+        return time;
+    }
 
 
     /**
@@ -412,13 +410,12 @@ public class GameScreen implements Screen
 
         startButton = new TextButton("Open Park", skin);
         startButton.setSize(100, 30);
-        startButton.setPosition(550, 870);
+        startButton.setPosition(550, 865);
         startButton.addListener(new ClickListener() {
                                     public void clicked(InputEvent e, float x, float y) {
                                         timer.cancel();
                                         timer = new Timer();
                                         new CreatePerson().run();
-                                        runTimer();
                                     }
                                 });
 
@@ -537,6 +534,7 @@ public class GameScreen implements Screen
                 plantsButton.setPosition(buttonWidth*2 + 30, 40);
                 gamesButton.setVisible(false);
                 roadButton.setVisible(false);
+                korhintaButton.setVisible(false);
 
                 bushButton.setVisible(true);
                 bushButton.setPosition(buttonWidth*3 + 50, 40);
@@ -757,8 +755,8 @@ public class GameScreen implements Screen
     public void moneyHeist(int price){
 
         money = money - price;
-        label.setText("[BLACK]Money: " + money + "$");
-        label.setPosition(70,820);
+        label.setText("[WHITE]Money: " + money + "$");
+        label.setPosition(70,860);
     }
 
     @Override
@@ -798,6 +796,12 @@ public class GameScreen implements Screen
             timer.schedule(new GameScreen.CreatePerson(), delay);
             Guest p = new Guest(map,0,0,20,20, guest_texture, window_height, window_width,happy_texture,annoyed_texture,angry_texture,trash_texture);
             guests.add(p);
+            money = money + ticketPrice;
+            label.setText("[BLACK]Money:" + money + "$");
+            /*
+            Guest p = new Guest(map,0,0,20,20, guest_texture, window_height, window_width,happy_texture,annoyed_texture,angry_texture,trash_texture);
+            guests.add(p);
+*/
             /*for(int i =0; i<3; i++)
             {
                 Guest p = new Guest(map, 0, 0, 20, 20, guest_texture, window_height, window_width, happy_texture, annoyed_texture, angry_texture, trash_texture);
