@@ -18,7 +18,6 @@ public class Guest extends Person implements Mover {
 
     private Timer timer;
     private int delay = 1000;
-    private Random rand;
     private int mood;
     private int maxMood = 100;
     public PathFinder finder;
@@ -34,6 +33,7 @@ public class Guest extends Person implements Mover {
 
     public Boolean isGoing = false;
     public Boolean isWaiting = false;
+    public Boolean throwingTrash = false;
 
 
 
@@ -69,16 +69,17 @@ public class Guest extends Person implements Mover {
         {
             isGoing = true;
             isWaiting = false;
-            System.out.println("new path");
-            System.out.println("ide:" + destination.x / 60 + "," + destination.y / 40);
+            System.out.println("Talaltam utat");
+            //System.out.println("ide:" + destination.x / 60 + "," + destination.y / 40);
             pathLength = path.getLength();
             stepIndex = 0;
             currentStep = path.getStep(stepIndex);
-            System.out.println("path:");
+            System.out.println("----------");
             for(int i = 0; i < pathLength; i++)
             {
                 System.out.println(path.getStep(i).getX()+","+path.getStep(i).getY());
             }
+            System.out.println("----------");
         } else {
             timer = new Timer();
             System.out.println("ujra probalom");
@@ -154,25 +155,27 @@ public class Guest extends Person implements Mover {
                     ind_y = y / 40;
 
                     Random to_trash_r = new Random();
-                    int to_trash = to_trash_r.nextInt(15);
-                    if (to_trash == 9) {
-                        System.out.println("keresek kukat");
-                        Point trash_p = findTrash();
-                        System.out.println("legközelebbi kuka "+trash_p.x+","+trash_p.y);
+                    if(!throwingTrash);
+                    {
+                        int to_trash = to_trash_r.nextInt(15);
+                        if (to_trash == 9) {
+                            throwingTrash = true;
+                            System.out.println("keresek kukat");
+                            Point trash_p = findTrash();
+                            //System.out.println("legközelebbi kuka "+trash_p.x+","+trash_p.y);
 
-                        double distance = Math.sqrt((y - trash_p.y) * (y - trash_p.y) + (x - trash_p.x) * (x - trash_p.x));
-                        System.out.println("kuka tavolsage"+distance);
-                        if(distance<300)
-                        {
-                            System.out.println("van a kozelben kuka");
-                            path = null;
-                            goHere(trash_p);
-                        }
-                        else
-                        {
-                            System.out.println("Szemetelek");
-                            map.trashes.add(new Trash(x,y,10,10,trash_texture,0,Tiles.TRASH));
-                            //ide kell valahogy hívni a takarítót
+                            double distance = Math.sqrt((y - trash_p.y) * (y - trash_p.y) + (x - trash_p.x) * (x - trash_p.x));
+                            System.out.println("kuka tavolsage" + distance);
+                            if (distance < 300) {
+                                System.out.println("van a kozelben kuka");
+                                path = null;
+                                goHere(trash_p);
+                            } else {
+                                System.out.println("Szemetelek");
+                                map.trashes.add(new Trash(x, y, 10, 10, trash_texture, 0, Tiles.TRASH));
+                                throwingTrash = false;
+                                //ide kell valahogy hívni a takarítót
+                            }
                         }
                     }
                 }
