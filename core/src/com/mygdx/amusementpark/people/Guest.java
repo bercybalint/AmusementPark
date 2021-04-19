@@ -50,16 +50,28 @@ public class Guest extends Person implements Mover
         behaviour();
     }
 
+    public void gainMood(int moodGain)
+    {
+        this.mood+=moodGain;
+        if(this.mood>=maxMood)
+        {
+            this.mood = maxMood;
+        }
+    }
+
     public void goToNewPlace()
     {
         Random random = new Random();
-        int randInt = random.nextInt(map.destinationPoints.size);
+        int randInt = 0;
+        if(map.destinationPoints.size>0) {
+            randInt = random.nextInt(map.destinationPoints.size);
 
-        destination = map.destinationPoints.get(randInt);
-        System.out.println("db:"+map.destinationPoints.size);
-        map.clearVisited();
-        path = finder.findPath(this,(ind_x),(ind_y),destination.x/60,destination.y/40);
 
+            destination = map.destinationPoints.get(randInt);
+            System.out.println("db:" + map.destinationPoints.size);
+            map.clearVisited();
+            path = finder.findPath(this, (ind_x), (ind_y), destination.x / 60, destination.y / 40);
+        }
         if(path!=null)
         {
             isGoing=true;
