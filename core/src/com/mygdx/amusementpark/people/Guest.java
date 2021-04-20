@@ -196,6 +196,9 @@ public class Guest extends Person implements Mover
                                 System.out.println("Szemetelek");
                                 map.trashes.add(new Trash(x, y, 10, 10, trash_texture, 0, Tiles.TRASH));
                                 throwingTrash = false;
+                                int cleanerIndex=findCleaner(new Point(x,y));
+                                map.cleaners.get(cleanerIndex).addTrash(new Trash(x, y, 10, 10, trash_texture, 0, Tiles.TRASH));
+
                             }
                         }
                     }
@@ -227,6 +230,9 @@ public class Guest extends Person implements Mover
         {
             isGoing = false;
         }
+    }
+
+    private void cleanUP() {
     }
 
     public Boolean isParkNearby()
@@ -275,6 +281,39 @@ public class Guest extends Person implements Mover
 
         return trash_point;
     }
+
+
+
+    public int findCleaner(Point p)
+    {
+        double minDistance = 10000;
+        Point cleaner_point = new Point(-100,-100);
+        int cleanerInd = -1;
+
+        if(map.cleaners.size>0)
+        {
+            for(int i = 0; i < map.cleaners.size; i++) {
+                double y2 = map.cleaners.get(i).y;
+                double y1 = p.y;
+
+                double x2 = map.cleaners.get(i).x;
+                double x1 = p.x;
+                double distance = Math.sqrt((y2 - y1) * (y2 - y1) + (x2 - x1) * (x2 - x1));
+
+                if(minDistance>distance)
+                {
+                    minDistance=distance;
+                    cleaner_point = new Point(map.cleaners.get(i).x,map.cleaners.get(i).y);
+                    cleanerInd=i;
+                }
+                System.out.println("tavolsag:"+distance);
+            }
+        }
+
+        return cleanerInd;
+    }
+
+
 
 
     public int getMood() {
