@@ -52,6 +52,7 @@ public class GameScreen implements Screen
      * Gombok textúrái, méreteinek beállítása.
      */
     private TextButton startButton;
+    private TextButton closeParkButton;
     private TextButton buildButton;
     private TextButton parkButton;
     private TextButton gamesButton;
@@ -66,7 +67,7 @@ public class GameScreen implements Screen
     private ImageButton trashButton;
     private ImageButton hamburgerButton;
     private ImageButton waterButton;
-    private TextButton closeButton;
+    private TextButton closeMenuButton;
     private final int buttonWidth = 150;
     private  int buttonHeight = 50;
 
@@ -470,8 +471,19 @@ public class GameScreen implements Screen
                                         timer.cancel();
                                         timer = new Timer();
                                         new CreatePerson().run();
+                                        startButton.setVisible(false);
+                                        closeParkButton.setVisible(true);
                                     }
                                 });
+
+        closeParkButton = new TextButton("Close Park", skin);
+        closeParkButton.setSize(100, 30);
+        closeParkButton.setPosition(550, 865);
+        closeParkButton.addListener(new ClickListener() {
+            public void clicked(InputEvent e, float x, float y) {
+                //startButton.setVisible(false);
+            }
+        });
 
         buildButton = new TextButton("Build", skin);
         buildButton.setSize(buttonWidth, buttonHeight);
@@ -487,7 +499,7 @@ public class GameScreen implements Screen
                 rButton.setVisible(false);
                 gamesButton.setVisible(false);
                 plantsButton.setVisible(false);
-                closeButton.setVisible(true);
+                closeMenuButton.setVisible(true);
                 korhintaButton.setVisible(false);
                 bushButton.setVisible(false);
                 sButton.setVisible(false);
@@ -500,12 +512,12 @@ public class GameScreen implements Screen
             }
         });
 
-        closeButton = new TextButton("Close menu", skin);
-        closeButton.setSize(buttonWidth, buttonHeight);
-        closeButton.setPosition(1000, 40);
-        closeButton.addListener(new ClickListener() {
+        closeMenuButton = new TextButton("Close menu", skin);
+        closeMenuButton.setSize(buttonWidth, buttonHeight);
+        closeMenuButton.setPosition(1000, 40);
+        closeMenuButton.addListener(new ClickListener() {
             public void clicked(InputEvent e, float x, float y) {
-                closeButton.setVisible(false);
+                closeMenuButton.setVisible(false);
                 //ide minden gombot be kell majd írni kivéve a buildet
 
                 parkButton.setVisible(false);
@@ -713,6 +725,7 @@ public class GameScreen implements Screen
 
 
         stage.addActor(startButton);
+        stage.addActor(closeParkButton);
         stage.addActor(buildButton);
         stage.addActor(parkButton);
         stage.addActor(staffButton);
@@ -722,7 +735,7 @@ public class GameScreen implements Screen
         stage.addActor(plantsButton);
         stage.addActor(roadButton);
         stage.addActor(rButton);
-        stage.addActor(closeButton);
+        stage.addActor(closeMenuButton);
         stage.addActor(bushButton);
         stage.addActor(sButton);
         stage.addActor(trashButton);
@@ -731,6 +744,7 @@ public class GameScreen implements Screen
 
 
 
+        closeParkButton.setVisible(false);
         parkButton.setVisible(false);
         staffButton.setVisible(false);
         guestButton.setVisible(false);
@@ -738,7 +752,7 @@ public class GameScreen implements Screen
         plantsButton.setVisible(false);
         roadButton.setVisible(false);
         rButton.setVisible(false);
-        closeButton.setVisible(false);
+        closeMenuButton.setVisible(false);
         korhintaButton.setVisible(false);
         bushButton.setVisible(false);
         sButton.setVisible(false);
