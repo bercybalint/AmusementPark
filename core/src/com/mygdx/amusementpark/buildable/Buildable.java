@@ -11,6 +11,7 @@ public class Buildable extends Rectangle {
     public Texture texture;
     public int timeToUse;
     public int moodGain = 30;
+    public boolean working=true;
 
     public Buildable(Texture texture)
     {

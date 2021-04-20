@@ -1,5 +1,6 @@
 package com.mygdx.amusementpark.gui;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -273,11 +274,15 @@ public class GameScreen implements Screen
                 {
                     if(!guest.isGoing && !guest.isWaiting)
                     {
-                        guest.isWaiting=true;
                         System.out.println("megjottem");
                         guest.reachedDestination(map.destinationPoints.get(j).timeToUse);
                         money+=map.destinationPoints.get(j).prizeToUse;
                         guest.gainMood(map.destinationPoints.get(j).moodGain);
+
+                        if(map.destinationPoints.get(j).getType()== Tiles.CASTLE||map.destinationPoints.get(j).getType()== Tiles.ROLLER)
+                        {
+                            ((Games)map.destinationPoints.get(j)).takeDmg();
+                        }
                     }
                 }
             }
@@ -336,9 +341,25 @@ public class GameScreen implements Screen
         for(int i = 0; i<map.mechanics.size; i++)
         {
             Mechanic mechanic = map.mechanics.get(i);
-
             mechanic.move();
             game.batch.draw(mechanic.texture, mechanic.x + 20, mechanic.y + 110, mechanic.width, mechanic.height);
+            if (mechanic.intersects(mechanic.destination))
+            {
+                if(mechanic.destination.getType()==Tiles.MECHANIC && !mechanic.isHome)
+                {
+                    mechanic.isHome = true;
+                    mechanic.gotHome();
+                }
+                else
+                {
+                    if (!mechanic.isFixing && mechanic.destination.getType() != Tiles.MECHANIC)
+                    {
+                        mechanic.isFixing = true;
+                        mechanic.fixIt();
+                    }
+                }
+            }
+
         }
         /**
          * Az aktuálisan lerakásra kiválaszott elem privewjának a kirajzolása az egér pozíciójára.
@@ -438,7 +459,7 @@ public class GameScreen implements Screen
                         break;
                     case MECHANIC:
                         moneyHeist(buildingPrice);
-                        map.mechanics.add(new Mechanic(map,0,0,20,20,mechanic_texture,window_height,window_width));
+                        map.mechanics.add(new Mechanic(map,0,0,20,20,mechanic_texture,window_height,window_width,(new Point((int)touch.x,(int)touch.y-100))));
                         break;
                     case BUSH:
                     case TREE:
@@ -978,16 +999,18 @@ public class GameScreen implements Screen
 
     class CreatePerson extends TimerTask {
         public void run() {
-
-            //System.out.println(delay + " sec is up");
-
             int delay = (new Random().nextInt(10))*1000;
             timer.schedule(new GameScreen.CreatePerson(), delay);
-            Guest p = new Guest(map,0,0,20,20, guest_texture, window_height, window_width,happy_texture,annoyed_texture,angry_texture,trash_texture);
-            guests.add(p);
-            guestsLabel.setText("[WHITE]Guests: " + guests.size);
-            money = money + ticketPrice;
-            moneyLabel.setText("[WHITE]Money:" + money + "$");
+            if((map.destinationPoints.size*3)>guests.size)
+            {
+
+                Guest p = new Guest(map, 0, 0, 20, 20, guest_texture, window_height, window_width, happy_texture, annoyed_texture, angry_texture, trash_texture);
+                guests.add(p);
+
+                guestsLabel.setText("[WHITE]Guests: " + guests.size);
+                money = money + ticketPrice;
+                moneyLabel.setText("[WHITE]Money:" + money + "$");
+            }
         }
     }
 }

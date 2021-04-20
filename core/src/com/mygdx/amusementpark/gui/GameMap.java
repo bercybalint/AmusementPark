@@ -39,6 +39,8 @@ public class GameMap implements TileBasedMap
 
     public Array<Mechanic> mechanics = new Array<Mechanic>();
 
+    public Array<StaffBuilding> staffBuildings = new Array<StaffBuilding>();
+
 
     Point p = new Point();
 
@@ -404,6 +406,8 @@ public class GameMap implements TileBasedMap
 
                                             units.get(i).set(j, actual);
                                             terrain.get(i).set(j, type);
+
+                                            staffBuildings.add((StaffBuilding) actual);
                                         }
                                     }
 
@@ -426,6 +430,7 @@ public class GameMap implements TileBasedMap
 
                                             units.get(i).set(j, actual);
                                             terrain.get(i).set(j, type);
+                                            staffBuildings.add((StaffBuilding) actual);
                                         }
                                     }
                                     break;
@@ -663,6 +668,7 @@ public class GameMap implements TileBasedMap
 
         roller_texture = new Texture(Gdx.files.internal("roller.png"));
         castle_texture = new Texture(Gdx.files.internal("castle.png"));
+        roller_broken_texture = new Texture(Gdx.files.internal("hullamvasut_rossz.png"));
         bush_texture = new Texture(Gdx.files.internal("bush.png"));
         hamburger_texture = new Texture(Gdx.files.internal("hamburger.png"));
         water_texture = new Texture(Gdx.files.internal("water.png"));

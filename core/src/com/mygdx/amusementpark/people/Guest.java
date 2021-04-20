@@ -17,7 +17,7 @@ import java.util.TimerTask;
 public class Guest extends Person implements Mover
 {
 
-    private Timer timer;
+    public Timer timer;
     private Timer parkTimer;
     private int delay = 1000;
     private int mood;
@@ -49,9 +49,8 @@ public class Guest extends Person implements Mover
         this.angry_texture = angry;
         this.texture = happy_texture;
         this.trash_texture = trash;
-        finder = new AStarPathFinder(map, 200, false);
-
-        behaviour();
+        timer = new Timer();
+        goToNewPlace();
     }
 
     public void gainMood(int moodGain)
@@ -76,6 +75,7 @@ public class Guest extends Person implements Mover
     {
         this.p = p;
         map.clearVisited();
+        finder = new AStarPathFinder(map, 200, false);
         path = finder.findPath(this, (ind_x), (ind_y), p.x / 60, p.y / 40);
 
         if (path != null)
@@ -95,7 +95,7 @@ public class Guest extends Person implements Mover
         {
             timer = new Timer();
             //System.out.println("ujra probalom");
-            timer.schedule(new Guest.personBehaviour(), 2000);
+            timer.schedule(new Guest.personBehaviour(), 3000);
         }
     }
 
@@ -107,24 +107,31 @@ public class Guest extends Person implements Mover
         {
             randInt = random.nextInt(map.destinationPoints.size);
             destination = map.destinationPoints.get(randInt);
+            if(!destination.working)
+            {
+                Timer re_random = new Timer();
+                re_random.schedule(new personBehaviour(), 2000);
 
-            Point p = new Point(destination.x, destination.y);
-            goHere(p);
-        } else
+            }
+            else
+            {
+                Point p = new Point(destination.x, destination.y);
+                goHere(p);
+            }
+
+        }
+        else
         {
             timer = new Timer();
-            timer.schedule(new Guest.personBehaviour(), 2000);
+            timer.schedule(new Guest.personBehaviour(), 3000);
         }
 
     }
 
-    public void behaviour()
-    {
-        goToNewPlace();
-    }
 
     public void reachedDestination(int time_length)
     {
+        isWaiting=true;
         timer = new Timer();
         timer.schedule(new personBehaviour(), time_length * 1000);
     }
@@ -352,8 +359,8 @@ public class Guest extends Person implements Mover
     {
         public void run() {
             isWaiting=false;
-            behaviour();
-            //timer.cancel(); //Terminate the timer thread
+            goToNewPlace();
+            timer.cancel();
         }
     }
 
