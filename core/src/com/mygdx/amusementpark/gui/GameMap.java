@@ -62,6 +62,7 @@ public class GameMap implements TileBasedMap
     Texture roller_texture;
     Texture roller_broken_texture;
     Texture castle_texture;
+    Texture castle_broken;
     Texture cleanerHouse_texture;
     Texture mechanicHouse_texture;
     Texture bush_texture;
@@ -363,7 +364,7 @@ public class GameMap implements TileBasedMap
                                                                 units.get(i).get(j).y,
                                                                 units.get(i).get(j).width,
                                                                 units.get(i).get(j).height,
-                                                                castle_texture, 10, Tiles.CASTLE,5,castle_texture,castle_texture);
+                                                                castle_texture, 10, Tiles.CASTLE,5,castle_texture,castle_broken);
 
                                             p.x = units.get(i).get(j).x/units.get(i).get(j).width;
                                             p.y = units.get(i).get(j).y/units.get(i).get(j).height;
@@ -669,6 +670,7 @@ public class GameMap implements TileBasedMap
         roller_texture = new Texture(Gdx.files.internal("roller.png"));
         castle_texture = new Texture(Gdx.files.internal("castle.png"));
         roller_broken_texture = new Texture(Gdx.files.internal("hullamvasut_rossz.png"));
+        castle_broken = new Texture(Gdx.files.internal("castle_broken.png"));
         bush_texture = new Texture(Gdx.files.internal("bush.png"));
         hamburger_texture = new Texture(Gdx.files.internal("hamburger.png"));
         water_texture = new Texture(Gdx.files.internal("water.png"));

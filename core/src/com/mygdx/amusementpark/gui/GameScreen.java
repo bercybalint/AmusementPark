@@ -230,7 +230,7 @@ public class GameScreen implements Screen
         camera.update();
         game.batch.setProjectionMatrix(camera.combined);
         game.batch.begin();
-        game.batch.draw(grass_texture,0,0,window_width,window_height);
+        game.batch.draw(grass_texture,0,0,window_width,window_height+100);
 
         /**
          * Palya kirajzolása

@@ -69,16 +69,12 @@ public class Cleaner extends Person implements Mover {
                 System.out.println("----------");
             } else
             {
-                timer = new Timer();
                 System.out.println("nem talaltam utat a szemethez");
-                timer.schedule(new cleanerBehaviour(), 2000);
             }
         }
         else
         {
-            timer = new Timer();
             System.out.println("nem talaltam utat a szemethez");
-            timer.schedule(new cleanerBehaviour(), 2000);
         }
     }
 
@@ -89,6 +85,7 @@ public class Cleaner extends Person implements Mover {
             {
                 goHere(new Point(trashes.get(0).x,trashes.get(0).y));
             }
+
         }
     }
 }
