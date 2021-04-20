@@ -58,14 +58,14 @@ public class GameMap implements TileBasedMap
     Texture gate_texture;
     Texture fence_texture;
     Texture korhinta_texture;
-    Texture staff_texture;
+    Texture cleanerHouse_texture;
+    Texture mechanicHouse_texture;
     Texture bush_texture;
     Texture water_texture;
     Texture hamburger_texture;
     Texture trashcan_texture;
     Texture trash_texture;
     Texture cleaner_texture;
-
 
     /**
      * d Különböző út textúrák beállítása, szomszédoktól függően.
@@ -350,7 +350,7 @@ public class GameMap implements TileBasedMap
                                                                 units.get(i).get(j).y,
                                                                 units.get(i).get(j).width,
                                                                 units.get(i).get(j).height,
-                                                                staff_texture,10,Tiles.CLEANER);
+                                                    cleanerHouse_texture,10,Tiles.CLEANER);
 
                                             p.x = units.get(i).get(j).x/units.get(i).get(j).width;
                                             p.y = units.get(i).get(j).y/units.get(i).get(j).height;
@@ -361,6 +361,26 @@ public class GameMap implements TileBasedMap
                                     }
 
 
+                                    break;
+                                case MECHANIC:
+                                    type = Tiles.MECHANIC;
+                                    if((i>0 && j>0))
+                                    {
+                                        if (units.get(i).get(j).getType() == Tiles.EMPTY) {
+                                            actual = new StaffBuilding(
+                                                    units.get(i).get(j).x,
+                                                    units.get(i).get(j).y,
+                                                    units.get(i).get(j).width,
+                                                    units.get(i).get(j).height,
+                                                    mechanicHouse_texture,10,Tiles.MECHANIC);
+
+                                            p.x = units.get(i).get(j).x/units.get(i).get(j).width;
+                                            p.y = units.get(i).get(j).y/units.get(i).get(j).height;
+
+                                            units.get(i).set(j, actual);
+                                            terrain.get(i).set(j, type);
+                                        }
+                                    }
                                     break;
                                 case FOOD:
                                     type = Tiles.FOOD;
@@ -594,7 +614,8 @@ public class GameMap implements TileBasedMap
         water_texture = new Texture(Gdx.files.internal("water.png"));
         trashcan_texture = new Texture(Gdx.files.internal("trashcan.png"));
         trash_texture = new Texture(Gdx.files.internal("trash.png"));
-        staff_texture = new Texture(Gdx.files.internal("staff.png"));
+        cleanerHouse_texture = new Texture(Gdx.files.internal("cleanerhouse.png"));
+        mechanicHouse_texture = new Texture(Gdx.files.internal("mechanichouse.png"));
         cleaner_texture = new Texture(Gdx.files.internal("cleaner.png"));
     }
 

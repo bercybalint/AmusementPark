@@ -62,7 +62,8 @@ public class GameScreen implements Screen
     private TextButton roadButton;
     private ImageButton rButton;
     private TextButton staffButton;
-    private  ImageButton sButton;
+    private  ImageButton cleanerButton;
+    private  ImageButton mechanicButton;
     private TextButton guestButton;
     private ImageButton trashButton;
     private ImageButton hamburgerButton;
@@ -79,7 +80,8 @@ public class GameScreen implements Screen
     Texture gate_texture;
     Texture fence_texture;
     Texture korhinta_texture;
-    Texture staff_texture;
+    Texture cleanerHouse_texture;
+    Texture mechanicHouse_texture;
     Texture bush_texture;
     Texture water_texture;
     Texture hamburger_texture;
@@ -111,8 +113,10 @@ public class GameScreen implements Screen
     TextureRegionDrawable textureRegionDrawableGameKorhinta;
     TextureRegion textureRegionPlantBush;
     TextureRegionDrawable textureRegionDrawablePlantBush;
-    TextureRegion textureRegionStaff;
-    TextureRegionDrawable textureRegionDrawableStaff;
+    TextureRegion textureRegionCleaner;
+    TextureRegionDrawable textureRegionDrawableCleaner;
+    TextureRegion textureRegionMechanic;
+    TextureRegionDrawable textureRegionDrawableMechanic;
     TextureRegion textureRegionTrash;
     TextureRegionDrawable textureRegionDrawableTrash;
     TextureRegion textureRegionHamburger;
@@ -138,6 +142,8 @@ public class GameScreen implements Screen
     private Label moneyLabel;
     private Label timeLabel;
     private Label guestsLabel;
+    private Label dayLabel;
+    int day = 0;
     private TimerTask task;
 
     int gamePrice = 2000;
@@ -169,9 +175,13 @@ public class GameScreen implements Screen
         guestsLabel = new Label("[WHITE]Guests: 0", skin);
         guestsLabel.setPosition(370,860);
 
+        dayLabel = new Label("[WHITE]Day: 0",skin);
+        dayLabel.setPosition(670, 868);
+
         stage.addActor(moneyLabel);
         stage.addActor(timeLabel);
         stage.addActor(guestsLabel);
+        stage.addActor(dayLabel);
 
 
         task = new TimerTask() {
@@ -318,7 +328,12 @@ public class GameScreen implements Screen
             }
             else if(chosen == Tiles.CLEANER)
             {
-                game.batch.draw(staff_texture,mouse_pos.x-((map.tile_width)/2),
+                game.batch.draw(cleanerHouse_texture,mouse_pos.x-((map.tile_width)/2),
+                        mouse_pos.y-((map.tile_height)/2),map.tile_width,map.tile_height);
+            }
+            else if(chosen == Tiles.MECHANIC)
+            {
+                game.batch.draw(mechanicHouse_texture,mouse_pos.x-((map.tile_width)/2),
                         mouse_pos.y-((map.tile_height)/2),map.tile_width,map.tile_height);
             }
             else if(chosen == Tiles.TRASH)
@@ -377,6 +392,9 @@ public class GameScreen implements Screen
                         {
                             map.cleaners.add(new Cleaner(map, 0,0, 20, 20, cleaner_texture,window_height,window_width,new Array<Trash>()));
                         }
+                        break;
+                    case MECHANIC:
+                        moneyHeist(buildingPrice);
                         break;
                     case BUSH:
                     case TREE:
@@ -468,6 +486,8 @@ public class GameScreen implements Screen
         startButton.setPosition(550, 865);
         startButton.addListener(new ClickListener() {
                                     public void clicked(InputEvent e, float x, float y) {
+                                        day = day + 1;
+                                        dayLabel.setText("[WHITE]Day: " + day);
                                         timer.cancel();
                                         timer = new Timer();
                                         new CreatePerson().run();
@@ -502,7 +522,8 @@ public class GameScreen implements Screen
                 closeMenuButton.setVisible(true);
                 korhintaButton.setVisible(false);
                 bushButton.setVisible(false);
-                sButton.setVisible(false);
+                cleanerButton.setVisible(false);
+                mechanicButton.setVisible(false);
                 trashButton.setVisible(false);
                 hamburgerButton.setVisible(false);
                 waterButton.setVisible(false);
@@ -529,7 +550,8 @@ public class GameScreen implements Screen
                 guestButton.setVisible(false);
                 korhintaButton.setVisible(false);
                 bushButton.setVisible(false);
-                sButton.setVisible(false);
+                cleanerButton.setVisible(false);
+                mechanicButton.setVisible(false);
                 trashButton.setVisible(false);
                 hamburgerButton.setVisible(false);
                 waterButton.setVisible(false);
@@ -558,7 +580,8 @@ public class GameScreen implements Screen
                 roadButton.setPosition(buttonWidth*4 + 50, 40);
                 rButton.setVisible(false);
                 bushButton.setVisible(false);
-                sButton.setVisible(false);
+                cleanerButton.setVisible(false);
+                mechanicButton.setVisible(false);
 
                 //chosen = Tiles.EMPTY;
                 if (isSelected)
@@ -657,19 +680,31 @@ public class GameScreen implements Screen
                 guestButton.setVisible(false);
                 staffButton.setPosition(buttonWidth + 20, 40);
 
-                sButton.setVisible(true);
-                sButton.setPosition(buttonWidth*2 + 50,40);
+                cleanerButton.setVisible(true);
+                cleanerButton.setPosition(buttonWidth*2 + 50,40);
+
+                mechanicButton.setVisible(true);
+                mechanicButton.setPosition(buttonWidth*2 + 120,40);
 
                 if (isSelected)
                     isSelected = false;
             }
         });
 
-        sButton = new ImageButton(textureRegionDrawableStaff);
-        sButton.setSize(50,50);
-        sButton.addListener(new ClickListener() {
+        cleanerButton = new ImageButton(textureRegionDrawableCleaner);
+        cleanerButton.setSize(50,50);
+        cleanerButton.addListener(new ClickListener() {
             public void clicked(InputEvent e, float x, float y) {
                 chosen = Tiles.CLEANER;
+                isSelected=true;
+            }
+        });
+
+        mechanicButton = new ImageButton(textureRegionDrawableMechanic);
+        mechanicButton.setSize(50,50);
+        mechanicButton.addListener(new ClickListener() {
+            public void clicked(InputEvent e, float x, float y) {
+                chosen = Tiles.MECHANIC;
                 isSelected=true;
             }
         });
@@ -737,7 +772,8 @@ public class GameScreen implements Screen
         stage.addActor(rButton);
         stage.addActor(closeMenuButton);
         stage.addActor(bushButton);
-        stage.addActor(sButton);
+        stage.addActor(cleanerButton);
+        stage.addActor(mechanicButton);
         stage.addActor(trashButton);
         stage.addActor(hamburgerButton);
         stage.addActor(waterButton);
@@ -755,7 +791,8 @@ public class GameScreen implements Screen
         closeMenuButton.setVisible(false);
         korhintaButton.setVisible(false);
         bushButton.setVisible(false);
-        sButton.setVisible(false);
+        cleanerButton.setVisible(false);
+        mechanicButton.setVisible(false);
         trashButton.setVisible(false);
         hamburgerButton.setVisible(false);
         waterButton.setVisible(false);
@@ -797,7 +834,8 @@ public class GameScreen implements Screen
         trashcan_texture = new Texture(Gdx.files.internal("trashcan.png"));
         cleaner_texture = new Texture(Gdx.files.internal("cleaner.png"));
 
-        staff_texture = new Texture(Gdx.files.internal("staff.png"));
+        cleanerHouse_texture = new Texture(Gdx.files.internal("cleanerhouse.png"));
+        mechanicHouse_texture = new Texture(Gdx.files.internal("mechanichouse.png"));
 
         //-d
 
@@ -813,8 +851,10 @@ public class GameScreen implements Screen
         textureRegionDrawableWater = new TextureRegionDrawable(textureRegionWater);
         textureRegionTrash = new TextureRegion(trashcan_texture);
         textureRegionDrawableTrash = new TextureRegionDrawable(textureRegionTrash);
-        textureRegionStaff = new TextureRegion(staff_texture);
-        textureRegionDrawableStaff = new TextureRegionDrawable(textureRegionStaff);
+        textureRegionCleaner = new TextureRegion(cleanerHouse_texture);
+        textureRegionDrawableCleaner = new TextureRegionDrawable(textureRegionCleaner);
+        textureRegionMechanic = new TextureRegion(mechanicHouse_texture);
+        textureRegionDrawableMechanic = new TextureRegionDrawable(textureRegionMechanic);
         happy_texture = new Texture(Gdx.files.internal("guestHappy.png"));
         annoyed_texture = new Texture(Gdx.files.internal("guestAnnoyed.png"));
         angry_texture = new Texture(Gdx.files.internal("guestAngry.png"));
