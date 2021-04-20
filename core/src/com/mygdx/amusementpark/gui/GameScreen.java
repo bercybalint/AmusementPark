@@ -21,6 +21,7 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.mygdx.amusementpark.buildable.*;
 import com.mygdx.amusementpark.people.Cleaner;
 import com.mygdx.amusementpark.people.Guest;
+import com.mygdx.amusementpark.people.Mechanic;
 
 import java.awt.*;
 import java.util.Random;
@@ -97,6 +98,8 @@ public class GameScreen implements Screen
     Texture trashcan_texture;
     Texture trash_texture;
     Texture cleaner_texture;
+    Texture mechanic_texture;
+
 
 
     /**
@@ -228,8 +231,9 @@ public class GameScreen implements Screen
         game.batch.begin();
         game.batch.draw(grass_texture,0,0,window_width,window_height);
 
-        //draw dolgok
-
+        /**
+         * Palya kirajzolása
+         */
         for(int i = 0; i < map.units.size; i++)
         {
             for(int j = 0; j< map.units.get(i).size; j++)
@@ -238,6 +242,25 @@ public class GameScreen implements Screen
                 game.batch.draw(act.getTexture(),act.x,act.y+100,act.width,act.height);
             }
         }
+
+        /**
+         * Szemét kirajzolása
+         */
+        if(map.cleaners.size==0)
+        {
+            if(map.trashes.size>0)
+            {
+                for (int i = 0; i < map.trashes.size; i++)
+                {
+                    Trash t = map.trashes.get(i);
+                    game.batch.draw(t.texture,t.x+20,t.y+110,t.width,t.height);
+                }
+            }
+        }
+
+        /**
+         * Vendékeg kirajzolása
+         */
         for(int i = 0; i < guests.size; i++)
         {
             Guest guest = guests.get(i);
@@ -268,51 +291,54 @@ public class GameScreen implements Screen
             }
         }
 
-        //szemetek kirajzolasa
-        if(map.cleaners.size==0)
-        {
-            if(map.trashes.size>0)
-            {
-                for (int i = 0; i < map.trashes.size; i++)
-                {
-                    Trash t = map.trashes.get(i);
-                    game.batch.draw(t.texture,t.x+20,t.y+110,t.width,t.height);
-                }
-            }
-        }
+        /**
+         * Takarítók kirajzolása
+         */
         if(map.cleaners.size>0)
         {
             for (int i = 0; i < map.cleaners.size; i++)
             {
                 map.cleaners.get(i).move();
-                for(int j = 0; j<map.cleaners.get(i).trashes.size; j++)
+                if(map.cleaners.get(i).trashes.size>0)
                 {
-                    Trash t = map.cleaners.get(i).trashes.get(j);
-                    game.batch.draw(t.texture,t.x+20,t.y+110,t.width,t.height);
-
-                    if(map.cleaners.get(i).intersects(map.cleaners.get(i).trashes.get(j)))
+                    for (int j = 0; j < map.cleaners.get(i).trashes.size; j++)
                     {
-                        map.cleaners.get(i).isCleaning=false;
-                        map.cleaners.get(i).trashes.removeIndex(j);
-                        if(map.cleaners.get(i).trashes.size>0)
-                        {
-                            map.cleaners.get(i).goHere(new Point(map.cleaners.get(i).trashes.get(0).x, map.cleaners.get(i).trashes.get(0).y));
-                            map.cleaners.get(i).isCleaning=true;
-                        }
-                    }
-                    for(int k = 0; k<guests.size; k++)
-                    {
-                        if(guests.get(k).intersects(map.cleaners.get(i).trashes.get(j)))
-                        {
-                            guests.get(k).loseMood(5);
-                        }
-                    }
+                        Trash t = map.cleaners.get(i).trashes.get(j);
+                        game.batch.draw(t.texture, t.x + 20, t.y + 110, t.width, t.height);
 
-
+                        if (map.cleaners.get(i).intersects(map.cleaners.get(i).trashes.get(j)))
+                        {
+                            map.cleaners.get(i).isCleaning = false;
+                            map.cleaners.get(i).trashes.removeIndex(j);
+                            if (map.cleaners.get(i).trashes.size > 0)
+                            {
+                                map.cleaners.get(i).goHere(new Point(map.cleaners.get(i).trashes.get(0).x, map.cleaners.get(i).trashes.get(0).y));
+                                map.cleaners.get(i).isCleaning = true;
+                            }
+                        }
+                        /*for (int k = 0; k < guests.size; k++)
+                        {
+                            if (guests.get(k).intersects(map.cleaners.get(i).trashes.get(j)))
+                            {
+                                guests.get(k).loseMood(5);
+                            }
+                        }*/
+                    }
                 }
                 Cleaner cleaner = map.cleaners.get(i);
                 game.batch.draw(cleaner.texture, cleaner.x + 20, cleaner.y + 110, cleaner.width, cleaner.height);
             }
+        }
+
+        /**
+         * Szerelők kirajzolása
+         */
+        for(int i = 0; i<map.mechanics.size; i++)
+        {
+            Mechanic mechanic = map.mechanics.get(i);
+
+            mechanic.move();
+            game.batch.draw(mechanic.texture, mechanic.x + 20, mechanic.y + 110, mechanic.width, mechanic.height);
         }
         /**
          * Az aktuálisan lerakásra kiválaszott elem privewjának a kirajzolása az egér pozíciójára.
@@ -384,7 +410,7 @@ public class GameScreen implements Screen
             if(map.touched(touch,chosen,isSelected))
             {
                 /**
-                 * pénz levonás, elem lerakásánál.
+                 * Teendők ha leraktunk egy bizonyos épületet.
                  */
                 switch (chosen){
                     case ROAD:
@@ -412,6 +438,7 @@ public class GameScreen implements Screen
                         break;
                     case MECHANIC:
                         moneyHeist(buildingPrice);
+                        map.mechanics.add(new Mechanic(map,0,0,20,20,mechanic_texture,window_height,window_width));
                         break;
                     case BUSH:
                     case TREE:
@@ -869,6 +896,8 @@ public class GameScreen implements Screen
         trash_texture = new Texture(Gdx.files.internal("trash.png"));
         trashcan_texture = new Texture(Gdx.files.internal("trashcan.png"));
         cleaner_texture = new Texture(Gdx.files.internal("cleaner.png"));
+        mechanic_texture = new Texture(Gdx.files.internal("mechanic.png"));
+
 
         cleanerHouse_texture = new Texture(Gdx.files.internal("cleanerhouse.png"));
         mechanicHouse_texture = new Texture(Gdx.files.internal("mechanichouse.png"));

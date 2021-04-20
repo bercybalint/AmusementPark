@@ -59,7 +59,6 @@ public class Cleaner extends Person implements Mover {
                 isCleaning = true;
 
                 System.out.println("Talaltam utat a takaritashoz");
-                //System.out.println("ide:" + destination.x / 60 + "," + destination.y / 40);
                 pathLength = path.getLength();
                 stepIndex = 0;
                 currentStep = path.getStep(stepIndex);

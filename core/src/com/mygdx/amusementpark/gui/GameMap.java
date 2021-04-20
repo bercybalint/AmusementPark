@@ -9,6 +9,7 @@ import com.mygdx.amusementpark.buildable.*;
 import com.mygdx.amusementpark.pathfinding.Mover;
 import com.mygdx.amusementpark.pathfinding.TileBasedMap;
 import com.mygdx.amusementpark.people.Cleaner;
+import com.mygdx.amusementpark.people.Mechanic;
 
 
 import java.awt.*;
@@ -36,6 +37,9 @@ public class GameMap implements TileBasedMap
 
     public Array<Cleaner> cleaners = new Array<Cleaner>();
 
+    public Array<Mechanic> mechanics = new Array<Mechanic>();
+
+
     Point p = new Point();
 
 
@@ -54,6 +58,7 @@ public class GameMap implements TileBasedMap
     Texture gate_texture;
     Texture fence_texture;
     Texture roller_texture;
+    Texture roller_broken_texture;
     Texture castle_texture;
     Texture cleanerHouse_texture;
     Texture mechanicHouse_texture;
@@ -311,7 +316,7 @@ public class GameMap implements TileBasedMap
                                                                 units.get(i).get(j).y,
                                                                 units.get(i).get(j).width,
                                                                 units.get(i).get(j).height,
-                                                    roller_texture, 10, Tiles.ROLLER,5);
+                                                    roller_texture, 10, Tiles.ROLLER,5, roller_texture,roller_broken_texture);
 
                                             p.x = units.get(i).get(j).x/units.get(i).get(j).width;
                                             p.y = units.get(i).get(j).y/units.get(i).get(j).height;
@@ -353,10 +358,10 @@ public class GameMap implements TileBasedMap
                                         )
                                         {
                                             actual = new Games( units.get(i).get(j).x,
-                                                    units.get(i).get(j).y,
-                                                    units.get(i).get(j).width,
-                                                    units.get(i).get(j).height,
-                                                    castle_texture, 10, Tiles.CASTLE,5);
+                                                                units.get(i).get(j).y,
+                                                                units.get(i).get(j).width,
+                                                                units.get(i).get(j).height,
+                                                                castle_texture, 10, Tiles.CASTLE,5,castle_texture,castle_texture);
 
                                             p.x = units.get(i).get(j).x/units.get(i).get(j).width;
                                             p.y = units.get(i).get(j).y/units.get(i).get(j).height;
