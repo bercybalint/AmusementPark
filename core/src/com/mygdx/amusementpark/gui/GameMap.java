@@ -42,10 +42,6 @@ public class GameMap implements TileBasedMap
 
     public Array<Cleaner> cleaners = new Array<Cleaner>();
 
-
-
-
-
     Point p = new Point();
 
 
@@ -541,9 +537,7 @@ public class GameMap implements TileBasedMap
                         s="O";
                         break;
                 }
-                //System.out.print(s);
             }
-            //System.out.println();
         }
     }
 
@@ -601,7 +595,6 @@ public class GameMap implements TileBasedMap
         road_threeway_to_left = new Texture(Gdx.files.internal("road_three_left.png"));
         road_from_all = new Texture(Gdx.files.internal("road_inter.png"));
 
-
         korhinta_texture = new Texture(Gdx.files.internal("korhinta.png"));
         bush_texture = new Texture(Gdx.files.internal("bush.png"));
         hamburger_texture = new Texture(Gdx.files.internal("hamburger.png"));
@@ -610,8 +603,6 @@ public class GameMap implements TileBasedMap
         trash_texture = new Texture(Gdx.files.internal("trash.png"));
         staff_texture = new Texture(Gdx.files.internal("staff.png"));
         cleaner_texture = new Texture(Gdx.files.internal("cleaner.png"));
-
-
     }
 
     @Override

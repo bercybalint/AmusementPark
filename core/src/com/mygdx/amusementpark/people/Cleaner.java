@@ -37,6 +37,8 @@ public class Cleaner extends Person implements Mover {
 
 
     public void goHere(Point p) {
+
+        map.clearVisited();
         path = finder.findPath(this, (ind_x), (ind_y), p.x / 60, p.y / 40);
 
         if (path != null) {
