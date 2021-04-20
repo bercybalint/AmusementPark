@@ -255,6 +255,14 @@ public class GameScreen implements Screen
                 {
                     Trash t = map.trashes.get(i);
                     game.batch.draw(t.texture,t.x+20,t.y+110,t.width,t.height);
+
+                    for (int k = 0; k < guests.size; k++)
+                    {
+                        if (guests.get(k).intersects(map.trashes.get(i))&&!guests.get(k).steppedInTrash)
+                        {
+                            guests.get(k).stepToTrash();
+                        }
+                    }
                 }
             }
         }
@@ -321,13 +329,16 @@ public class GameScreen implements Screen
                                 map.cleaners.get(i).isCleaning = true;
                             }
                         }
-                        /*for (int k = 0; k < guests.size; k++)
+                        for (int k = 0; k < guests.size; k++)
                         {
-                            if (guests.get(k).intersects(map.cleaners.get(i).trashes.get(j)))
+                            if (map.cleaners.get(i).trashes.size > 0 && j<map.cleaners.get(i).trashes.size)
                             {
-                                guests.get(k).loseMood(5);
+                                if (guests.get(k).intersects(map.cleaners.get(i).trashes.get(j)) && !guests.get(k).steppedInTrash)
+                                {
+                                    guests.get(k).stepToTrash();
+                                }
                             }
-                        }*/
+                        }
                     }
                 }
                 Cleaner cleaner = map.cleaners.get(i);

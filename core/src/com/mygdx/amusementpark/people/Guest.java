@@ -19,6 +19,7 @@ public class Guest extends Person implements Mover
 
     public Timer timer;
     private Timer parkTimer;
+    private Timer trashStep;
     private int delay = 1000;
     private int mood;
     private int maxMood = 100;
@@ -35,6 +36,7 @@ public class Guest extends Person implements Mover
     public Boolean isGoing = false;
     public Boolean isWaiting = false;
     public Boolean throwingTrash = false;
+    public Boolean steppedInTrash = false;
 
     public Guest(GameMap map, int x, int y, int width, int height, Texture texture, int window_h, int window_w, Texture happy, Texture annoyed, Texture angry, Texture trash)
     {
@@ -69,6 +71,13 @@ public class Guest extends Person implements Mover
         {
             this.mood=0;
         }
+    }
+
+    public void stepToTrash()
+    {
+        steppedInTrash=true;
+        trashStep=new Timer();
+        trashStep.schedule(new treshStap(),1000);
     }
 
     public void goHere(Point p)
@@ -345,7 +354,7 @@ public class Guest extends Person implements Mover
     }
 
     public void leavePark(){
-        System.out.println("Elhagyom a parkot mert szar");
+        System.out.println("Elhagyom a parkot mert szar :)");
     }
 
     class moodTask extends TimerTask
@@ -373,6 +382,17 @@ public class Guest extends Person implements Mover
                 System.out.println("van termeszet a kozelben");
                 gainMood(2);
             }
+        }
+    }
+
+    class treshStap extends TimerTask
+    {
+        public void run()
+        {
+            System.out.println("Szemetbe leptem");
+            loseMood(5);
+            steppedInTrash=false;
+            trashStep.cancel();
         }
     }
 
