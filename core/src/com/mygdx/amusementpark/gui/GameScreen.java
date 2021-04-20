@@ -483,9 +483,13 @@ public class GameScreen implements Screen
         // if we have a min or more
         else if (sec >= 60)
         {
-            hours = 0;               //62
+            hours = 0;
             minutes = sec / 60;
             seconds = sec % 60;
+        }
+        if (sec%60 == 0){
+            money = money-(100*map.cleaners.size) - (100*map.mechanics.size);
+            moneyLabel.setText("[WHITE]Money: " + money);
         }
 
         else if (sec < 60)

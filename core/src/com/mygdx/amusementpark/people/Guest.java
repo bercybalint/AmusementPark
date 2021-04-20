@@ -144,7 +144,7 @@ public class Guest extends Person implements Mover
         }
         if (mood <= 0)
         {
-            //leave the park
+            leavePark();
         }
     }
 
@@ -153,106 +153,108 @@ public class Guest extends Person implements Mover
     {
         if (path != null)
         {
-            ind_x = x / 60;
-            ind_y = y / 40;
-            int go_to_x = currentStep.getX() * tile_width;
-            int go_to_y = currentStep.getY() * tile_height;
-            if (x < go_to_x && y == go_to_y)
-            {
-                dir = Direction.RIGHT;
-            }
-            if (x > go_to_x && y == go_to_y)
-            {
-                dir = Direction.LEFT;
-            }
-            if (x == go_to_x && y > go_to_y)
-            {
-                dir = Direction.DOWN;
-            }
-            if (x == go_to_x && y < go_to_y)
-            {
-                dir = Direction.UP;
-            }
-            if (x == go_to_x && y == go_to_y)
-            {
-                if (stepIndex == pathLength - 1)
+            if(mood > 0){
+                ind_x = x / 60;
+                ind_y = y / 40;
+                int go_to_x = currentStep.getX() * tile_width;
+                int go_to_y = currentStep.getY() * tile_height;
+                if (x < go_to_x && y == go_to_y)
                 {
-                    dir = Direction.NOTHING;
-                    isGoing = false;
-                    path = null;
-                } else if (stepIndex < pathLength - 1)
+                    dir = Direction.RIGHT;
+                }
+                if (x > go_to_x && y == go_to_y)
                 {
-                    stepIndex++;
-                    currentStep = path.getStep(stepIndex);
-                    dir = Direction.NOTHING;
-
-                    Random to_trash_r = new Random();
-                    if(map.terrain.get(ind_x).get(ind_y)==Tiles.ROAD)
+                    dir = Direction.LEFT;
+                }
+                if (x == go_to_x && y > go_to_y)
+                {
+                    dir = Direction.DOWN;
+                }
+                if (x == go_to_x && y < go_to_y)
+                {
+                    dir = Direction.UP;
+                }
+                if (x == go_to_x && y == go_to_y)
+                {
+                    if (stepIndex == pathLength - 1)
                     {
-                    if (!throwingTrash)
-                        {
-                            int to_trash = to_trash_r.nextInt(15);
-                            if (to_trash == 9)
-                            {
-                                throwingTrash = true;
-                                Point trash_p = findTrashCan();
-                                System.out.println("Ki akarom dobni a szemetem");
+                        dir = Direction.NOTHING;
+                        isGoing = false;
+                        path = null;
+                    } else if (stepIndex < pathLength - 1)
+                    {
+                        stepIndex++;
+                        currentStep = path.getStep(stepIndex);
+                        dir = Direction.NOTHING;
 
-                                double distance = Math.sqrt((y - trash_p.y) * (y - trash_p.y) + (x - trash_p.x) * (x - trash_p.x));
-                                if (distance < 300)
+                        Random to_trash_r = new Random();
+                        if(map.terrain.get(ind_x).get(ind_y)==Tiles.ROAD)
+                        {
+                            if (!throwingTrash)
+                            {
+                                int to_trash = to_trash_r.nextInt(15);
+                                if (to_trash == 9)
                                 {
-                                    System.out.println("to kuka");
-                                    goHere(trash_p);
-                                } else
-                                {
-                                    System.out.println("Szemetelek");
-                                    throwingTrash = false;
-                                    int cleanerIndex = findCleaner(new Point(x, y));
-                                    if (cleanerIndex >= 0)
+                                    throwingTrash = true;
+                                    Point trash_p = findTrashCan();
+                                    System.out.println("Ki akarom dobni a szemetem");
+
+                                    double distance = Math.sqrt((y - trash_p.y) * (y - trash_p.y) + (x - trash_p.x) * (x - trash_p.x));
+                                    if (distance < 300)
                                     {
-                                        map.cleaners.get(cleanerIndex).addTrash(new Trash(x, y, 10, 10, trash_texture, 0, Tiles.TRASH));
-                                        System.out.println("jön a takaríto a szeméthez");
+                                        System.out.println("to kuka");
+                                        goHere(trash_p);
                                     } else
                                     {
-                                        map.trashes.add(new Trash(x, y, 10, 10, trash_texture, 0, Tiles.TRASH));
-                                        System.out.println("Földre szemetelek");
-                                    }
+                                        System.out.println("Szemetelek");
+                                        throwingTrash = false;
+                                        int cleanerIndex = findCleaner(new Point(x, y));
+                                        if (cleanerIndex >= 0)
+                                        {
+                                            map.cleaners.get(cleanerIndex).addTrash(new Trash(x, y, 10, 10, trash_texture, 0, Tiles.TRASH));
+                                            System.out.println("jön a takaríto a szeméthez");
+                                        } else
+                                        {
+                                            map.trashes.add(new Trash(x, y, 10, 10, trash_texture, 0, Tiles.TRASH));
+                                            System.out.println("Földre szemetelek");
+                                        }
 
+                                    }
                                 }
                             }
                         }
                     }
                 }
+                switch (dir)
+                {
+                    case UP:
+                        y += speed;
+                        break;
+                    case DOWN:
+                        y -= speed;
+                        break;
+                    case LEFT:
+                        x -= speed;
+                        break;
+                    case RIGHT:
+                        x += speed;
+                        break;
+                    case NOTHING:
+                        x = x;
+                        y = y;
+                        break;
+                    default:
+                        break;
+                }
+            }else {
+                leavePark();
             }
-            switch (dir)
-            {
-                case UP:
-                    y += speed;
-                    break;
-                case DOWN:
-                    y -= speed;
-                    break;
-                case LEFT:
-                    x -= speed;
-                    break;
-                case RIGHT:
-                    x += speed;
-                    break;
-                case NOTHING:
-                    x = x;
-                    y = y;
-                    break;
-                default:
-                    break;
-            }
+
         }
         if (path == null)
         {
             isGoing = false;
         }
-    }
-
-    private void cleanUP() {
     }
 
     public Boolean isParkNearby()
@@ -302,8 +304,6 @@ public class Guest extends Person implements Mover
         return trash_point;
     }
 
-
-
     public int findCleaner(Point p)
     {
         double minDistance = 10000;
@@ -333,11 +333,12 @@ public class Guest extends Person implements Mover
         return cleanerInd;
     }
 
-
-
-
     public int getMood() {
         return mood;
+    }
+
+    public void leavePark(){
+        System.out.println("Elhagyom a parkot mert szar");
     }
 
     class moodTask extends TimerTask
