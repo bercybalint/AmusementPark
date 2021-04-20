@@ -20,12 +20,8 @@ public class GameMap implements TileBasedMap
     /** The map height in tiles */
     public static final int HEIGHT = 20;
 
-
-
-
     /** The terrain settings for each tile in the map */
     public Array<Array<Tiles>> terrain = new Array<Array<Tiles>>();
-
 
     /** The unit in each tile of the map */
     public Array<Array<Buildable>> units = new Array<Array<Buildable>>();
@@ -57,7 +53,8 @@ public class GameMap implements TileBasedMap
     Texture grass_texture;
     Texture gate_texture;
     Texture fence_texture;
-    Texture korhinta_texture;
+    Texture roller_texture;
+    Texture castle_texture;
     Texture cleanerHouse_texture;
     Texture mechanicHouse_texture;
     Texture bush_texture;
@@ -295,8 +292,8 @@ public class GameMap implements TileBasedMap
                                 /**
                                  * Játék lerakás, 9 mezőt foglal el a kijelölt mező körül.
                                  */
-                                case GAMES:
-                                    type = Tiles.GAMES;
+                                case ROLLER:
+                                    type = Tiles.ROLLER;
 
                                     if((i>0 && j>0))
                                     {
@@ -314,7 +311,52 @@ public class GameMap implements TileBasedMap
                                                                 units.get(i).get(j).y,
                                                                 units.get(i).get(j).width,
                                                                 units.get(i).get(j).height,
-                                                                korhinta_texture, 10, Tiles.GAMES,5);
+                                                    roller_texture, 10, Tiles.ROLLER,5);
+
+                                            p.x = units.get(i).get(j).x/units.get(i).get(j).width;
+                                            p.y = units.get(i).get(j).y/units.get(i).get(j).height;
+                                            destinationPoints.add(actual);
+
+                                            units.get(i + 1).set(j + 1, actual);
+                                            units.get(i + 1).set(j, actual);
+                                            units.get(i + 1).set(j - 1, actual);
+                                            units.get(i).set(j + 1, actual);
+                                            units.get(i).set(j - 1, actual);
+                                            units.get(i - 1).set(j + 1, actual);
+                                            units.get(i - 1).set(j - 1, actual);
+                                            units.get(i - 1).set(j, actual);
+
+                                            terrain.get(i + 1).set(j + 1, type);
+                                            terrain.get(i + 1).set(j, type);
+                                            terrain.get(i + 1).set(j - 1, type);
+                                            terrain.get(i).set(j + 1, type);
+                                            terrain.get(i).set(j - 1, type);
+                                            terrain.get(i - 1).set(j + 1, type);
+                                            terrain.get(i - 1).set(j - 1, type);
+                                            terrain.get(i - 1).set(j, type);
+                                        }
+                                    }
+                                    break;
+                                case CASTLE:
+                                    type = Tiles.CASTLE;
+
+                                    if((i>0 && j>0))
+                                    {
+                                        if (units.get(i + 1).get(j + 1).getType() == Tiles.EMPTY &&
+                                                units.get(i).get(j + 1).getType() == Tiles.EMPTY &&
+                                                units.get(i - 1).get(j + 1).getType() == Tiles.EMPTY &&
+                                                units.get(i+1).get(j).getType() == Tiles.EMPTY &&
+                                                units.get(i).get(j - 1).getType() == Tiles.EMPTY &&
+                                                units.get(i - 1).get(j - 1).getType() == Tiles.EMPTY &&
+                                                units.get(i - 1).get(j).getType() == Tiles.EMPTY &&
+                                                units.get(i + 1).get(j - 1).getType() == Tiles.EMPTY
+                                        )
+                                        {
+                                            actual = new Games( units.get(i).get(j).x,
+                                                    units.get(i).get(j).y,
+                                                    units.get(i).get(j).width,
+                                                    units.get(i).get(j).height,
+                                                    castle_texture, 10, Tiles.CASTLE,5);
 
                                             p.x = units.get(i).get(j).x/units.get(i).get(j).width;
                                             p.y = units.get(i).get(j).y/units.get(i).get(j).height;
@@ -528,8 +570,11 @@ public class GameMap implements TileBasedMap
                     case EMPTY:
                         s="E";
                         break;
-                    case GAMES:
-                        s="G";
+                    case ROLLER:
+                        s="Ro";
+                        break;
+                    case CASTLE:
+                        s="Ca";
                         break;
                     case FOOD:
                         s="F";
@@ -544,7 +589,7 @@ public class GameMap implements TileBasedMap
                         s="T";
                         break;
                     case CLEANER:
-                        s="S";
+                        s="C";
                         break;
                     default:
                         s="O";
@@ -574,11 +619,14 @@ public class GameMap implements TileBasedMap
     public boolean blocked(Mover mover, int x, int y) {
         // if theres a unit at the location, then it's blocked
         if (getTerrain(x,y) == Tiles.ROAD ||
-            getTerrain(x,y) == Tiles.GAMES ||
+            getTerrain(x,y) == Tiles.ROLLER ||
+            getTerrain(x,y) == Tiles.CASTLE ||
             getTerrain(x,y) == Tiles.FOOD ||
             getTerrain(x,y) == Tiles.WATER ||
             getTerrain(x,y) == Tiles.TRASH ||
-            getTerrain(x,y) == Tiles.CLEANER || getTerrain(x,y) == Tiles.TRASHCAN) {
+            getTerrain(x,y) == Tiles.CLEANER ||
+            getTerrain(x,y) == Tiles.MECHANIC ||
+            getTerrain(x,y) == Tiles.TRASHCAN) {
             return false;
         }
         else{
@@ -608,7 +656,8 @@ public class GameMap implements TileBasedMap
         road_threeway_to_left = new Texture(Gdx.files.internal("road_three_left.png"));
         road_from_all = new Texture(Gdx.files.internal("road_inter.png"));
 
-        korhinta_texture = new Texture(Gdx.files.internal("korhinta.png"));
+        roller_texture = new Texture(Gdx.files.internal("roller.png"));
+        castle_texture = new Texture(Gdx.files.internal("castle.png"));
         bush_texture = new Texture(Gdx.files.internal("bush.png"));
         hamburger_texture = new Texture(Gdx.files.internal("hamburger.png"));
         water_texture = new Texture(Gdx.files.internal("water.png"));

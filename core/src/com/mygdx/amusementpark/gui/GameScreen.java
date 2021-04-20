@@ -53,22 +53,30 @@ public class GameScreen implements Screen
      */
     private TextButton startButton;
     private TextButton closeParkButton;
+
     private TextButton buildButton;
     private TextButton parkButton;
+
     private TextButton gamesButton;
-    private ImageButton korhintaButton;
+    private ImageButton rollerButton;
+    private ImageButton castleButton;
+
     private TextButton plantsButton;
     private ImageButton bushButton;
+
     private TextButton roadButton;
     private ImageButton rButton;
+
     private TextButton staffButton;
     private  ImageButton cleanerButton;
     private  ImageButton mechanicButton;
+
     private TextButton guestButton;
     private ImageButton trashButton;
     private ImageButton hamburgerButton;
     private ImageButton waterButton;
     private TextButton closeMenuButton;
+
     private final int buttonWidth = 150;
     private  int buttonHeight = 50;
 
@@ -79,7 +87,8 @@ public class GameScreen implements Screen
     Texture grass_texture;
     Texture gate_texture;
     Texture fence_texture;
-    Texture korhinta_texture;
+    Texture roller_texture;
+    Texture castle_texture;
     Texture cleanerHouse_texture;
     Texture mechanicHouse_texture;
     Texture bush_texture;
@@ -109,8 +118,10 @@ public class GameScreen implements Screen
 
     TextureRegion textureRegionRoad;
     TextureRegionDrawable textureRegionDrawableRoad;
-    TextureRegion textureRegionGameKorhinta;
-    TextureRegionDrawable textureRegionDrawableGameKorhinta;
+    TextureRegion textureRegionGameRoller;
+    TextureRegionDrawable textureRegionDrawableGameRoller;
+    TextureRegion textureRegionGameCastle;
+    TextureRegionDrawable textureRegionDrawableGameCastle;
     TextureRegion textureRegionPlantBush;
     TextureRegionDrawable textureRegionDrawablePlantBush;
     TextureRegion textureRegionCleaner;
@@ -311,9 +322,14 @@ public class GameScreen implements Screen
             Vector3 mouse_pos = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
             camera.unproject(mouse_pos);
 
-            if(chosen == Tiles.GAMES)
+            if(chosen == Tiles.ROLLER)
             {
-                game.batch.draw(korhinta_texture,mouse_pos.x-((3*map.tile_width)/2),
+                game.batch.draw(roller_texture,mouse_pos.x-((3*map.tile_width)/2),
+                        mouse_pos.y-((3*map.tile_height)/2),map.tile_width*3,map.tile_height*3);
+            }
+            else if(chosen == Tiles.CASTLE)
+            {
+                game.batch.draw(castle_texture,mouse_pos.x-((3*map.tile_width)/2),
                         mouse_pos.y-((3*map.tile_height)/2),map.tile_width*3,map.tile_height*3);
             }
             else if(chosen == Tiles.FOOD)
@@ -374,7 +390,8 @@ public class GameScreen implements Screen
                     case ROAD:
                         moneyHeist(roadPrice);
                         break;
-                    case GAMES:
+                    case ROLLER:
+                    case CASTLE:
                         moneyHeist(gamePrice);
                         break;
                     case FOOD:
@@ -520,7 +537,8 @@ public class GameScreen implements Screen
                 gamesButton.setVisible(false);
                 plantsButton.setVisible(false);
                 closeMenuButton.setVisible(true);
-                korhintaButton.setVisible(false);
+                rollerButton.setVisible(false);
+                castleButton.setVisible(false);
                 bushButton.setVisible(false);
                 cleanerButton.setVisible(false);
                 mechanicButton.setVisible(false);
@@ -548,7 +566,8 @@ public class GameScreen implements Screen
                 rButton.setVisible(false);
                 staffButton.setVisible(false);
                 guestButton.setVisible(false);
-                korhintaButton.setVisible(false);
+                rollerButton.setVisible(false);
+                castleButton.setVisible(false);
                 bushButton.setVisible(false);
                 cleanerButton.setVisible(false);
                 mechanicButton.setVisible(false);
@@ -598,19 +617,31 @@ public class GameScreen implements Screen
                 plantsButton.setVisible(false);
                 roadButton.setVisible(false);
 
-                korhintaButton.setVisible(true);
-                korhintaButton.setPosition(buttonWidth * 3 + 50,40);
+                rollerButton.setVisible(true);
+                rollerButton.setPosition(buttonWidth * 3 + 50,40);
+
+                castleButton.setVisible(true);
+                castleButton.setPosition(buttonWidth * 3 + 130,30);
 
                 if (isSelected)
                     isSelected = false;
             }
         });
 
-        korhintaButton = new ImageButton(textureRegionDrawableGameKorhinta);
-        korhintaButton.setSize(50,50);
-        korhintaButton.addListener(new ClickListener() {
+        rollerButton = new ImageButton(textureRegionDrawableGameRoller);
+        rollerButton.setSize(50,50);
+        rollerButton.addListener(new ClickListener() {
             public void clicked(InputEvent e, float x, float y) {
-                chosen = Tiles.GAMES;
+                chosen = Tiles.ROLLER;
+                isSelected=true;
+            }
+        });
+
+        castleButton = new ImageButton(textureRegionDrawableGameCastle);
+        castleButton.setSize(70,70);
+        castleButton.addListener(new ClickListener() {
+            public void clicked(InputEvent e, float x, float y) {
+                chosen = Tiles.CASTLE;
                 isSelected=true;
             }
         });
@@ -623,7 +654,8 @@ public class GameScreen implements Screen
                 plantsButton.setPosition(buttonWidth*2 + 30, 40);
                 gamesButton.setVisible(false);
                 roadButton.setVisible(false);
-                korhintaButton.setVisible(false);
+                rollerButton.setVisible(false);
+                castleButton.setVisible(false);
 
                 bushButton.setVisible(true);
                 bushButton.setPosition(buttonWidth*3 + 50, 40);
@@ -651,7 +683,8 @@ public class GameScreen implements Screen
                 staffButton.setVisible(false);
                 gamesButton.setVisible(false);
                 plantsButton.setVisible(false);
-                korhintaButton.setVisible(false);
+                rollerButton.setVisible(false);
+                castleButton.setVisible(false);
 
                 rButton.setVisible(true);
                 rButton.setPosition(buttonWidth * 3 + 50,40);
@@ -765,7 +798,8 @@ public class GameScreen implements Screen
         stage.addActor(parkButton);
         stage.addActor(staffButton);
         stage.addActor(guestButton);
-        stage.addActor(korhintaButton);
+        stage.addActor(rollerButton);
+        stage.addActor(castleButton);
         stage.addActor(gamesButton);
         stage.addActor(plantsButton);
         stage.addActor(roadButton);
@@ -789,7 +823,8 @@ public class GameScreen implements Screen
         roadButton.setVisible(false);
         rButton.setVisible(false);
         closeMenuButton.setVisible(false);
-        korhintaButton.setVisible(false);
+        rollerButton.setVisible(false);
+        castleButton.setVisible(false);
         bushButton.setVisible(false);
         cleanerButton.setVisible(false);
         mechanicButton.setVisible(false);
@@ -826,7 +861,8 @@ public class GameScreen implements Screen
         road_from_all = new Texture(Gdx.files.internal("road_inter.png"));
 
 
-        korhinta_texture = new Texture(Gdx.files.internal("korhinta.png"));
+        roller_texture = new Texture(Gdx.files.internal("roller.png"));
+        castle_texture = new Texture(Gdx.files.internal("castle.png"));
         bush_texture = new Texture(Gdx.files.internal("bush.png"));
         hamburger_texture = new Texture(Gdx.files.internal("hamburger.png"));
         water_texture = new Texture(Gdx.files.internal("water.png"));
@@ -841,20 +877,28 @@ public class GameScreen implements Screen
 
         textureRegionRoad = new TextureRegion(road_down_to_up);
         textureRegionDrawableRoad = new TextureRegionDrawable(textureRegionRoad);
-        textureRegionGameKorhinta = new TextureRegion(korhinta_texture);
-        textureRegionDrawableGameKorhinta = new TextureRegionDrawable(textureRegionGameKorhinta);
+
+        textureRegionGameRoller = new TextureRegion(roller_texture);
+        textureRegionDrawableGameRoller = new TextureRegionDrawable(textureRegionGameRoller);
+        textureRegionGameCastle = new TextureRegion(castle_texture);
+        textureRegionDrawableGameCastle = new TextureRegionDrawable(textureRegionGameCastle);
+
         textureRegionPlantBush = new TextureRegion(bush_texture);
         textureRegionDrawablePlantBush = new TextureRegionDrawable(textureRegionPlantBush);
+
         textureRegionHamburger = new TextureRegion(hamburger_texture);
         textureRegionDrawableHamburger = new TextureRegionDrawable(textureRegionHamburger);
         textureRegionWater = new TextureRegion(water_texture);
         textureRegionDrawableWater = new TextureRegionDrawable(textureRegionWater);
+
         textureRegionTrash = new TextureRegion(trashcan_texture);
         textureRegionDrawableTrash = new TextureRegionDrawable(textureRegionTrash);
+
         textureRegionCleaner = new TextureRegion(cleanerHouse_texture);
         textureRegionDrawableCleaner = new TextureRegionDrawable(textureRegionCleaner);
         textureRegionMechanic = new TextureRegion(mechanicHouse_texture);
         textureRegionDrawableMechanic = new TextureRegionDrawable(textureRegionMechanic);
+
         happy_texture = new Texture(Gdx.files.internal("guestHappy.png"));
         annoyed_texture = new Texture(Gdx.files.internal("guestAnnoyed.png"));
         angry_texture = new Texture(Gdx.files.internal("guestAngry.png"));
