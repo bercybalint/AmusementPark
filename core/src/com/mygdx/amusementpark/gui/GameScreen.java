@@ -2,7 +2,6 @@ package com.mygdx.amusementpark.gui;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -20,12 +19,10 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.mygdx.amusementpark.buildable.*;
-import com.mygdx.amusementpark.pathfinding.*;
+import com.mygdx.amusementpark.people.Cleaner;
 import com.mygdx.amusementpark.people.Guest;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 import java.awt.*;
-import java.sql.Time;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -87,6 +84,7 @@ public class GameScreen implements Screen
     Texture hamburger_texture;
     Texture trashcan_texture;
     Texture trash_texture;
+    Texture cleaner_texture;
 
 
     /**
@@ -257,6 +255,15 @@ public class GameScreen implements Screen
             }
         }
 
+        if(map.cleaners.size>0)
+        {
+            for (int i = 0; i < map.cleaners.size; i++)
+            {
+                Cleaner cleaner = map.cleaners.get(i);
+                game.batch.draw(cleaner.texture,cleaner.x+20,cleaner.y+110,cleaner.width,cleaner.height);
+            }
+        }
+
         /**
          * Az aktuálisan lerakásra kiválaszott elem privewjának a kirajzolása az egér pozíciójára.
         */
@@ -280,7 +287,7 @@ public class GameScreen implements Screen
                 game.batch.draw(water_texture,mouse_pos.x-((map.tile_width)/2),
                         mouse_pos.y-((map.tile_height)/2),map.tile_width,map.tile_height);
             }
-            else if(chosen == Tiles.STAFF)
+            else if(chosen == Tiles.CLEANER)
             {
                 game.batch.draw(staff_texture,mouse_pos.x-((map.tile_width)/2),
                         mouse_pos.y-((map.tile_height)/2),map.tile_width,map.tile_height);
@@ -328,8 +335,10 @@ public class GameScreen implements Screen
                         break;
                     case FOOD:
                     case WATER:
-                    case STAFF:
                         moneyHeist(buildingPrice);
+                    case CLEANER:
+                        moneyHeist(buildingPrice);
+                        map.cleaners.add(new Cleaner(map, 0,0, 20, 20, cleaner_texture, window_width, window_height));
                         break;
                     case BUSH:
                     case TREE:
@@ -611,7 +620,7 @@ public class GameScreen implements Screen
         sButton.setSize(50,50);
         sButton.addListener(new ClickListener() {
             public void clicked(InputEvent e, float x, float y) {
-                chosen = Tiles.STAFF;
+                chosen = Tiles.CLEANER;
                 isSelected=true;
             }
         });
@@ -735,6 +744,7 @@ public class GameScreen implements Screen
         water_texture = new Texture(Gdx.files.internal("water.png"));
         trash_texture = new Texture(Gdx.files.internal("trash.png"));
         trashcan_texture = new Texture(Gdx.files.internal("trashcan.png"));
+        cleaner_texture = new Texture(Gdx.files.internal("cleaner.png"));
 
         staff_texture = new Texture(Gdx.files.internal("staff.png"));
 

@@ -45,6 +45,7 @@ abstract class Person extends Rectangle implements Mover
 
     private Timer timer;
     public Buildable destination;
+    public Buildable trashDest;
 
     public Person(GameMap map, int x, int y, int width, int height, Texture texture, int window_h, int window_w)
     {

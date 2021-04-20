@@ -196,7 +196,7 @@ public class Guest extends Person implements Mover
                                 System.out.println("Szemetelek");
                                 map.trashes.add(new Trash(x, y, 10, 10, trash_texture, 0, Tiles.TRASH));
                                 throwingTrash = false;
-                                int cleanerIndex=findCleaner(new Point(x,y));
+                                int cleanerIndex = findCleaner(new Point(x,y));
                                 if(cleanerIndex>=0)
                                 {
                                     map.cleaners.get(cleanerIndex).addTrash(new Trash(x, y, 10, 10, trash_texture, 0, Tiles.TRASH));

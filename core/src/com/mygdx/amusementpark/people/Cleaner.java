@@ -58,63 +58,6 @@ public class Cleaner extends Person implements Mover {
         }
     }
 
-    @Override
-    public void move() {
-        if (path != null) {
-            int go_to_x = currentStep.getX() * tile_width;
-            int go_to_y = currentStep.getY() * tile_height;
-            if (x < go_to_x && y == go_to_y) {
-                dir = Direction.RIGHT;
-            }
-            if (x > go_to_x && y == go_to_y) {
-                dir = Direction.LEFT;
-            }
-            if (x == go_to_x && y > go_to_y) {
-                dir = Direction.DOWN;
-            }
-            if (x == go_to_x && y < go_to_y) {
-                dir = Direction.UP;
-            }
-            if (x == go_to_x && y == go_to_y) {
-                if (stepIndex == pathLength - 1) {
-                    dir = Direction.NOTHING;
-                    isGoing = false;
-                    path = null;
-                } else if (stepIndex < pathLength - 1) {
-                    stepIndex++;
-                    currentStep = path.getStep(stepIndex);
-                    dir = Direction.NOTHING;
-                    ind_x = x / 60;
-                    ind_y = y / 40;
-                }
-                switch (dir) {
-                    case UP:
-                        y += speed;
-                        break;
-                    case DOWN:
-                        y -= speed;
-                        break;
-                    case LEFT:
-                        x -= speed;
-                        break;
-                    case RIGHT:
-                        x += speed;
-                        break;
-                    case NOTHING:
-                        x = x;
-                        y = y;
-                        break;
-                    default:
-                        break;
-                }
-            }
-            if (path == null) {
-                isGoing = false;
-            }
-        }
-
-
-    }
 public void Cleaning(){
         for(int i = 0; i<trashes.size;i++){
             goHere(new Point((int)trashes.get(i).getX(),(int)trashes.get(i).getY()));

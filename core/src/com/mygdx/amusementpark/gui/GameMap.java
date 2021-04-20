@@ -3,20 +3,15 @@ package com.mygdx.amusementpark.gui;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Array;
 import com.mygdx.amusementpark.buildable.*;
 import com.mygdx.amusementpark.pathfinding.Mover;
 import com.mygdx.amusementpark.pathfinding.TileBasedMap;
 import com.mygdx.amusementpark.people.Cleaner;
-import com.mygdx.amusementpark.people.Cleaner;
-import com.mygdx.amusementpark.people.Guest;
 
 
 import java.awt.*;
-import java.util.Vector;
 
 public class GameMap implements TileBasedMap
 {
@@ -342,8 +337,8 @@ public class GameMap implements TileBasedMap
                                         }
                                     }
                                     break;
-                                case STAFF:
-                                    type = Tiles.STAFF;
+                                case CLEANER:
+                                    type = Tiles.CLEANER;
 
                                     if((i>0 && j>0))
                                     {
@@ -353,14 +348,10 @@ public class GameMap implements TileBasedMap
                                                                 units.get(i).get(j).y,
                                                                 units.get(i).get(j).width,
                                                                 units.get(i).get(j).height,
-                                                                staff_texture,10,Tiles.STAFF);
-                                            Cleaner c = new Cleaner(this, units.get(i).get(j).x,units.get(i).get(j).y,20,20, cleaner_texture, units.get(i).get(j).height,  units.get(i).get(j).width);
-                                            cleaners.add(c);
+                                                                staff_texture,10,Tiles.CLEANER);
 
                                             p.x = units.get(i).get(j).x/units.get(i).get(j).width;
                                             p.y = units.get(i).get(j).y/units.get(i).get(j).height;
-
-                                            destinationPoints.add(actual);
 
                                             units.get(i).set(j, actual);
                                             terrain.get(i).set(j, type);
@@ -530,7 +521,7 @@ public class GameMap implements TileBasedMap
                     case TRASH:
                         s="T";
                         break;
-                    case STAFF:
+                    case CLEANER:
                         s="S";
                         break;
                     default:
@@ -565,7 +556,7 @@ public class GameMap implements TileBasedMap
             getTerrain(x,y) == Tiles.FOOD ||
             getTerrain(x,y) == Tiles.WATER ||
             getTerrain(x,y) == Tiles.TRASH ||
-            getTerrain(x,y) == Tiles.STAFF || getTerrain(x,y) == Tiles.TRASHCAN) {
+            getTerrain(x,y) == Tiles.CLEANER || getTerrain(x,y) == Tiles.TRASHCAN) {
             return false;
         }
         else{
