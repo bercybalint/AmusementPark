@@ -133,7 +133,7 @@ public class GameScreen implements Screen
     /**
      * Különböző elemek árai.
      */
-    private int money = 10000;
+    private int money = 100000;
     private Label moneyLabel;
     private Label timeLabel;
     private Label guestsLabel;
@@ -149,6 +149,7 @@ public class GameScreen implements Screen
 
     private GameMap map;
     int ido = 0;
+
     public GameScreen(final AmusementPark game)
     {
         this.game = game;
@@ -246,24 +247,51 @@ public class GameScreen implements Screen
         }
 
         //szemetek kirajzolasa
-        if(map.trashes.size>0)
+        if(map.cleaners.size==0)
         {
-            for (int i = 0; i < map.trashes.size; i++)
+            if(map.trashes.size>0)
             {
-                Trash t = map.trashes.get(i);
-                game.batch.draw(t.texture,t.x+20,t.y+110,t.width,t.height);
+                for (int i = 0; i < map.trashes.size; i++)
+                {
+                    Trash t = map.trashes.get(i);
+                    game.batch.draw(t.texture,t.x+20,t.y+110,t.width,t.height);
+                }
             }
         }
-
         if(map.cleaners.size>0)
         {
             for (int i = 0; i < map.cleaners.size; i++)
             {
+                map.cleaners.get(i).move();
+                for(int j = 0; j<map.cleaners.get(i).trashes.size; j++)
+                {
+                    Trash t = map.cleaners.get(i).trashes.get(j);
+                    game.batch.draw(t.texture,t.x+20,t.y+110,t.width,t.height);
+
+                    if(map.cleaners.get(i).intersects(map.cleaners.get(i).trashes.get(j)))
+                    {
+                        map.cleaners.get(i).isCleaning=false;
+                        map.cleaners.get(i).trashes.removeIndex(j);
+                        if(map.cleaners.get(i).trashes.size>0)
+                        {
+                            map.cleaners.get(i).goHere(new Point(map.cleaners.get(i).trashes.get(0).x, map.cleaners.get(i).trashes.get(0).y));
+                            map.cleaners.get(i).isCleaning=true;
+                        }
+                    }
+                    for(int k = 0; k<guests.size; k++)
+                    {
+                        if(guests.get(k).intersects(map.cleaners.get(i).trashes.get(j)))
+                        {
+                            guests.get(k).loseMood(5);
+                        }
+                    }
+
+
+                }
                 Cleaner cleaner = map.cleaners.get(i);
-                game.batch.draw(cleaner.texture,cleaner.x+20,cleaner.y+110,cleaner.width,cleaner.height);
+                game.batch.draw(cleaner.texture, cleaner.x + 20, cleaner.y + 110, cleaner.width, cleaner.height);
             }
         }
-
         /**
          * Az aktuálisan lerakásra kiválaszott elem privewjának a kirajzolása az egér pozíciójára.
         */
@@ -336,9 +364,18 @@ public class GameScreen implements Screen
                     case FOOD:
                     case WATER:
                         moneyHeist(buildingPrice);
+                        break;
                     case CLEANER:
                         moneyHeist(buildingPrice);
-                        map.cleaners.add(new Cleaner(map, 0,0, 20, 20, cleaner_texture, window_width, window_height));
+                        if(map.cleaners.size==0)
+                        {
+                            map.cleaners.add(new Cleaner(map, 0,0, 20, 20, cleaner_texture,window_height,window_width, map.trashes));
+                            map.trashes=new Array<Trash>();
+                        }
+                        else
+                        {
+                            map.cleaners.add(new Cleaner(map, 0,0, 20, 20, cleaner_texture,window_height,window_width,new Array<Trash>()));
+                        }
                         break;
                     case BUSH:
                     case TREE:

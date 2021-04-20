@@ -66,6 +66,8 @@ abstract class Person extends Rectangle implements Mover
     {
         if(path!=null)
         {
+            ind_x = x / 60;
+            ind_y = y / 40;
             int go_to_x = currentStep.getX()*tile_width;
             int go_to_y = currentStep.getY()*tile_height;
 

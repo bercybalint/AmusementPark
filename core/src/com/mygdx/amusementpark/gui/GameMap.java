@@ -21,6 +21,8 @@ public class GameMap implements TileBasedMap
     public static final int HEIGHT = 20;
 
 
+
+
     /** The terrain settings for each tile in the map */
     public Array<Array<Tiles>> terrain = new Array<Array<Tiles>>();
 
@@ -34,6 +36,7 @@ public class GameMap implements TileBasedMap
     public Array<Buildable> trashCans = new Array<Buildable>();
 
     public Array<Trash> trashes = new Array<Trash>();
+    public Boolean isThereACleaner =false;
 
     public Array<Cleaner> cleaners = new Array<Cleaner>();
 
@@ -339,7 +342,6 @@ public class GameMap implements TileBasedMap
                                     break;
                                 case CLEANER:
                                     type = Tiles.CLEANER;
-
                                     if((i>0 && j>0))
                                     {
                                         if (units.get(i).get(j).getType() == Tiles.EMPTY) {
