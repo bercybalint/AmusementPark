@@ -1,0 +1,14 @@
+image:gradle:latest
+
+stages:
+  - build
+
+before_script:
+  - apt-get update -yqq
+  - apt-get install -yqq junit5
+
+build_game:
+  stage: build
+  script:
+    - gradle compile
+    - gradle jar
