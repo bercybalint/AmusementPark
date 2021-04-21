@@ -1,6 +1,5 @@
 package com.mygdx.amusementpark.gui;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -61,22 +60,31 @@ public class GameScreen implements Screen
 
     private TextButton gamesButton;
     private ImageButton rollerButton;
+    private Label rollerPrice;
     private ImageButton castleButton;
+    private Label castlePrice;
 
     private TextButton plantsButton;
     private ImageButton bushButton;
+    private Label bushPrice;
 
     private TextButton roadButton;
     private ImageButton rButton;
+    private Label roadPrice;
 
     private TextButton staffButton;
     private  ImageButton cleanerButton;
+    private Label cleanerBuildingPrice;
     private  ImageButton mechanicButton;
+    private Label mechanicBuildingPrice;
 
     private TextButton guestButton;
     private ImageButton trashButton;
+    private Label trashPrice;
     private ImageButton hamburgerButton;
+    private Label hamburgerPrice;
     private ImageButton waterButton;
+    private Label waterPrice;
     private TextButton closeMenuButton;
 
     private final int buttonWidth = 150;
@@ -165,7 +173,7 @@ public class GameScreen implements Screen
     int plantPrice = 1000;
     int buildingPrice = 1500;
     int trashcanPrice = 1000;
-    int roadPrice = 100;
+    int roadsPrice = 100;
 
     ShapeRenderer shapeRenderer = new ShapeRenderer();
 
@@ -193,10 +201,30 @@ public class GameScreen implements Screen
         dayLabel = new Label("[WHITE]Day: 0",skin);
         dayLabel.setPosition(670, 868);
 
+        rollerPrice = new Label("", skin);
+        castlePrice = new Label("", skin);
+        bushPrice = new Label("", skin);
+        roadPrice = new Label("", skin);
+        hamburgerPrice = new Label("", skin);
+        waterPrice = new Label("", skin);
+        trashPrice = new Label("", skin);
+        mechanicBuildingPrice = new Label("", skin);
+        cleanerBuildingPrice = new Label("", skin);
+
+
         stage.addActor(moneyLabel);
         stage.addActor(timeLabel);
         stage.addActor(guestsLabel);
         stage.addActor(dayLabel);
+
+        stage.addActor(rollerPrice);
+        stage.addActor(castlePrice);
+        stage.addActor(bushPrice);
+        stage.addActor(hamburgerPrice);
+        stage.addActor(waterPrice);
+        stage.addActor(trashPrice);
+        stage.addActor(mechanicBuildingPrice);
+        stage.addActor(cleanerBuildingPrice);
 
 
         task = new TimerTask() {
@@ -446,7 +474,7 @@ public class GameScreen implements Screen
                  */
                 switch (chosen){
                     case ROAD:
-                        moneyHeist(roadPrice);
+                        moneyHeist(roadsPrice);
                         break;
                     case ROLLER:
                     case CASTLE:
@@ -597,17 +625,26 @@ public class GameScreen implements Screen
                 guestButton.setPosition(buttonWidth*3 + 40,40);
                 roadButton.setVisible(false);
                 rButton.setVisible(false);
+                roadPrice.setVisible(false);
                 gamesButton.setVisible(false);
                 plantsButton.setVisible(false);
                 closeMenuButton.setVisible(true);
                 rollerButton.setVisible(false);
+                rollerPrice.setVisible(false);
                 castleButton.setVisible(false);
+                castlePrice.setVisible(false);
                 bushButton.setVisible(false);
+                bushPrice.setVisible(false);
                 cleanerButton.setVisible(false);
                 mechanicButton.setVisible(false);
+                cleanerBuildingPrice.setVisible(false);
+                mechanicBuildingPrice.setVisible(false);
                 trashButton.setVisible(false);
                 hamburgerButton.setVisible(false);
                 waterButton.setVisible(false);
+                trashPrice.setVisible(false);
+                hamburgerPrice.setVisible(false);
+                waterPrice.setVisible(false);
 
                 if (isSelected)
                     isSelected = false;
@@ -627,16 +664,25 @@ public class GameScreen implements Screen
                 plantsButton.setVisible(false);
                 roadButton.setVisible(false);
                 rButton.setVisible(false);
+                roadPrice.setVisible(false);
                 staffButton.setVisible(false);
                 guestButton.setVisible(false);
                 rollerButton.setVisible(false);
+                rollerPrice.setVisible(false);
                 castleButton.setVisible(false);
+                castlePrice.setVisible(false);
                 bushButton.setVisible(false);
+                bushPrice.setVisible(false);
                 cleanerButton.setVisible(false);
                 mechanicButton.setVisible(false);
+                cleanerBuildingPrice.setVisible(false);
+                mechanicBuildingPrice.setVisible(false);
                 trashButton.setVisible(false);
                 hamburgerButton.setVisible(false);
                 waterButton.setVisible(false);
+                trashPrice.setVisible(false);
+                hamburgerPrice.setVisible(false);
+                waterPrice.setVisible(false);
 
                 if (isSelected)
                     isSelected = false;
@@ -661,9 +707,18 @@ public class GameScreen implements Screen
                 roadButton.setVisible(true);
                 roadButton.setPosition(buttonWidth*4 + 50, 40);
                 rButton.setVisible(false);
+                roadPrice.setVisible(false);
                 bushButton.setVisible(false);
+                bushPrice.setVisible(false);
                 cleanerButton.setVisible(false);
                 mechanicButton.setVisible(false);
+                cleanerBuildingPrice.setVisible(false);
+                mechanicBuildingPrice.setVisible(false);
+
+                rollerButton.setVisible(false);
+                rollerPrice.setVisible(false);
+                castleButton.setVisible(false);
+                castlePrice.setVisible(false);
 
                 //chosen = Tiles.EMPTY;
                 if (isSelected)
@@ -682,9 +737,15 @@ public class GameScreen implements Screen
 
                 rollerButton.setVisible(true);
                 rollerButton.setPosition(buttonWidth * 3 + 50,40);
+                rollerPrice.setVisible(true);
+                rollerPrice.setText("[BLACK]" + gamePrice + "$");
+                rollerPrice.setPosition(buttonWidth * 3 + 50,20);
 
                 castleButton.setVisible(true);
                 castleButton.setPosition(buttonWidth * 3 + 130,30);
+                castlePrice.setVisible(true);
+                castlePrice.setText("[BLACK]" + gamePrice + "$");
+                castlePrice.setPosition(buttonWidth * 3 + 140,20);
 
                 if (isSelected)
                     isSelected = false;
@@ -718,10 +779,15 @@ public class GameScreen implements Screen
                 gamesButton.setVisible(false);
                 roadButton.setVisible(false);
                 rollerButton.setVisible(false);
+                rollerPrice.setVisible(false);
                 castleButton.setVisible(false);
+                castlePrice.setVisible(false);
 
                 bushButton.setVisible(true);
                 bushButton.setPosition(buttonWidth*3 + 50, 40);
+                bushPrice.setVisible(true);
+                bushPrice.setText("[BLACK]" + plantPrice + "$");
+                bushPrice.setPosition(buttonWidth*3 + 50, 20);
 
                 if (isSelected)
                     isSelected = false;
@@ -747,10 +813,15 @@ public class GameScreen implements Screen
                 gamesButton.setVisible(false);
                 plantsButton.setVisible(false);
                 rollerButton.setVisible(false);
+                rollerPrice.setVisible(false);
                 castleButton.setVisible(false);
+                castlePrice.setVisible(false);
 
                 rButton.setVisible(true);
                 rButton.setPosition(buttonWidth * 3 + 50,40);
+                roadPrice.setVisible(true);
+                roadPrice.setText("[BLACK]" + buildingPrice + "$");
+                roadPrice.setPosition(buttonWidth*2 + 30, 20);
 
                 if (isSelected)
                     isSelected = false;
@@ -778,9 +849,15 @@ public class GameScreen implements Screen
 
                 cleanerButton.setVisible(true);
                 cleanerButton.setPosition(buttonWidth*2 + 50,40);
+                cleanerBuildingPrice.setVisible(true);
+                cleanerBuildingPrice.setText("[BLACK]" + buildingPrice + "$");
+                cleanerBuildingPrice.setPosition(buttonWidth*2 + 50, 20);
 
                 mechanicButton.setVisible(true);
                 mechanicButton.setPosition(buttonWidth*2 + 120,40);
+                mechanicBuildingPrice.setVisible(true);
+                mechanicBuildingPrice.setText("[BLACK]" + buildingPrice + "$");
+                mechanicBuildingPrice.setPosition(buttonWidth*2 + 120, 20);
 
                 if (isSelected)
                     isSelected = false;
@@ -813,12 +890,24 @@ public class GameScreen implements Screen
                 guestButton.setPosition(buttonWidth + 20, 40);
                 parkButton.setVisible(false);
                 staffButton.setVisible(false);
+
                 trashButton.setVisible(true);
                 trashButton.setPosition(buttonWidth*2 + 50, 40);
                 waterButton.setVisible(true);
-                waterButton.setPosition(buttonWidth*2 + 110, 40);
+                waterButton.setPosition(buttonWidth*2 + 120, 40);
                 hamburgerButton.setVisible(true);
-                hamburgerButton.setPosition(buttonWidth*2 + 170, 40);
+                hamburgerButton.setPosition(buttonWidth*2 + 200, 40);
+
+
+                trashPrice.setVisible(true);
+                trashPrice.setText("[BLACK]" + trashcanPrice + "$");
+                trashPrice.setPosition(buttonWidth*2 + 50, 20);
+                waterPrice.setVisible(true);
+                waterPrice.setText("[BLACK]" + buildingPrice + "$");
+                waterPrice.setPosition(buttonWidth*2 + 120, 20);
+                hamburgerPrice.setVisible(true);
+                hamburgerPrice.setText("[BLACK]" + buildingPrice + "$");
+                hamburgerPrice.setPosition(buttonWidth*2 + 200, 20);
 
 
 
@@ -894,6 +983,15 @@ public class GameScreen implements Screen
         trashButton.setVisible(false);
         hamburgerButton.setVisible(false);
         waterButton.setVisible(false);
+
+        rollerPrice.setVisible(false);
+        castlePrice.setVisible(false);
+        bushPrice.setVisible(false);
+        hamburgerPrice.setVisible(false);
+        waterPrice.setVisible(false);
+        trashPrice.setVisible(false);
+        mechanicBuildingPrice.setVisible(false);
+        cleanerBuildingPrice.setVisible(false);
     }
 
     /**
