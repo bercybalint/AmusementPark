@@ -1,9 +1,6 @@
 package com.mygdx.amusementpark.buildable;
 
 import com.badlogic.gdx.graphics.Texture;
-import com.mygdx.amusementpark.buildable.Buildable;
-import org.graalvm.compiler.lir.LIRInstruction;
-import org.w3c.dom.Text;
 
 import java.util.Random;
 
