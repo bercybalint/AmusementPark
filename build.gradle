@@ -1,5 +1,5 @@
 buildscript {
-    
+
 
     repositories {
         mavenLocal()
@@ -9,7 +9,7 @@ buildscript {
         google()
     }
     dependencies {
-        
+
 
     }
 }
@@ -26,6 +26,7 @@ allprojects {
         ashleyVersion = '1.7.3'
         aiVersion = '1.8.2'
         gdxControllersVersion = '2.1.0'
+        junitVersion = '4.12'
     }
 
     repositories {
@@ -49,7 +50,7 @@ project(":desktop") {
         api "com.badlogicgames.gdx:gdx-tools:$gdxVersion"
         api "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-desktop"
         api "com.badlogicgames.gdx-controllers:gdx-controllers-desktop:$gdxControllersVersion"
-        
+
     }
 }
 
@@ -63,6 +64,7 @@ project(":core") {
         api "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"
         api "com.badlogicgames.gdx-controllers:gdx-controllers-core:$gdxControllersVersion"
         api "com.badlogicgames.gdx:gdx-ai:$aiVersion"
-        
+        testCompile "junit:junit:$junitVersion"
+
     }
 }
