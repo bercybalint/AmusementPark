@@ -11,4 +11,3 @@ build_game:
   stage: build
   script:
     - gradlew build
-    - gradlew jar
