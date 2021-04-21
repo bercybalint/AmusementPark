@@ -64,7 +64,7 @@ project(":core") {
         api "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"
         api "com.badlogicgames.gdx-controllers:gdx-controllers-core:$gdxControllersVersion"
         api "com.badlogicgames.gdx:gdx-ai:$aiVersion"
-        testCompile "junit:junit:$junitVersion"
+        testImplementation 'junit:junit:4.12'
 
     }
 }
