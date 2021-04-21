@@ -10,5 +10,5 @@ before_script:
 build_game:
   stage: build
   script:
-    - gradle compile
-    - gradle jar
+    - gradlew compile
+    - gradlew jar
