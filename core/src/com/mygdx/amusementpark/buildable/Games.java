@@ -18,10 +18,14 @@ public class Games extends Buildable
      * @param texture      -textúrája
      * @param prizeToBuild - mennyibeerül, a megépítése.
      * @param type
+     * @maxHealth - maximum ennyi hp-ja van a játéknak.
+     * @healthPoint - ennyi életerejet van a játéknak, ha lemegy 0-ra, elromlik.
+     * @workingTexture - ez a kép van beálltva ha működik a játék
+     * @brokenTexture - ez a kép van beállítva ha elromlott.
      */
 
-    public int healthPoints=5;
-    public int maxHealth=5;
+    public int healthPoints=10;
+    public int maxHealth=10;
     public Texture workingTexture;
     public Texture brokenTexture;
 
@@ -32,6 +36,9 @@ public class Games extends Buildable
         this.brokenTexture=broken;
     }
 
+    /**
+     * Ha használja egy vendég a játékot, akkor kopik a játék.
+     */
     public void takeDmg()
     {
         Random rand = new Random();
@@ -43,6 +50,10 @@ public class Games extends Buildable
             this.texture=brokenTexture;
         }
     }
+
+    /**
+     * Ha elromlott a játék, a szerelő tudja meghívni ezt a függvényt.
+     */
     public void fixed()
     {
         this.healthPoints=maxHealth;

@@ -180,6 +180,11 @@ public class GameScreen implements Screen
     private GameMap map;
     int ido = 0;
 
+    /**
+     * Létrehozza a képernyőn a pályát
+     * Beállítja a szövegeket a helyükre.
+     * elindítja az órát
+     */
     public GameScreen(final AmusementPark game)
     {
         this.game = game;
@@ -274,7 +279,7 @@ public class GameScreen implements Screen
         }
 
         /**
-         * Szemét kirajzolása
+         * Szemét kirajzolása, ha nincs takarító
          */
         if(map.cleaners.size==0)
         {
@@ -297,7 +302,7 @@ public class GameScreen implements Screen
         }
 
         /**
-         * Vendékeg kirajzolása
+         * Vendékeg kirajzolása, mozgatása
          */
         for(int i = 0; i < guests.size; i++)
         {
@@ -307,10 +312,16 @@ public class GameScreen implements Screen
             game.batch.draw(guest.getTexture(),guest.x+20,guest.y+110,guest.width,guest.height);
             for(int j = 0; j < map.destinationPoints.size; j++)
             {
+                /**
+                 * Ha a vendég megérkezik a célpontjára
+                 */
                 if(guest.intersects(map.destinationPoints.get(j)))
                 {
                     if(!guest.isGoing && !guest.isWaiting)
                     {
+                        /**
+                         * megérkezi, jobb kedve lesz és fizet a játékért
+                         */
                         System.out.println("megjottem");
                         guest.reachedDestination(map.destinationPoints.get(j).timeToUse);
                         money+=map.destinationPoints.get(j).prizeToUse;
@@ -318,11 +329,17 @@ public class GameScreen implements Screen
 
                         if(map.destinationPoints.get(j).getType()== Tiles.CASTLE||map.destinationPoints.get(j).getType()== Tiles.ROLLER)
                         {
+                            /**
+                             * Használat során kopik a játék
+                             */
                             ((Games)map.destinationPoints.get(j)).takeDmg();
                         }
                     }
                 }
             }
+            /**
+             * Ha szemetelhetnék-e van és van a közelben kuka, akkor a kukához megy.
+             */
             if(guest.throwingTrash) {
                 for (int j = 0; j < map.trashCans.size; j++) {
                     if (guest.intersects(map.trashCans.get(j))) {
@@ -334,7 +351,7 @@ public class GameScreen implements Screen
         }
 
         /**
-         * Takarítók kirajzolása
+         * Takarítók kirajzolása, mozgatása, szemetek kirajzolása ha van takarító
          */
         if(map.cleaners.size>0)
         {
@@ -358,6 +375,9 @@ public class GameScreen implements Screen
                                 map.cleaners.get(i).isCleaning = true;
                             }
                         }
+                        /**
+                         * ha egy vendég szemétre lép, rosszabb lesz a kedve
+                         */
                         for (int k = 0; k < guests.size; k++)
                         {
                             if (map.cleaners.get(i).trashes.size > 0 && j<map.cleaners.get(i).trashes.size)
@@ -376,7 +396,7 @@ public class GameScreen implements Screen
         }
 
         /**
-         * Szerelők kirajzolása
+         * Szerelők kirajzolása, mozgatása
          */
         for(int i = 0; i<map.mechanics.size; i++)
         {
@@ -487,6 +507,11 @@ public class GameScreen implements Screen
                         break;
                     case CLEANER:
                         moneyHeist(buildingPrice);
+                        /**
+                         * Ha a cleaner buildinget raktunk le, akkor spawnolunk egy takarítót
+                         *
+                         * Ha ez az első takarító akkor oda adjuk neki a pályán lévő összes szemetet
+                         */
                         if(map.cleaners.size==0)
                         {
                             map.cleaners.add(new Cleaner(map, 0,0, 20, 20, cleaner_texture,window_height,window_width, map.trashes));
@@ -498,6 +523,9 @@ public class GameScreen implements Screen
                         }
                         break;
                     case MECHANIC:
+                        /**
+                         * ha mechanic buldinget rakunk le, akkor spawnolunk egy mechanikot
+                         */
                         moneyHeist(buildingPrice);
                         map.mechanics.add(new Mechanic(map,0,0,20,20,mechanic_texture,window_height,window_width,(new Point((int)touch.x,(int)touch.y-100))));
                         break;
@@ -519,6 +547,11 @@ public class GameScreen implements Screen
         gametimer.schedule(task, 0, 1000 );
     }
 
+    /**
+     *
+     * @param sec - aktuális másodpercek
+     * @return Teljes idő
+     */
     public String getTime(int sec)
     {
         int hours = 0;
@@ -1068,6 +1101,10 @@ public class GameScreen implements Screen
         angry_texture = new Texture(Gdx.files.internal("guestAngry.png"));
     }
 
+    /**
+     *
+     * @param price - ennyit vonunk le egy játék lerakásakor
+     */
     public void moneyHeist(int price){
 
         money = money - price;
@@ -1107,11 +1144,14 @@ public class GameScreen implements Screen
     {
     }
 
+    /**
+     * Ha elindítjuk a játékot, random időközben spawnol vendégeket, 5 * annyit, mint amennyi játék van.
+     */
     class CreatePerson extends TimerTask {
         public void run() {
             int delay = (new Random().nextInt(10))*1000;
             timer.schedule(new GameScreen.CreatePerson(), delay);
-            if((map.destinationPoints.size*3)>guests.size)
+            if((map.destinationPoints.size*5)>guests.size)
             {
 
                 Guest p = new Guest(map, 0, 0, 20, 20, guest_texture, window_height, window_width, happy_texture, annoyed_texture, angry_texture, trash_texture);

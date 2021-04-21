@@ -16,32 +16,39 @@ import java.awt.*;
 
 public class GameMap implements TileBasedMap
 {
-    /** The map width in tiles */
+    /** A játék felületen egy sorban hány Tile van */
     public static final int WIDTH = 20;
-    /** The map height in tiles */
+    /** Egy oszlopban hány Tile van */
     public static final int HEIGHT = 20;
 
-    /** The terrain settings for each tile in the map */
+    /** Tartalmazza, hogy egy helyen milyen típusú egység van */
     public Array<Array<Tiles>> terrain = new Array<Array<Tiles>>();
 
-    /** The unit in each tile of the map */
+    /** Tárolja az összes épületet a pályán */
     public Array<Array<Buildable>> units = new Array<Array<Buildable>>();
 
-    /** The array of all destination points   */
+    /** Tárolja a helyeket ahova a vendégek mehetnek.   */
     public Array<Buildable> destinationPoints = new Array<Buildable>();
 
+    /**
+     * Kukákat tároló tömb
+     */
     public Array<Buildable> trashCans = new Array<Buildable>();
 
+    /** szemeteket tárolása */
     public Array<Trash> trashes = new Array<Trash>();
-    public Boolean isThereACleaner =false;
 
+    /** Takarítók tárolása */
     public Array<Cleaner> cleaners = new Array<Cleaner>();
 
+    /** Szerelők tárolása */
     public Array<Mechanic> mechanics = new Array<Mechanic>();
 
+    /** Személyzet épületeinek tárolása */
     public Array<StaffBuilding> staffBuildings = new Array<StaffBuilding>();
 
 
+    /** Aktuális cépont - lehet, hogy törölhető */
     Point p = new Point();
 
 
@@ -98,7 +105,9 @@ public class GameMap implements TileBasedMap
         mapInit();
     }
 
-
+    /**
+     * Pálya kezdőállapotba állítása
+     */
     public void mapInit()
     {
         Buildable tile;
@@ -268,6 +277,14 @@ public class GameMap implements TileBasedMap
         }
     }
 
+    /**
+     * kezeli ha kattintott valahova a játékos
+     *
+     * @param touch - a kattintás helye
+     * @param chosen - a kiválaszott elem, amit le akarunk rakni
+     * @param isSelected - van-e kiválasztva valami.
+     * @return - sikerült-e lerakni egy új elemet.
+     */
     public Boolean touched(Vector3 touch, Tiles chosen, Boolean isSelected)
     {
         Boolean did_place = false;
@@ -555,6 +572,9 @@ public class GameMap implements TileBasedMap
         return did_place;
     }
 
+    /**
+     * A pathFindingot segíti elő, törli a már általa bejárt mezőket.
+     */
     public void clearVisited() {
         for (int x=0;x<getWidthInTiles();x++) {
             for (int y=0;y<getHeightInTiles();y++) {
@@ -563,6 +583,9 @@ public class GameMap implements TileBasedMap
         }
     }
 
+    /**
+     * Kiírja az aktuális állípotát a pályának
+     */
     public void writeOut()
     {
         for (int x=0;x<getWidthInTiles();x++)
@@ -626,6 +649,14 @@ public class GameMap implements TileBasedMap
         units.get(x).set(y,unit);
     }
 
+    /**
+     *
+     * @param mover The mover that is potentially moving through the specified
+     * tile.
+     * @param x The x coordinate of the tile to check
+     * @param y The y coordinate of the tile to check
+     * @return tud-e a bizonyos mezőre lépni a mover.
+     */
     @Override
     public boolean blocked(Mover mover, int x, int y) {
         // if theres a unit at the location, then it's blocked

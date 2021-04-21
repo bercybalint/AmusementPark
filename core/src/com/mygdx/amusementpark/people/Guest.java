@@ -18,11 +18,24 @@ public class Guest extends Person implements Mover
 {
 
     public Timer timer;
+
+    /**
+     * Ezzel a timerrel nézzük, hogy van-e a közelben park
+     */
     private Timer parkTimer;
+
+    /**
+     * ha szemétre léptünk indítunk egy timert, hogy ugyanarra, a szemétre ne lépjen rá újra
+     */
     private Timer trashStep;
     private int delay = 1000;
+
+    /**
+     * A vendék kedve
+     */
     private int mood;
     private int maxMood = 100;
+
     public PathFinder finder;
 
     Timer moodTimer;
@@ -38,6 +51,21 @@ public class Guest extends Person implements Mover
     public Boolean throwingTrash = false;
     public Boolean steppedInTrash = false;
 
+    /**
+     *
+     * @param map
+     * @param x
+     * @param y
+     * @param width
+     * @param height
+     * @param texture
+     * @param window_h
+     * @param window_w
+     * @param happy - ha jó kedve van, ez a kp van beállítva
+     * @param annoyed -ha már unott, ez a kp van beállítva
+     * @param angry - ha már dühös, ez a kp van beállítva
+     * @param trash - a szemét képe,amit eltud dobni a vendég
+     */
     public Guest(GameMap map, int x, int y, int width, int height, Texture texture, int window_h, int window_w, Texture happy, Texture annoyed, Texture angry, Texture trash)
     {
         super(map, x, y, width, height, texture, window_h, window_w);
@@ -55,6 +83,9 @@ public class Guest extends Person implements Mover
         goToNewPlace();
     }
 
+    /**
+     * @param moodGain - ennyivel nő a kedve
+     */
     public void gainMood(int moodGain)
     {
         this.mood += moodGain;
@@ -64,6 +95,9 @@ public class Guest extends Person implements Mover
         }
     }
 
+    /**
+     * @param mood -ennyivel csökken a kedve
+     */
     public void loseMood(int mood)
     {
         this.mood-=mood;
@@ -73,6 +107,9 @@ public class Guest extends Person implements Mover
         }
     }
 
+    /**
+     * Ha szemétbe lépett
+     */
     public void stepToTrash()
     {
         steppedInTrash=true;
@@ -80,6 +117,10 @@ public class Guest extends Person implements Mover
         trashStep.schedule(new treshStap(),1000);
     }
 
+    /**
+     *
+     * @param p - A vendég menjen p -pontra
+     */
     public void goHere(Point p)
     {
         this.p = p;
@@ -108,6 +149,9 @@ public class Guest extends Person implements Mover
         }
     }
 
+    /**
+     * Kiválaszt egy új helyet, hogy hova menjen
+     */
     public void goToNewPlace()
     {
         Random random = new Random();
@@ -138,6 +182,9 @@ public class Guest extends Person implements Mover
     }
 
 
+    /**
+     * @param time_length - Ha oda érnek valahova.
+     */
     public void reachedDestination(int time_length)
     {
         isWaiting=true;
@@ -145,6 +192,9 @@ public class Guest extends Person implements Mover
         timer.schedule(new personBehaviour(), time_length * 1000);
     }
 
+    /**
+     * Idővel megy lefele a kedvük
+     */
     public void moodChange()
     {
         mood--;
@@ -164,6 +214,9 @@ public class Guest extends Person implements Mover
         }
     }
 
+    /**
+     * Mozgás
+     */
     @Override
     public void move()
     {
@@ -208,6 +261,9 @@ public class Guest extends Person implements Mover
                         {
                             if (!throwingTrash)
                             {
+                                /**
+                                 * 1:15-höz eséllyel dob szemetet
+                                 */
                                 int to_trash = to_trash_r.nextInt(15);
                                 if (to_trash == 9)
                                 {
@@ -215,6 +271,10 @@ public class Guest extends Person implements Mover
                                     Point trash_p = findTrashCan();
                                     System.out.println("Ki akarom dobni a szemetem");
 
+                                    /**
+                                     * Ha van kuka a közelben oda megy a kukához
+                                     * Ha nincs, akkor a földre dobja
+                                     */
                                     double distance = Math.sqrt((y - trash_p.y) * (y - trash_p.y) + (x - trash_p.x) * (x - trash_p.x));
                                     if (distance < 300)
                                     {
@@ -273,6 +333,10 @@ public class Guest extends Person implements Mover
         }
     }
 
+    /**
+     *
+     * @return van-e park a közelben
+     */
     public Boolean isParkNearby()
     {
         Boolean retu = false;
@@ -293,6 +357,10 @@ public class Guest extends Person implements Mover
         return retu;
     }
 
+    /**
+     * keres egy kukát
+     * @return - ha van kika, akkor vissza adja akoordinátáit
+     */
     public Point findTrashCan()
     {
         double minDistance = 10000;
@@ -320,6 +388,11 @@ public class Guest extends Person implements Mover
         return trash_point;
     }
 
+    /**
+     * Ha eldob egy szemetet megnézni, hogy melyik takaríó van a legközelebb
+     * @param p
+     * @return
+     */
     public int findCleaner(Point p)
     {
         double minDistance = 10000;
@@ -357,6 +430,9 @@ public class Guest extends Person implements Mover
         System.out.println("Elhagyom a parkot mert szar :)");
     }
 
+    /**
+     * Kedv változás idővel.
+     */
     class moodTask extends TimerTask
     {
         public void run() {

@@ -21,6 +21,6 @@ public class Catering extends Buildable
      */
     public Catering(int x, int y, int width, int height, Texture texture, int prizeToBuild, Tiles type)
     {
-        super(x, y, width, height, texture, prizeToBuild, type,30);
+        super(x, y, width, height, texture, prizeToBuild, type,10);
     }
 }

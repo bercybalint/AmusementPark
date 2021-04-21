@@ -10,6 +10,11 @@ public class Buildable extends Rectangle {
     public Tiles type;
     public Texture texture;
     public int timeToUse;
+
+    /**
+     * @moodGain - Ennyi kedvet kapnak a vendégek ha használják az egységet
+     * @woring - Nem romlott-e el az egység
+     */
     public int moodGain = 30;
     public boolean working=true;
 
@@ -24,7 +29,7 @@ public class Buildable extends Rectangle {
      * @param width - szélesség
      * @param height -magasság
      * @param texture -textúrája
-     * @param prizeToUse - mennyibeerül, a megépítése.
+     * @param prizeToUse - mennyibekerül, a használata.
      */
     public Buildable(int x, int y, int width, int height, Texture texture, int prizeToUse, Tiles type, int timeToUse)
     {

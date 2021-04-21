@@ -22,13 +22,35 @@ public class Cleaner extends Person implements Mover {
     public PathFinder finder;
     public Buildable destination;
 
+    /**
+     * éppen megy-e valahova
+     */
     public Boolean isGoing = false;
+
+    /**
+     * éppen takarít-e
+     */
     public Boolean isCleaning = false;
 
+    /**
+     * A szemetek amiket össze kell szednie
+     */
     public Array<Trash> trashes = new Array<Trash>();
     public Timer timer;
 
 
+    /**
+     *
+     * @param map
+     * @param x
+     * @param y
+     * @param width
+     * @param height
+     * @param texture
+     * @param window_h
+     * @param window_w
+     * @param trashes - szemetek, amiket a pályától kap meg, ha ő az első takarító
+     */
     public Cleaner(GameMap map, int x, int y, int width, int height, Texture texture, int window_h, int window_w,Array<Trash> trashes ) {
         super(map, x, y, width, height, texture, window_h, window_w);
         this.trashes = trashes;
@@ -46,6 +68,10 @@ public class Cleaner extends Person implements Mover {
         trashes.add(t);
     }
 
+    /**
+     *
+     * @param p - erre a pontra menjen a takarító
+     */
     public void goHere(Point p) {
         this.p = p;
         if(!isCleaning)
@@ -78,6 +104,9 @@ public class Cleaner extends Person implements Mover {
         }
     }
 
+    /**
+     * mindig menjen az első elemhez a szemét tömbből
+     */
     class cleanerBehaviour extends TimerTask
     {
         public void run() {
