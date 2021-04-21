@@ -11,4 +11,8 @@ build_game:
   stage: build
   script:
     - gradle compileJava
-    - gradle compileTestJava
+
+test_game:
+  stage: test
+  script:
+    - gradle test

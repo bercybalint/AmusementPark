@@ -11,4 +11,10 @@ public class GameMapTest extends TestCase
     {
         Assert.assertTrue(true);
     }
+
+    @Test
+    public void testGetLong2()
+    {
+        Assert.assertTrue(false);
+    }
 }
