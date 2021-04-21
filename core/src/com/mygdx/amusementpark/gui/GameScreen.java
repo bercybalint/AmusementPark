@@ -220,6 +220,7 @@ public class GameScreen implements Screen
         stage.addActor(rollerPrice);
         stage.addActor(castlePrice);
         stage.addActor(bushPrice);
+        stage.addActor(roadPrice);
         stage.addActor(hamburgerPrice);
         stage.addActor(waterPrice);
         stage.addActor(trashPrice);
@@ -820,8 +821,8 @@ public class GameScreen implements Screen
                 rButton.setVisible(true);
                 rButton.setPosition(buttonWidth * 3 + 50,40);
                 roadPrice.setVisible(true);
-                roadPrice.setText("[BLACK]" + buildingPrice + "$");
-                roadPrice.setPosition(buttonWidth*2 + 30, 20);
+                roadPrice.setText("[BLACK]" + roadsPrice + "$");
+                roadPrice.setPosition(buttonWidth * 3 + 55, 30);
 
                 if (isSelected)
                     isSelected = false;
