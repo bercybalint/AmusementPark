@@ -1,4 +1,4 @@
-package main.java.com.mygdx.amusementpark.pathfinding;
+package com.mygdx.amusementpark.pathfinding;
 
 import java.util.ArrayList;
 

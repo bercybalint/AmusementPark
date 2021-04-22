@@ -1,4 +1,4 @@
-package main.java.com.mygdx.amusementpark.pathfinding;
+package com.mygdx.amusementpark.pathfinding;
 
 /**
  * The description of a class providing a cost for a given tile based

@@ -1,4 +1,4 @@
-package main.java.com.mygdx.amusementpark.pathfinding;
+package com.mygdx.amusementpark.pathfinding;
 
 /**
  * A description of an implementation that can find a path from one 

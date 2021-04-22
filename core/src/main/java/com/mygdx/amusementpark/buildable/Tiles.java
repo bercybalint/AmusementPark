@@ -1,4 +1,4 @@
-package main.java.com.mygdx.amusementpark.buildable;
+package com.mygdx.amusementpark.buildable;
 
 public enum Tiles
 {

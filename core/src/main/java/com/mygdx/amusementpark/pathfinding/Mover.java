@@ -1,4 +1,4 @@
-package main.java.com.mygdx.amusementpark.pathfinding;
+package com.mygdx.amusementpark.pathfinding;
 
 /**
  * A tagging interface for an object representing the entity in the game that

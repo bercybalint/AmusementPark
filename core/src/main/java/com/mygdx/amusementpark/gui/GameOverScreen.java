@@ -1,4 +1,4 @@
-package main.java.com.mygdx.amusementpark.gui;
+package com.mygdx.amusementpark.gui;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;

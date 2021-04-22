@@ -1,4 +1,4 @@
-package main.java.com.mygdx.amusementpark.gui;
+package com.mygdx.amusementpark.gui;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -18,10 +18,10 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
-import main.java.com.mygdx.amusementpark.buildable.*;
-import main.java.com.mygdx.amusementpark.people.Cleaner;
-import main.java.com.mygdx.amusementpark.people.Guest;
-import main.java.com.mygdx.amusementpark.people.Mechanic;
+import com.mygdx.amusementpark.buildable.*;
+import com.mygdx.amusementpark.people.Cleaner;
+import com.mygdx.amusementpark.people.Guest;
+import com.mygdx.amusementpark.people.Mechanic;
 
 import java.awt.*;
 import java.util.Random;

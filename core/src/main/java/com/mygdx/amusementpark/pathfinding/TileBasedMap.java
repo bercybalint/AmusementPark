@@ -1,4 +1,4 @@
-package main.java.com.mygdx.amusementpark.pathfinding;
+package com.mygdx.amusementpark.pathfinding;
 
 /**
  * The description for the data we're pathfinding over. This provides the contract

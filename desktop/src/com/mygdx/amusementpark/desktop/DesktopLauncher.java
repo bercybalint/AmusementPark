@@ -2,7 +2,7 @@ package com.mygdx.amusementpark.desktop;
 
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
-import main.java.com.mygdx.amusementpark.gui.AmusementPark;
+import com.mygdx.amusementpark.gui.AmusementPark;
 
 public class DesktopLauncher
 {

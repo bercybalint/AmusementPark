@@ -1,8 +1,8 @@
-package main.java.com.mygdx.amusementpark.pathfinding.heuristics;
+package com.mygdx.amusementpark.pathfinding.heuristics;
 
-import main.java.com.mygdx.amusementpark.pathfinding.AStarHeuristic;
-import main.java.com.mygdx.amusementpark.pathfinding.Mover;
-import main.java.com.mygdx.amusementpark.pathfinding.TileBasedMap;
+import com.mygdx.amusementpark.pathfinding.AStarHeuristic;
+import com.mygdx.amusementpark.pathfinding.Mover;
+import com.mygdx.amusementpark.pathfinding.TileBasedMap;
 
 
 /**

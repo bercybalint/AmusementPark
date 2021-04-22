@@ -1,15 +1,15 @@
-package main.java.com.mygdx.amusementpark.gui;
+package com.mygdx.amusementpark.gui;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
-import main.java.com.mygdx.amusementpark.buildable.*;
-import main.java.com.mygdx.amusementpark.pathfinding.Mover;
-import main.java.com.mygdx.amusementpark.pathfinding.TileBasedMap;
-import main.java.com.mygdx.amusementpark.people.Cleaner;
-import main.java.com.mygdx.amusementpark.people.Mechanic;
+import com.mygdx.amusementpark.buildable.*;
+import com.mygdx.amusementpark.pathfinding.Mover;
+import com.mygdx.amusementpark.pathfinding.TileBasedMap;
+import com.mygdx.amusementpark.people.Cleaner;
+import com.mygdx.amusementpark.people.Mechanic;
 
 
 import java.awt.*;

@@ -1,13 +1,13 @@
-package main.java.com.mygdx.amusementpark.people;
+package com.mygdx.amusementpark.people;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
-import main.java.com.mygdx.amusementpark.buildable.*;
-import main.java.com.mygdx.amusementpark.gui.GameMap;
-import main.java.com.mygdx.amusementpark.pathfinding.AStarPathFinder;
-import main.java.com.mygdx.amusementpark.pathfinding.Mover;
-import main.java.com.mygdx.amusementpark.pathfinding.Path;
-import main.java.com.mygdx.amusementpark.pathfinding.PathFinder;
+import com.mygdx.amusementpark.buildable.*;
+import com.mygdx.amusementpark.gui.GameMap;
+import com.mygdx.amusementpark.pathfinding.AStarPathFinder;
+import com.mygdx.amusementpark.pathfinding.Mover;
+import com.mygdx.amusementpark.pathfinding.Path;
+import com.mygdx.amusementpark.pathfinding.PathFinder;
 
 import java.awt.*;
 import java.util.Random;

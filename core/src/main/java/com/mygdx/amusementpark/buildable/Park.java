@@ -1,7 +1,7 @@
-package main.java.com.mygdx.amusementpark.buildable;
+package com.mygdx.amusementpark.buildable;
 
 import com.badlogic.gdx.graphics.Texture;
-import main.java.com.mygdx.amusementpark.buildable.Buildable;
+import com.mygdx.amusementpark.buildable.Buildable;
 import org.w3c.dom.Text;
 
 public class Park extends Buildable

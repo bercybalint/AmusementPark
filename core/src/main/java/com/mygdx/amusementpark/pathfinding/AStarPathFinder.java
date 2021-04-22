@@ -1,9 +1,9 @@
-package main.java.com.mygdx.amusementpark.pathfinding;
+package com.mygdx.amusementpark.pathfinding;
 
 import java.util.ArrayList;
 import java.util.Collections;
 
-import main.java.com.mygdx.amusementpark.pathfinding.heuristics.ClosestHeuristic;
+import com.mygdx.amusementpark.pathfinding.heuristics.ClosestHeuristic;
 
 /**
  * A path finder implementation that uses the AStar heuristic based algorithm
