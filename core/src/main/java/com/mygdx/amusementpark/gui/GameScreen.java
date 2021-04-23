@@ -324,6 +324,16 @@ public class GameScreen implements Screen
                          */
                         System.out.println("megjottem");
                         guest.reachedDestination(map.destinationPoints.get(j).timeToUse);
+
+                        if (map.destinationPoints.get(j).getType() == Tiles.FOOD)
+                        {
+                            guest.justAte = true;
+                        }
+                        else
+                        {
+                            guest.justAte = false;
+                        }
+
                         money+=map.destinationPoints.get(j).prizeToUse;
                         guest.gainMood(map.destinationPoints.get(j).moodGain);
 
@@ -423,7 +433,7 @@ public class GameScreen implements Screen
         }
         /**
          * Az aktuálisan lerakásra kiválaszott elem privewjának a kirajzolása az egér pozíciójára.
-        */
+         */
         if(isSelected)
         {
             Vector3 mouse_pos = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
@@ -627,16 +637,16 @@ public class GameScreen implements Screen
         startButton.setSize(100, 30);
         startButton.setPosition(550, 865);
         startButton.addListener(new ClickListener() {
-                                    public void clicked(InputEvent e, float x, float y) {
-                                        day = day + 1;
-                                        dayLabel.setText("[WHITE]Day: " + day);
-                                        timer.cancel();
-                                        timer = new Timer();
-                                        new CreatePerson().run();
-                                        startButton.setVisible(false);
-                                        closeParkButton.setVisible(true);
-                                    }
-                                });
+            public void clicked(InputEvent e, float x, float y) {
+                day = day + 1;
+                dayLabel.setText("[WHITE]Day: " + day);
+                timer.cancel();
+                timer = new Timer();
+                new CreatePerson().run();
+                startButton.setVisible(false);
+                closeParkButton.setVisible(true);
+            }
+        });
 
         closeParkButton = new TextButton("Close Park", skin);
         closeParkButton.setSize(100, 30);

@@ -1,12 +1,10 @@
 package com.mygdx.amusementpark.people;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.mygdx.amusementpark.buildable.*;
 import com.mygdx.amusementpark.gui.GameMap;
 import com.mygdx.amusementpark.pathfinding.AStarPathFinder;
 import com.mygdx.amusementpark.pathfinding.Mover;
-import com.mygdx.amusementpark.pathfinding.Path;
 import com.mygdx.amusementpark.pathfinding.PathFinder;
 
 import java.awt.*;
@@ -50,6 +48,7 @@ public class Guest extends Person implements Mover
     public Boolean isWaiting = false;
     public Boolean throwingTrash = false;
     public Boolean steppedInTrash = false;
+    public Boolean justAte = false;
 
     /**
      *
@@ -114,7 +113,7 @@ public class Guest extends Person implements Mover
     {
         steppedInTrash=true;
         trashStep=new Timer();
-        trashStep.schedule(new treshStap(),1000);
+        trashStep.schedule(new trashStep(),1000);
     }
 
     /**
@@ -259,44 +258,49 @@ public class Guest extends Person implements Mover
                         Random to_trash_r = new Random();
                         if(map.terrain.get(ind_x).get(ind_y)==Tiles.ROAD)
                         {
-                            if (!throwingTrash)
-                            {
-                                /**
-                                 * 1:15-höz eséllyel dob szemetet
-                                 */
-                                int to_trash = to_trash_r.nextInt(15);
-                                if (to_trash == 9)
+                            if (justAte == true){
+                                if (!throwingTrash)
                                 {
-                                    throwingTrash = true;
-                                    Point trash_p = findTrashCan();
-                                    System.out.println("Ki akarom dobni a szemetem");
 
                                     /**
-                                     * Ha van kuka a közelben oda megy a kukához
-                                     * Ha nincs, akkor a földre dobja
+                                     * 1:15-höz eséllyel dob szemetet
                                      */
-                                    double distance = Math.sqrt((y - trash_p.y) * (y - trash_p.y) + (x - trash_p.x) * (x - trash_p.x));
-                                    if (distance < 300)
+                                    int to_trash = to_trash_r.nextInt(7);
+                                    if (to_trash == 3)
                                     {
-                                        System.out.println("to kuka");
-                                        goHere(trash_p);
-                                    } else
-                                    {
-                                        System.out.println("Szemetelek");
-                                        throwingTrash = false;
-                                        int cleanerIndex = findCleaner(new Point(x, y));
-                                        if (cleanerIndex >= 0)
+                                        throwingTrash = true;
+                                        Point trash_p = findTrashCan();
+                                        System.out.println("Ki akarom dobni a szemetem");
+
+                                        /**
+                                         * Ha van kuka a közelben oda megy a kukához
+                                         * Ha nincs, akkor a földre dobja
+                                         */
+                                        double distance = Math.sqrt((y - trash_p.y) * (y - trash_p.y) + (x - trash_p.x) * (x - trash_p.x));
+                                        if (distance < 300)
                                         {
-                                            map.cleaners.get(cleanerIndex).addTrash(new Trash(x, y, 10, 10, trash_texture, 0, Tiles.TRASH));
-                                            System.out.println("jön a takaríto a szeméthez");
+                                            System.out.println("to kuka");
+                                            goHere(trash_p);
                                         } else
                                         {
-                                            map.trashes.add(new Trash(x, y, 10, 10, trash_texture, 0, Tiles.TRASH));
-                                            System.out.println("Földre szemetelek");
-                                        }
+                                            System.out.println("Szemetelek");
+                                            throwingTrash = false;
+                                            int cleanerIndex = findCleaner(new Point(x, y));
+                                            if (cleanerIndex >= 0)
+                                            {
+                                                map.cleaners.get(cleanerIndex).addTrash(new Trash(x, y, 10, 10, trash_texture, 0, Tiles.TRASH));
+                                                System.out.println("jön a takaríto a szeméthez");
+                                            } else
+                                            {
+                                                map.trashes.add(new Trash(x, y, 10, 10, trash_texture, 0, Tiles.TRASH));
+                                                System.out.println("Földre szemetelek");
+                                            }
 
+                                        }
                                     }
+
                                 }
+
                             }
                         }
                     }
@@ -461,7 +465,7 @@ public class Guest extends Person implements Mover
         }
     }
 
-    class treshStap extends TimerTask
+    class trashStep extends TimerTask
     {
         public void run()
         {
