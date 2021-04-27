@@ -285,9 +285,10 @@ public class GameMap implements TileBasedMap
      * @param isSelected - van-e kiválasztva valami.
      * @return - sikerült-e lerakni egy új elemet.
      */
-    public Boolean touched(Vector3 touch, Tiles chosen, Boolean isSelected)
+    public Buildable touched(Vector3 touch, Tiles chosen, Boolean isSelected)
     {
         Boolean did_place = false;
+        Buildable actual = null;
         for(int i = 0; i < units.size; i++)  //units.size => mennyi buildable van a tombben eppen
         {
             for(int j = 0; j < units.get(i).size; j++)
@@ -298,7 +299,7 @@ public class GameMap implements TileBasedMap
                     {
                         if(units.get(i).get(j).getType()==Tiles.EMPTY)
                         {
-                            Buildable actual;
+
                             Tiles type;
                             actual = new Buildable(units.get(i).get(j).x,
                                     units.get(i).get(j).y,
@@ -569,7 +570,7 @@ public class GameMap implements TileBasedMap
                 }
             }
         }
-        return did_place;
+        return actual;
     }
 
     /**

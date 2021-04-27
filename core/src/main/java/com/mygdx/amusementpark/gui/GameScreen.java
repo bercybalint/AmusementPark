@@ -1,6 +1,7 @@
 package com.mygdx.amusementpark.gui;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -23,20 +24,22 @@ import com.mygdx.amusementpark.people.Cleaner;
 import com.mygdx.amusementpark.people.Guest;
 import com.mygdx.amusementpark.people.Mechanic;
 
+import javax.swing.*;
+import java.awt.event.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class GameScreen implements Screen
+public class GameScreen implements Screen, ActionListener
 {
     Timer timer = new Timer();
     Timer gametimer = new Timer();
     Boolean first_building_placed=false;
     private Array<Guest> guests = new Array<Guest>();
     public int ticketPrice = 50;
-
-
 
     /**
      * Ablak, tile-ok méreteineek beállítása
@@ -179,6 +182,14 @@ public class GameScreen implements Screen
 
     private GameMap map;
     int ido = 0;
+
+    JPanel p;
+    JTextField t;
+    JFrame f;
+    JButton b;
+    public Boolean takingInPrice = false;
+    Buildable actualPlaced = null;
+
 
     /**
      * Létrehozza a képernyőn a pályát
@@ -498,8 +509,13 @@ public class GameScreen implements Screen
             Vector3 touch = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
             camera.unproject(touch);
             System.out.println(touch.x + " " + " " + touch.y);
-            if(map.touched(touch,chosen,isSelected))
+            actualPlaced = map.touched(touch,chosen,isSelected);
+            if(actualPlaced!=null)
             {
+                if(actualPlaced.getType()==Tiles.CASTLE||actualPlaced.getType()==Tiles.ROLLER)
+                {
+                    showPrizeSettingWindow();
+                }
                 /**
                  * Teendők ha leraktunk egy bizonyos épületet.
                  */
@@ -551,6 +567,66 @@ public class GameScreen implements Screen
                 }
             }
         }
+
+    }
+
+    public void actionPerformed(ActionEvent e)
+    {
+
+        String s = e.getActionCommand();
+        if (s.equals("submit")) {
+            if(takingInPrice)
+            {
+                takingInPrice=false;
+                if(t.getText().length()>0)
+                {
+                    actualPlaced.prizeToUse = Integer.parseInt(t.getText());
+                }
+                f.setVisible(false);
+            }
+        }
+        System.out.println(actualPlaced.prizeToUse);
+    }
+
+    public void showPrizeSettingWindow()
+    {
+        takingInPrice = true;
+        parkButton.setVisible(false);
+        gamesButton.setVisible(false);
+        plantsButton.setVisible(false);
+        roadButton.setVisible(false);
+        rButton.setVisible(false);
+        roadPrice.setVisible(false);
+        staffButton.setVisible(false);
+        guestButton.setVisible(false);
+        rollerButton.setVisible(false);
+        rollerPrice.setVisible(false);
+        castleButton.setVisible(false);
+        castlePrice.setVisible(false);
+        bushButton.setVisible(false);
+        bushPrice.setVisible(false);
+        cleanerButton.setVisible(false);
+        mechanicButton.setVisible(false);
+        cleanerBuildingPrice.setVisible(false);
+        mechanicBuildingPrice.setVisible(false);
+        trashButton.setVisible(false);
+        hamburgerButton.setVisible(false);
+        waterButton.setVisible(false);
+        trashPrice.setVisible(false);
+        hamburgerPrice.setVisible(false);
+        waterPrice.setVisible(false);
+
+        p = new JPanel();
+
+        t = new JTextField(5);
+        b = new JButton("submit");
+        f = new JFrame("textfield");
+        p.add(t);
+        p.add(b);
+        f.add(p);
+        b.addActionListener(this);
+        f.setSize(200,200);
+        f.setVisible(true);
     }
 
     public void runTimer(){
