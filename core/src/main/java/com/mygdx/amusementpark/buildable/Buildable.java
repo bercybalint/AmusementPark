@@ -10,6 +10,7 @@ public class Buildable extends Rectangle {
     public Tiles type;
     public Texture texture;
     public int timeToUse;
+    public Boolean gameOn = false;
 
     /**
      * @moodGain - Ennyi kedvet kapnak a vendégek ha használják az egységet
@@ -59,8 +60,5 @@ public class Buildable extends Rectangle {
     {
         this.type = type;
     }
-
-
-
 
 }

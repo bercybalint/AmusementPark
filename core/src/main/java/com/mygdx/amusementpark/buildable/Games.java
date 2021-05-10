@@ -2,6 +2,7 @@ package com.mygdx.amusementpark.buildable;
 
 import com.badlogic.gdx.graphics.Texture;
 
+import java.awt.*;
 import java.util.Random;
 
 public class Games extends Buildable
@@ -29,8 +30,8 @@ public class Games extends Buildable
     public Games(int x, int y, int width, int height, Texture texture, int prizeToBuild, Tiles type, int timeToUse,Texture working, Texture broken)
     {
         super(x-width, y-height, width*3, height*3, texture, prizeToBuild, type, timeToUse);
-        this.workingTexture=working;
-        this.brokenTexture=broken;
+        this.workingTexture = working;
+        this.brokenTexture = broken;
     }
 
     /**
@@ -39,12 +40,12 @@ public class Games extends Buildable
     public void takeDmg()
     {
         Random rand = new Random();
-        this.healthPoints-=rand.nextInt(3);
+        this.healthPoints -= rand.nextInt(3);
         if(healthPoints<=0)
         {
-            this.healthPoints=0;
-            this.working=false;
-            this.texture=brokenTexture;
+            this.healthPoints = 0;
+            this.working = false;
+            this.texture = brokenTexture;
         }
     }
 

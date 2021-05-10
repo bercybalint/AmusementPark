@@ -29,7 +29,7 @@ public class Guest extends Person implements Mover
     private int delay = 1000;
 
     /**
-     * A vendék kedve
+     * A vendégek kedve
      */
     private int mood;
     private int maxMood = 100;
@@ -50,6 +50,8 @@ public class Guest extends Person implements Mover
     public Boolean steppedInTrash = false;
     public Boolean justAte = false;
 
+    public Boolean gameOn = false;
+    public int rollerGuests = 0;
     /**
      *
      * @param map
@@ -143,7 +145,6 @@ public class Guest extends Person implements Mover
         } else
         {
             timer = new Timer();
-            //System.out.println("ujra probalom");
             timer.schedule(new Guest.personBehaviour(), 3000);
         }
     }
@@ -159,6 +160,7 @@ public class Guest extends Person implements Mover
         {
             randInt = random.nextInt(map.destinationPoints.size);
             destination = map.destinationPoints.get(randInt);
+
             if(!destination.working)
             {
                 Timer re_random = new Timer();
@@ -167,17 +169,94 @@ public class Guest extends Person implements Mover
             }
             else
             {
-                Point p = new Point(destination.x, destination.y);
+                Point p;
+                Timer gameTimer;
+                //destination.gameOn = false;
+                if (destination.getType() == Tiles.ROLLER || destination.getType() == Tiles.CASTLE)
+                {
+                    if(destination.gameOn == true) //ha megy a jatek akkor megallnak az uton
+                    {
+                        int t_x = destination.x / 60;
+                        int t_y = destination.y / 40;
+
+                        if (map.terrain.get(t_x).get(t_y - 1) == Tiles.ROAD)
+                        {
+                            p = new Point(t_x * 60, (t_y - 1) * 40);
+                        }
+                        else if (map.terrain.get(t_x + 1).get(t_y - 1) == Tiles.ROAD)
+                        {
+                            p = new Point((t_x + 1) * 60, (t_y - 1) * 40);
+                        }
+                        else if (map.terrain.get(t_x + 2).get(t_y - 1) == Tiles.ROAD)
+                        {
+                            p = new Point((t_x + 2) * 60, (t_y - 1) * 40);
+                        }
+                        else if (map.terrain.get(t_x + 3).get(t_y) == Tiles.ROAD)
+                        {
+                            p = new Point((t_x + 3) * 60, (t_y) * 40);
+                        }
+                        else if (map.terrain.get(t_x + 3).get(t_y + 1) == Tiles.ROAD)
+                        {
+                            p = new Point((t_x + 3) * 60, (t_y + 1) * 40);
+                        }
+                        else if (map.terrain.get(t_x + 3).get(t_y + 2) == Tiles.ROAD)
+                        {
+                            p = new Point((t_x + 3) * 60, (t_y + 2) * 40);
+                        }
+                        else if (map.terrain.get(t_x + 2).get(t_y + 3) == Tiles.ROAD)
+                        {
+                            p = new Point((t_x + 2) * 60, (t_y + 3) * 40);
+                        }
+                        else if (map.terrain.get(t_x + 1).get(t_y + 3) == Tiles.ROAD)
+                        {
+                            p = new Point((t_x + 1) * 60, (t_y + 3) * 40);
+                        }
+                        else if (map.terrain.get(t_x).get(t_y + 3) == Tiles.ROAD)
+                        {
+                            p = new Point((t_x) * 60, (t_y + 3) * 40);
+                        }
+                        else if (map.terrain.get(t_x - 1).get(t_y + 2) == Tiles.ROAD)
+                        {
+                            p = new Point((t_x - 1) * 60, (t_y + 2) * 40);
+                        }
+                        else if (map.terrain.get(t_x - 1).get(t_y + 1) == Tiles.ROAD)
+                        {
+                            p = new Point((t_x - 1) * 60, (t_y + 1) * 40);
+                        }
+                        else if (map.terrain.get(t_x - 1).get(t_y) == Tiles.ROAD)
+                        {
+                            p = new Point((t_x - 1) * 60, (t_y) * 40);
+                        }
+                        else
+                        {
+                            p = new Point(destination.x, destination.y);
+                        }
+
+
+                    }
+                    else //ha nem megy a jatek akkor felszallnak a jatekra
+                    {
+                        p = new Point(destination.x, destination.y);
+
+                        //itt kene randomizáni a jatek indulasat de nem akarja azt amit en
+                        gameTimer = new Timer();
+                        gameTimer.schedule(new gameStart(), 0,5000);
+                    }
+                }
+                else //ha nem jatekhoz mennek akkor mennek egybol a celjukhoz
+                {
+                    p = new Point(destination.x, destination.y);
+                }
+
                 goHere(p);
             }
-
+            //destination.gameOn = false; //nem tudom hol kell falsera allitami
         }
         else
         {
             timer = new Timer();
             timer.schedule(new Guest.personBehaviour(), 3000);
         }
-
     }
 
 
@@ -246,9 +325,11 @@ public class Guest extends Person implements Mover
                 {
                     if (stepIndex == pathLength - 1)
                     {
+                        //map.terrain.get(currentStep.getX()).get(currentStep.getY()) == Tiles.ROLLER
                         dir = Direction.NOTHING;
                         isGoing = false;
                         path = null;
+
                     } else if (stepIndex < pathLength - 1)
                     {
                         stepIndex++;
@@ -256,6 +337,7 @@ public class Guest extends Person implements Mover
                         dir = Direction.NOTHING;
 
                         Random to_trash_r = new Random();
+
                         if(map.terrain.get(ind_x).get(ind_y)==Tiles.ROAD)
                         {
                             if (justAte == true){
@@ -431,7 +513,7 @@ public class Guest extends Person implements Mover
     }
 
     public void leavePark(){
-        System.out.println("Elhagyom a parkot mert szar :)");
+        System.out.println("Elhagyom a parkot :)");
     }
 
     /**
@@ -441,6 +523,18 @@ public class Guest extends Person implements Mover
     {
         public void run() {
             moodChange();
+        }
+    }
+
+    class gameStart extends TimerTask
+    {
+        public void run() {
+            /*Random start_r = new Random();
+            int start = start_r.nextInt(5);
+            if (start == 3){
+                destination.gameOn = true;
+            }*/
+            destination.gameOn = true;
         }
     }
 

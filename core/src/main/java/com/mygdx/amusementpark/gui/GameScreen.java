@@ -36,7 +36,7 @@ import java.util.TimerTask;
 public class GameScreen implements Screen, ActionListener
 {
     Timer timer = new Timer();
-    Timer gametimer = new Timer();
+    Timer gameTimer = new Timer();
     Boolean first_building_placed=false;
     private Array<Guest> guests = new Array<Guest>();
     public int ticketPrice = 50;
@@ -333,7 +333,6 @@ public class GameScreen implements Screen, ActionListener
                         /**
                          * megérkezi, jobb kedve lesz és fizet a játékért
                          */
-                        System.out.println("megjottem");
                         guest.reachedDestination(map.destinationPoints.get(j).timeToUse);
 
                         if (map.destinationPoints.get(j).getType() == Tiles.FOOD)
@@ -630,7 +629,7 @@ public class GameScreen implements Screen, ActionListener
     }
 
     public void runTimer(){
-        gametimer.schedule(task, 0, 1000 );
+        gameTimer.schedule(task, 0, 1000 );
     }
 
     /**
@@ -1237,12 +1236,11 @@ public class GameScreen implements Screen, ActionListener
         public void run() {
             int delay = (new Random().nextInt(10))*1000;
             timer.schedule(new GameScreen.CreatePerson(), delay);
-            if((map.destinationPoints.size*5)>guests.size)
+            if((map.destinationPoints.size)*5>guests.size)
             {
 
                 Guest p = new Guest(map, 0, 0, 20, 20, guest_texture, window_height, window_width, happy_texture, annoyed_texture, angry_texture, trash_texture);
                 guests.add(p);
-
                 guestsLabel.setText("[WHITE]Guests: " + guests.size);
                 money = money + ticketPrice;
                 moneyLabel.setText("[WHITE]Money:" + money + "$");

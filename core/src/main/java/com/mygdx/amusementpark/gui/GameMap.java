@@ -333,14 +333,14 @@ public class GameMap implements TileBasedMap
                                             units.get(i + 1).get(j - 1).getType() == Tiles.EMPTY
                                         )
                                         {
+
                                             actual = new Games( units.get(i).get(j).x,
-                                                                units.get(i).get(j).y,
-                                                                units.get(i).get(j).width,
-                                                                units.get(i).get(j).height,
+                                                    units.get(i).get(j).y,
+                                                    units.get(i).get(j).width,
+                                                    units.get(i).get(j).height,
                                                     roller_texture, 10, Tiles.ROLLER,5, roller_texture,roller_broken_texture);
 
-                                            p.x = units.get(i).get(j).x/units.get(i).get(j).width;
-                                            p.y = units.get(i).get(j).y/units.get(i).get(j).height;
+
                                             destinationPoints.add(actual);
 
                                             units.get(i + 1).set(j + 1, actual);
