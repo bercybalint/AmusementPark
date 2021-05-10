@@ -52,6 +52,8 @@ public class Guest extends Person implements Mover
 
     public Boolean gameOn = false;
     public int rollerGuests = 0;
+
+    public Boolean isGointIntoALine = false;
     /**
      *
      * @param map
@@ -132,16 +134,10 @@ public class Guest extends Person implements Mover
         if (path != null)
         {
             isGoing = true;
-            //System.out.println("ide:" + destination.x / 60 + "," + destination.y / 40);
             pathLength = path.getLength();
             stepIndex = 0;
             currentStep = path.getStep(stepIndex);
-            /*System.out.println("----------");
-            for (int i = 0; i < pathLength; i++)
-            {
-                System.out.println(path.getStep(i).getX() + "," + path.getStep(i).getY());
-            }
-            System.out.println("----------");*/
+
         } else
         {
             timer = new Timer();
@@ -176,6 +172,7 @@ public class Guest extends Person implements Mover
                 {
                     if(destination.gameOn == true) //ha megy a jatek akkor megallnak az uton
                     {
+                        isGointIntoALine=true;
                         int t_x = destination.x / 60;
                         int t_y = destination.y / 40;
 
@@ -239,8 +236,7 @@ public class Guest extends Person implements Mover
                         p = new Point(destination.x, destination.y);
 
                         //itt kene randomizáni a jatek indulasat de nem akarja azt amit en
-                        gameTimer = new Timer();
-                        gameTimer.schedule(new gameStart(), 0,5000);
+
                     }
                 }
                 else //ha nem jatekhoz mennek akkor mennek egybol a celjukhoz
@@ -325,7 +321,11 @@ public class Guest extends Person implements Mover
                 {
                     if (stepIndex == pathLength - 1)
                     {
-                        //map.terrain.get(currentStep.getX()).get(currentStep.getY()) == Tiles.ROLLER
+                        if(isGointIntoALine==true)
+                        {
+                            isGointIntoALine=false;
+                            destination.que.add(this);
+                        }
                         dir = Direction.NOTHING;
                         isGoing = false;
                         path = null;
@@ -380,9 +380,7 @@ public class Guest extends Person implements Mover
 
                                         }
                                     }
-
                                 }
-
                             }
                         }
                     }
@@ -526,17 +524,7 @@ public class Guest extends Person implements Mover
         }
     }
 
-    class gameStart extends TimerTask
-    {
-        public void run() {
-            /*Random start_r = new Random();
-            int start = start_r.nextInt(5);
-            if (start == 3){
-                destination.gameOn = true;
-            }*/
-            destination.gameOn = true;
-        }
-    }
+
 
     class personBehaviour extends TimerTask
     {
@@ -555,6 +543,10 @@ public class Guest extends Person implements Mover
             {
                 System.out.println("van termeszet a kozelben");
                 gainMood(2);
+                if(!destination.working)
+                {
+                    goToNewPlace();
+                }
             }
         }
     }

@@ -96,63 +96,7 @@ public class GameScreen implements Screen, ActionListener
     /**
      * Alap elemek textúrái. d
      */
-    Texture wall_texture;
-    Texture grass_texture;
-    Texture gate_texture;
-    Texture fence_texture;
-    Texture roller_texture;
-    Texture castle_texture;
-    Texture cleanerHouse_texture;
-    Texture mechanicHouse_texture;
-    Texture bush_texture;
-    Texture water_texture;
-    Texture hamburger_texture;
-    Texture trashcan_texture;
-    Texture trash_texture;
-    Texture cleaner_texture;
-    Texture mechanic_texture;
 
-
-
-    /**
-     * d Különböző út textúrák beállítása, szomszédoktól függően.
-     */
-    Texture road_down_to_up;
-    Texture road_down_to_left;
-    Texture road_down_to_right;
-    Texture road_left_to_right;
-    Texture road_top_to_right;
-    Texture road_top_to_left;
-    Texture road_threeway_to_up;
-    Texture road_threeway_to_down;
-    Texture road_threeway_to_right;
-    Texture road_threeway_to_left;
-    Texture road_from_all;
-
-    Texture guest_texture;
-
-    TextureRegion textureRegionRoad;
-    TextureRegionDrawable textureRegionDrawableRoad;
-    TextureRegion textureRegionGameRoller;
-    TextureRegionDrawable textureRegionDrawableGameRoller;
-    TextureRegion textureRegionGameCastle;
-    TextureRegionDrawable textureRegionDrawableGameCastle;
-    TextureRegion textureRegionPlantBush;
-    TextureRegionDrawable textureRegionDrawablePlantBush;
-    TextureRegion textureRegionCleaner;
-    TextureRegionDrawable textureRegionDrawableCleaner;
-    TextureRegion textureRegionMechanic;
-    TextureRegionDrawable textureRegionDrawableMechanic;
-    TextureRegion textureRegionTrash;
-    TextureRegionDrawable textureRegionDrawableTrash;
-    TextureRegion textureRegionHamburger;
-    TextureRegionDrawable textureRegionDrawableHamburger;
-    TextureRegion textureRegionWater;
-    TextureRegionDrawable textureRegionDrawableWater;
-
-    Texture happy_texture;
-    Texture annoyed_texture;
-    Texture angry_texture;
 
     /**
      * chosen - a kiválaszott textúrát ebben tárojuk, és ezzel rakjuk le.
@@ -190,6 +134,8 @@ public class GameScreen implements Screen, ActionListener
     public Boolean takingInPrice = false;
     Buildable actualPlaced = null;
 
+
+    public Textures textures = new Textures();
 
     /**
      * Létrehozza a képernyőn a pályát
@@ -256,7 +202,6 @@ public class GameScreen implements Screen, ActionListener
         camera = new OrthographicCamera();
         camera.setToOrtho(false, window_width, window_height+100);
         map = new GameMap(window_height, window_width, camera);
-        texturesInit();
         buttonManagment();
         moneyHeist(0);
         runTimer();
@@ -275,7 +220,7 @@ public class GameScreen implements Screen, ActionListener
         camera.update();
         game.batch.setProjectionMatrix(camera.combined);
         game.batch.begin();
-        game.batch.draw(grass_texture,0,0,window_width,window_height+100);
+        game.batch.draw(textures.grass_texture,0,0,window_width,window_height+100);
 
         /**
          * Palya kirajzolása
@@ -451,47 +396,47 @@ public class GameScreen implements Screen, ActionListener
 
             if(chosen == Tiles.ROLLER)
             {
-                game.batch.draw(roller_texture,mouse_pos.x-((3*map.tile_width)/2),
+                game.batch.draw(textures.roller_texture,mouse_pos.x-((3*map.tile_width)/2),
                         mouse_pos.y-((3*map.tile_height)/2),map.tile_width*3,map.tile_height*3);
             }
             else if(chosen == Tiles.CASTLE)
             {
-                game.batch.draw(castle_texture,mouse_pos.x-((3*map.tile_width)/2),
+                game.batch.draw(textures.castle_texture,mouse_pos.x-((3*map.tile_width)/2),
                         mouse_pos.y-((3*map.tile_height)/2),map.tile_width*3,map.tile_height*3);
             }
             else if(chosen == Tiles.FOOD)
             {
-                game.batch.draw(hamburger_texture,mouse_pos.x-((map.tile_width)/2),
+                game.batch.draw(textures.hamburger_texture,mouse_pos.x-((map.tile_width)/2),
                         mouse_pos.y-((map.tile_height)/2),map.tile_width,map.tile_height);
             }
             else if(chosen == Tiles.WATER)
             {
-                game.batch.draw(water_texture,mouse_pos.x-((map.tile_width)/2),
+                game.batch.draw(textures.water_texture,mouse_pos.x-((map.tile_width)/2),
                         mouse_pos.y-((map.tile_height)/2),map.tile_width,map.tile_height);
             }
             else if(chosen == Tiles.CLEANER)
             {
-                game.batch.draw(cleanerHouse_texture,mouse_pos.x-((map.tile_width)/2),
+                game.batch.draw(textures.cleanerHouse_texture,mouse_pos.x-((map.tile_width)/2),
                         mouse_pos.y-((map.tile_height)/2),map.tile_width,map.tile_height);
             }
             else if(chosen == Tiles.MECHANIC)
             {
-                game.batch.draw(mechanicHouse_texture,mouse_pos.x-((map.tile_width)/2),
+                game.batch.draw(textures.mechanicHouse_texture,mouse_pos.x-((map.tile_width)/2),
                         mouse_pos.y-((map.tile_height)/2),map.tile_width,map.tile_height);
             }
             else if(chosen == Tiles.TRASH)
             {
-                game.batch.draw(trashcan_texture,mouse_pos.x-((map.tile_width)/2),
+                game.batch.draw(textures.trashcan_texture,mouse_pos.x-((map.tile_width)/2),
                         mouse_pos.y-((map.tile_height)/2),map.tile_width,map.tile_height);
             }
             else if(chosen == Tiles.BUSH)
             {
-                game.batch.draw(bush_texture,mouse_pos.x-((map.tile_width)/2),
+                game.batch.draw(textures.bush_texture,mouse_pos.x-((map.tile_width)/2),
                         mouse_pos.y-((map.tile_height)/2),map.tile_width,map.tile_height);
             }
             else
             {
-                game.batch.draw(road_down_to_up,mouse_pos.x-map.tile_width/2,
+                game.batch.draw(textures.road_down_to_up,mouse_pos.x-map.tile_width/2,
                         mouse_pos.y-map.tile_height/2,map.tile_width ,map.tile_height);
             }
         }
@@ -539,12 +484,12 @@ public class GameScreen implements Screen, ActionListener
                          */
                         if(map.cleaners.size==0)
                         {
-                            map.cleaners.add(new Cleaner(map, 0,0, 20, 20, cleaner_texture,window_height,window_width, map.trashes));
+                            map.cleaners.add(new Cleaner(map, 0,0, 20, 20, textures.cleaner_texture,window_height,window_width, map.trashes));
                             map.trashes=new Array<Trash>();
                         }
                         else
                         {
-                            map.cleaners.add(new Cleaner(map, 0,0, 20, 20, cleaner_texture,window_height,window_width,new Array<Trash>()));
+                            map.cleaners.add(new Cleaner(map, 0,0, 20, 20, textures.cleaner_texture,window_height,window_width,new Array<Trash>()));
                         }
                         break;
                     case MECHANIC:
@@ -552,7 +497,7 @@ public class GameScreen implements Screen, ActionListener
                          * ha mechanic buldinget rakunk le, akkor spawnolunk egy mechanikot
                          */
                         moneyHeist(buildingPrice);
-                        map.mechanics.add(new Mechanic(map,0,0,20,20,mechanic_texture,window_height,window_width,(new Point((int)touch.x,(int)touch.y-100))));
+                        map.mechanics.add(new Mechanic(map,0,0,20,20,textures.mechanic_texture,window_height,window_width,(new Point((int)touch.x,(int)touch.y-100))));
                         break;
                     case BUSH:
                     case TREE:
@@ -871,7 +816,7 @@ public class GameScreen implements Screen, ActionListener
             }
         });
 
-        rollerButton = new ImageButton(textureRegionDrawableGameRoller);
+        rollerButton = new ImageButton(textures.textureRegionDrawableGameRoller);
         rollerButton.setSize(50,50);
         rollerButton.addListener(new ClickListener() {
             public void clicked(InputEvent e, float x, float y) {
@@ -880,7 +825,7 @@ public class GameScreen implements Screen, ActionListener
             }
         });
 
-        castleButton = new ImageButton(textureRegionDrawableGameCastle);
+        castleButton = new ImageButton(textures.textureRegionDrawableGameCastle);
         castleButton.setSize(70,70);
         castleButton.addListener(new ClickListener() {
             public void clicked(InputEvent e, float x, float y) {
@@ -913,7 +858,7 @@ public class GameScreen implements Screen, ActionListener
             }
         });
 
-        bushButton = new ImageButton(textureRegionDrawablePlantBush);
+        bushButton = new ImageButton(textures.textureRegionDrawablePlantBush);
         bushButton.setSize(50,50);
         bushButton.addListener(new ClickListener() {
             public void clicked(InputEvent e, float x, float y) {
@@ -948,7 +893,7 @@ public class GameScreen implements Screen, ActionListener
             }
         });
 
-        rButton = new ImageButton(textureRegionDrawableRoad);
+        rButton = new ImageButton(textures.textureRegionDrawableRoad);
         rButton.setSize(50,50);
         rButton.addListener(new ClickListener() {
             public void clicked(InputEvent e, float x, float y) {
@@ -983,7 +928,7 @@ public class GameScreen implements Screen, ActionListener
             }
         });
 
-        cleanerButton = new ImageButton(textureRegionDrawableCleaner);
+        cleanerButton = new ImageButton(textures.textureRegionDrawableCleaner);
         cleanerButton.setSize(50,50);
         cleanerButton.addListener(new ClickListener() {
             public void clicked(InputEvent e, float x, float y) {
@@ -992,7 +937,7 @@ public class GameScreen implements Screen, ActionListener
             }
         });
 
-        mechanicButton = new ImageButton(textureRegionDrawableMechanic);
+        mechanicButton = new ImageButton(textures.textureRegionDrawableMechanic);
         mechanicButton.setSize(50,50);
         mechanicButton.addListener(new ClickListener() {
             public void clicked(InputEvent e, float x, float y) {
@@ -1035,7 +980,7 @@ public class GameScreen implements Screen, ActionListener
             }
         });
 
-        trashButton = new ImageButton(textureRegionDrawableTrash);
+        trashButton = new ImageButton(textures.textureRegionDrawableTrash);
         trashButton.setSize(50,50);
         trashButton.addListener(new ClickListener() {
             public void clicked(InputEvent e, float x, float y) {
@@ -1044,7 +989,7 @@ public class GameScreen implements Screen, ActionListener
             }
         });
 
-        waterButton = new ImageButton(textureRegionDrawableWater);
+        waterButton = new ImageButton(textures.textureRegionDrawableWater);
         waterButton.setSize(50,50);
         waterButton.addListener(new ClickListener() {
             public void clicked(InputEvent e, float x, float y) {
@@ -1053,7 +998,7 @@ public class GameScreen implements Screen, ActionListener
             }
         });
 
-        hamburgerButton = new ImageButton(textureRegionDrawableHamburger);
+        hamburgerButton = new ImageButton(textures.textureRegionDrawableHamburger);
         hamburgerButton.setSize(50,50);
         hamburgerButton.addListener(new ClickListener() {
             public void clicked(InputEvent e, float x, float y) {
@@ -1121,70 +1066,6 @@ public class GameScreen implements Screen, ActionListener
         return map;
     }
 
-    public void texturesInit(){ //d
-        guest_texture = new Texture(Gdx.files.internal("people.png"));
-        wall_texture = new Texture(Gdx.files.internal("tile.png"));
-        grass_texture = new Texture(Gdx.files.internal("grass.png"));
-        gate_texture = new Texture(Gdx.files.internal("gate.png"));
-        fence_texture = new Texture(Gdx.files.internal("fence.png"));
-
-        road_down_to_up = new Texture(Gdx.files.internal("road_down.png"));
-        road_down_to_left = new Texture(Gdx.files.internal("road_left_to_down.png"));
-        road_down_to_right = new Texture(Gdx.files.internal("road_down_to_right.png"));
-        road_left_to_right = new Texture(Gdx.files.internal("road_right.png"));
-        road_top_to_right = new Texture(Gdx.files.internal("road_turn.png"));
-        road_top_to_left = new Texture(Gdx.files.internal("road_down_to_left.png"));
-        road_threeway_to_up = new Texture(Gdx.files.internal("road_three_up.png"));
-        road_threeway_to_down = new Texture(Gdx.files.internal("road_three_down.png"));
-        road_threeway_to_right = new Texture(Gdx.files.internal("road_three_right.png"));
-        road_threeway_to_left = new Texture(Gdx.files.internal("road_three_left.png"));
-        road_from_all = new Texture(Gdx.files.internal("road_inter.png"));
-
-
-        roller_texture = new Texture(Gdx.files.internal("roller.png"));
-        castle_texture = new Texture(Gdx.files.internal("castle.png"));
-        bush_texture = new Texture(Gdx.files.internal("bush.png"));
-        hamburger_texture = new Texture(Gdx.files.internal("hamburger.png"));
-        water_texture = new Texture(Gdx.files.internal("water.png"));
-        trash_texture = new Texture(Gdx.files.internal("trash.png"));
-        trashcan_texture = new Texture(Gdx.files.internal("trashcan.png"));
-        cleaner_texture = new Texture(Gdx.files.internal("cleaner.png"));
-        mechanic_texture = new Texture(Gdx.files.internal("mechanic.png"));
-
-
-        cleanerHouse_texture = new Texture(Gdx.files.internal("cleanerhouse.png"));
-        mechanicHouse_texture = new Texture(Gdx.files.internal("mechanichouse.png"));
-
-        //-d
-
-        textureRegionRoad = new TextureRegion(road_down_to_up);
-        textureRegionDrawableRoad = new TextureRegionDrawable(textureRegionRoad);
-
-        textureRegionGameRoller = new TextureRegion(roller_texture);
-        textureRegionDrawableGameRoller = new TextureRegionDrawable(textureRegionGameRoller);
-        textureRegionGameCastle = new TextureRegion(castle_texture);
-        textureRegionDrawableGameCastle = new TextureRegionDrawable(textureRegionGameCastle);
-
-        textureRegionPlantBush = new TextureRegion(bush_texture);
-        textureRegionDrawablePlantBush = new TextureRegionDrawable(textureRegionPlantBush);
-
-        textureRegionHamburger = new TextureRegion(hamburger_texture);
-        textureRegionDrawableHamburger = new TextureRegionDrawable(textureRegionHamburger);
-        textureRegionWater = new TextureRegion(water_texture);
-        textureRegionDrawableWater = new TextureRegionDrawable(textureRegionWater);
-
-        textureRegionTrash = new TextureRegion(trashcan_texture);
-        textureRegionDrawableTrash = new TextureRegionDrawable(textureRegionTrash);
-
-        textureRegionCleaner = new TextureRegion(cleanerHouse_texture);
-        textureRegionDrawableCleaner = new TextureRegionDrawable(textureRegionCleaner);
-        textureRegionMechanic = new TextureRegion(mechanicHouse_texture);
-        textureRegionDrawableMechanic = new TextureRegionDrawable(textureRegionMechanic);
-
-        happy_texture = new Texture(Gdx.files.internal("guestHappy.png"));
-        annoyed_texture = new Texture(Gdx.files.internal("guestAnnoyed.png"));
-        angry_texture = new Texture(Gdx.files.internal("guestAngry.png"));
-    }
 
     /**
      *
@@ -1198,7 +1079,6 @@ public class GameScreen implements Screen, ActionListener
         }else{
             game.setScreen(new GameOverScreen(game));
         }
-
     }
 
     @Override
@@ -1239,7 +1119,9 @@ public class GameScreen implements Screen, ActionListener
             if((map.destinationPoints.size)*5>guests.size)
             {
 
-                Guest p = new Guest(map, 0, 0, 20, 20, guest_texture, window_height, window_width, happy_texture, annoyed_texture, angry_texture, trash_texture);
+                Guest p = new Guest(map, 0, 0, 20, 20,
+                        textures.guest_texture, window_height, window_width,
+                        textures.happy_texture, textures.annoyed_texture, textures.angry_texture,textures.trash_texture);
                 guests.add(p);
                 guestsLabel.setText("[WHITE]Guests: " + guests.size);
                 money = money + ticketPrice;
