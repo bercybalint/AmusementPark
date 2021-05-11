@@ -1,12 +1,9 @@
 package com.mygdx.amusementpark.gui;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -16,7 +13,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.mygdx.amusementpark.buildable.*;
@@ -25,7 +21,6 @@ import com.mygdx.amusementpark.people.Guest;
 import com.mygdx.amusementpark.people.Mechanic;
 
 import javax.swing.*;
-import java.awt.event.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -37,7 +32,6 @@ public class GameScreen implements Screen, ActionListener
 {
     Timer timer = new Timer();
     Timer gameTimer = new Timer();
-    Boolean first_building_placed=false;
     private Array<Guest> guests = new Array<Guest>();
     public int ticketPrice = 50;
 
@@ -122,8 +116,6 @@ public class GameScreen implements Screen, ActionListener
     int trashcanPrice = 1000;
     int roadsPrice = 100;
 
-    ShapeRenderer shapeRenderer = new ShapeRenderer();
-
     private GameMap map;
     int ido = 0;
 
@@ -201,7 +193,7 @@ public class GameScreen implements Screen, ActionListener
 
         camera = new OrthographicCamera();
         camera.setToOrtho(false, window_width, window_height+100);
-        map = new GameMap(window_height, window_width, camera, false);
+        map = new GameMap(window_height, window_width, false);
         buttonManagment();
         moneyHeist(0);
         runTimer();

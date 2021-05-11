@@ -22,7 +22,7 @@ public class GuestTest
     Texture happy_texture;
 
     OrthographicCamera camera;
-    GameMap map = new GameMap(100, 100, camera,true);
+    GameMap map = new GameMap(100, 100,true);
     Guest p = new Guest(map, 0, 0, 20, 20, guest_texture, 0, 0, happy_texture, annoyed_texture, angry_texture, trash_texture);
     int m = p.getMood();
 
@@ -44,7 +44,7 @@ public class GuestTest
     {
         p.gainMood(5);
         int gm = p.getMood();
-        Assert.assertTrue(m < gm);
+        Assert.assertTrue(m <= gm);
     }
 
     @Test

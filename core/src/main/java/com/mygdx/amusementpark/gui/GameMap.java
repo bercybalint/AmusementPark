@@ -1,8 +1,6 @@
 package com.mygdx.amusementpark.gui;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Camera;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 import com.mygdx.amusementpark.buildable.*;
@@ -60,16 +58,9 @@ public class GameMap implements TileBasedMap
 
 
     public Textures textures;
-
-    /**
-     * Alap elemek textúrái. d
-     */
-
-    Camera camera;
-
     boolean forTest;
 
-    public GameMap(int window_h, int window_w, Camera camera, boolean forTest)
+    public GameMap(int window_h, int window_w, boolean forTest)
     {
         this.forTest = forTest;
         this.tile_width=window_w/WIDTH;
