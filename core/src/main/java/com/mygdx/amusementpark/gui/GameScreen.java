@@ -291,6 +291,7 @@ public class GameScreen implements Screen, ActionListener
                             ((Games)map.destinationPoints.get(j)).takeDmg();
                         }
                     }
+
                 }
             }
             /**
@@ -303,6 +304,10 @@ public class GameScreen implements Screen, ActionListener
                         guest.goHere(new Point(guest.destination.x, guest.destination.y));
                     }
                 }
+            }
+            if(guest.goingHome)
+            {
+                guests.removeIndex(i);
             }
         }
 

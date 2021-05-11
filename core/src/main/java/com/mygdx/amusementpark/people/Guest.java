@@ -49,7 +49,9 @@ public class Guest extends Person implements Mover
     public Boolean throwingTrash = false;
     public Boolean steppedInTrash = false;
     public Boolean justAte = false;
+    public Boolean stertedGoingHome = false;
 
+    public Boolean goingHome = false;
     public Boolean gameOn = false;
     public int rollerGuests = 0;
 
@@ -103,7 +105,7 @@ public class Guest extends Person implements Mover
      */
     public void loseMood(int mood)
     {
-        this.mood-=mood;
+        this.mood=this.mood-10;
         if(this.mood<0)
         {
             this.mood=0;
@@ -170,7 +172,7 @@ public class Guest extends Person implements Mover
                 //destination.gameOn = false;
                 if (destination.getType() == Tiles.ROLLER || destination.getType() == Tiles.CASTLE)
                 {
-                    if(destination.gameOn == true) //ha megy a jatek akkor megallnak az uton
+                    if(true) //ha megy a jatek akkor megallnak az uton
                     {
                         isGointIntoALine=true;
                         int t_x = destination.x / 60;
@@ -271,7 +273,7 @@ public class Guest extends Person implements Mover
      */
     public void moodChange()
     {
-        mood--;
+        mood=mood-10;
         if (mood >= 70)
         {
             this.texture = happy_texture;
@@ -296,121 +298,123 @@ public class Guest extends Person implements Mover
     {
         if (path != null)
         {
-            if(mood > 0){
-                ind_x = x / 60;
-                ind_y = y / 40;
-                int go_to_x = currentStep.getX() * tile_width;
-                int go_to_y = currentStep.getY() * tile_height;
-                if (x < go_to_x && y == go_to_y)
+            ind_x = x / 60;
+            ind_y = y / 40;
+            int go_to_x = currentStep.getX() * tile_width;
+            int go_to_y = currentStep.getY() * tile_height;
+            if (x < go_to_x && y == go_to_y)
+            {
+                dir = Direction.RIGHT;
+            }
+            if (x > go_to_x && y == go_to_y)
+            {
+                dir = Direction.LEFT;
+            }
+            if (x == go_to_x && y > go_to_y)
+            {
+                dir = Direction.DOWN;
+            }
+            if (x == go_to_x && y < go_to_y)
+            {
+                dir = Direction.UP;
+            }
+            if (x == go_to_x && y == go_to_y)
+            {
+                if (stepIndex == pathLength - 1)
                 {
-                    dir = Direction.RIGHT;
-                }
-                if (x > go_to_x && y == go_to_y)
-                {
-                    dir = Direction.LEFT;
-                }
-                if (x == go_to_x && y > go_to_y)
-                {
-                    dir = Direction.DOWN;
-                }
-                if (x == go_to_x && y < go_to_y)
-                {
-                    dir = Direction.UP;
-                }
-                if (x == go_to_x && y == go_to_y)
-                {
-                    if (stepIndex == pathLength - 1)
+                    if (isGointIntoALine == true)
                     {
-                        if(isGointIntoALine==true)
-                        {
-                            isGointIntoALine=false;
-                            destination.que.add(this);
-                        }
-                        dir = Direction.NOTHING;
-                        isGoing = false;
-                        path = null;
-
-                    } else if (stepIndex < pathLength - 1)
+                        isGointIntoALine = false;
+                        destination.que.add(this);
+                    }
+                    if (mood <= 0)
                     {
-                        stepIndex++;
-                        currentStep = path.getStep(stepIndex);
-                        dir = Direction.NOTHING;
+                        goingHome = true;
+                    }
+                    dir = Direction.NOTHING;
+                    isGoing = false;
+                    path = null;
 
-                        Random to_trash_r = new Random();
+                } else if (stepIndex < pathLength - 1)
+                {
+                    stepIndex++;
+                    currentStep = path.getStep(stepIndex);
+                    dir = Direction.NOTHING;
 
-                        if(map.terrain.get(ind_x).get(ind_y)==Tiles.ROAD)
+                    Random to_trash_r = new Random();
+
+                    if (map.terrain.get(ind_x).get(ind_y) == Tiles.ROAD)
+                    {
+                        if (justAte == true)
                         {
-                            if (justAte == true){
-                                if (!throwingTrash)
+                            if (!throwingTrash)
+                            {
+
+                                /**
+                                 * 1:15-höz eséllyel dob szemetet
+                                 */
+                                int to_trash = to_trash_r.nextInt(7);
+                                if (to_trash == 3)
                                 {
+                                    throwingTrash = true;
+                                    Point trash_p = findTrashCan();
+                                    System.out.println("Ki akarom dobni a szemetem");
 
                                     /**
-                                     * 1:15-höz eséllyel dob szemetet
+                                     * Ha van kuka a közelben oda megy a kukához
+                                     * Ha nincs, akkor a földre dobja
                                      */
-                                    int to_trash = to_trash_r.nextInt(7);
-                                    if (to_trash == 3)
+                                    double distance = Math.sqrt((y - trash_p.y) * (y - trash_p.y) + (x - trash_p.x) * (x - trash_p.x));
+                                    if (distance < 300)
                                     {
-                                        throwingTrash = true;
-                                        Point trash_p = findTrashCan();
-                                        System.out.println("Ki akarom dobni a szemetem");
-
-                                        /**
-                                         * Ha van kuka a közelben oda megy a kukához
-                                         * Ha nincs, akkor a földre dobja
-                                         */
-                                        double distance = Math.sqrt((y - trash_p.y) * (y - trash_p.y) + (x - trash_p.x) * (x - trash_p.x));
-                                        if (distance < 300)
+                                        System.out.println("to kuka");
+                                        goHere(trash_p);
+                                    } else
+                                    {
+                                        System.out.println("Szemetelek");
+                                        throwingTrash = false;
+                                        int cleanerIndex = findCleaner(new Point(x, y));
+                                        if (cleanerIndex >= 0)
                                         {
-                                            System.out.println("to kuka");
-                                            goHere(trash_p);
+                                            map.cleaners.get(cleanerIndex).addTrash(new Trash(x, y, 10, 10, trash_texture, 0, Tiles.TRASH));
+                                            System.out.println("jön a takaríto a szeméthez");
                                         } else
                                         {
-                                            System.out.println("Szemetelek");
-                                            throwingTrash = false;
-                                            int cleanerIndex = findCleaner(new Point(x, y));
-                                            if (cleanerIndex >= 0)
-                                            {
-                                                map.cleaners.get(cleanerIndex).addTrash(new Trash(x, y, 10, 10, trash_texture, 0, Tiles.TRASH));
-                                                System.out.println("jön a takaríto a szeméthez");
-                                            } else
-                                            {
-                                                map.trashes.add(new Trash(x, y, 10, 10, trash_texture, 0, Tiles.TRASH));
-                                                System.out.println("Földre szemetelek");
-                                            }
-
+                                            map.trashes.add(new Trash(x, y, 10, 10, trash_texture, 0, Tiles.TRASH));
+                                            System.out.println("Földre szemetelek");
                                         }
+
                                     }
                                 }
                             }
                         }
                     }
                 }
-                switch (dir)
-                {
-                    case UP:
-                        y += speed;
-                        break;
-                    case DOWN:
-                        y -= speed;
-                        break;
-                    case LEFT:
-                        x -= speed;
-                        break;
-                    case RIGHT:
-                        x += speed;
-                        break;
-                    case NOTHING:
-                        x = x;
-                        y = y;
-                        break;
-                    default:
-                        break;
-                }
-            }else {
-                leavePark();
+            }
+            switch (dir)
+            {
+                case UP:
+                    y += speed;
+                    break;
+                case DOWN:
+                    y -= speed;
+                    break;
+                case LEFT:
+                    x -= speed;
+                    break;
+                case RIGHT:
+                    x += speed;
+                    break;
+                case NOTHING:
+                    x = x;
+                    y = y;
+                    break;
+                default:
+                    break;
             }
 
         }
+
         if (path == null)
         {
             isGoing = false;
@@ -511,7 +515,13 @@ public class Guest extends Person implements Mover
     }
 
     public void leavePark(){
-        //System.out.println("Elhagyom a parkot :)");
+        if(!stertedGoingHome)
+        {
+            goHere(new Point(10 * tile_width,
+                    1 * tile_height));
+            System.out.println("hazamegyek");
+            stertedGoingHome=true;
+        }
     }
 
     /**
