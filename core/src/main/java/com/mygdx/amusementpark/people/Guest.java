@@ -511,7 +511,7 @@ public class Guest extends Person implements Mover
     }
 
     public void leavePark(){
-        System.out.println("Elhagyom a parkot :)");
+        //System.out.println("Elhagyom a parkot :)");
     }
 
     /**
