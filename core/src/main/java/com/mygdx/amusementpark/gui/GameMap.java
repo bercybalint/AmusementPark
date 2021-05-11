@@ -254,7 +254,7 @@ public class GameMap implements TileBasedMap
     {
         Boolean did_place = false;
         Buildable actual = null;
-        for(int i = 0; i < units.size; i++)  //units.size => mennyi buildable van a tombben eppen
+        for(int i = 0; i < units.size; i++)
         {
             for(int j = 0; j < units.get(i).size; j++)
             {

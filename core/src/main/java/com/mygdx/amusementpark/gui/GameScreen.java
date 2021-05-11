@@ -4,7 +4,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -444,7 +443,7 @@ public class GameScreen implements Screen, ActionListener
         {
             Vector3 touch = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
             camera.unproject(touch);
-            System.out.println(touch.x + " " + " " + touch.y);
+            //System.out.println(touch.x + " " + " " + touch.y);
             actualPlaced = map.touched(touch,chosen,isSelected);
             if(actualPlaced!=null)
             {
