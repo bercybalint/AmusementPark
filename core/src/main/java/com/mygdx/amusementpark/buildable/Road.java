@@ -36,5 +36,6 @@ public class Road extends Buildable
         leftNeigh = false;
         rightNeigh = false;
     }
+    public Road(){}
 
 }

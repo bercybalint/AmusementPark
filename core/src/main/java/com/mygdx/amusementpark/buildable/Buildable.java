@@ -26,7 +26,7 @@ public class Buildable extends Rectangle {
     public boolean working=true;
 
     public Array<Guest> que = new Array<Guest>();
-
+    public Buildable(){}
     public Buildable(Texture texture)
     {
         this.texture = texture;
