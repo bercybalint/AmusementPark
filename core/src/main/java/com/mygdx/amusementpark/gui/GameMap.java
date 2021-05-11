@@ -59,49 +59,23 @@ public class GameMap implements TileBasedMap
     public int tile_height;
 
 
+    public Textures textures;
+
     /**
      * Alap elemek textúrái. d
      */
-    Texture wall_texture;
-    Texture grass_texture;
-    Texture gate_texture;
-    Texture fence_texture;
-    Texture roller_texture;
-    Texture roller_broken_texture;
-    Texture castle_texture;
-    Texture castle_broken;
-    Texture cleanerHouse_texture;
-    Texture mechanicHouse_texture;
-    Texture bush_texture;
-    Texture water_texture;
-    Texture hamburger_texture;
-    Texture trashcan_texture;
-    Texture trash_texture;
-    Texture cleaner_texture;
-
-    /**
-     * d Különböző út textúrák beállítása, szomszédoktól függően.
-     */
-    Texture road_down_to_up;
-    Texture road_down_to_left;
-    Texture road_down_to_right;
-    Texture road_left_to_right;
-    Texture road_top_to_right;
-    Texture road_top_to_left;
-    Texture road_threeway_to_up;
-    Texture road_threeway_to_down;
-    Texture road_threeway_to_right;
-    Texture road_threeway_to_left;
-    Texture road_from_all;
 
     Camera camera;
 
-    public GameMap(int window_h, int window_w, Camera camera)
+    boolean forTest;
+
+    public GameMap(int window_h, int window_w, Camera camera, boolean forTest)
     {
+        this.forTest = forTest;
         this.tile_width=window_w/WIDTH;
         this.tile_height=window_h/HEIGHT;
 
-        texturesInit();
+        textures = new Textures(forTest);
         mapInit();
     }
 
@@ -125,14 +99,14 @@ public class GameMap implements TileBasedMap
                 if(j==0 & i == 10)
                 {
                     type = Tiles.EMPTY;
-                    tile = new Road((i)*tile_width,(j)*tile_height,tile_width,tile_height,road_down_to_up,30,type);
+                    tile = new Road((i)*tile_width,(j)*tile_height,tile_width,tile_height,textures.road_down_to_up,30,type);
                     units.get(i).add(tile);
                     terrain.get(i).add(type);
                 }
                 else if(j==1 & i == 10)
                 {
                     type = Tiles.ROAD;
-                    tile = new Road((i)*tile_width,(j)*tile_height,tile_width,tile_height,road_down_to_up,20,type);
+                    tile = new Road((i)*tile_width,(j)*tile_height,tile_width,tile_height,textures.road_down_to_up,20,type);
                     units.get(i).add(tile);
                     terrain.get(i).add(type);
                 }
@@ -141,21 +115,21 @@ public class GameMap implements TileBasedMap
                     if(i == 8 || i==12)
                     {
                         type = Tiles.BORDER;
-                        tile = new Border((i)*tile_width,(j)*tile_height,tile_width,tile_height,gate_texture,20,type);
+                        tile = new Border((i)*tile_width,(j)*tile_height,tile_width,tile_height,textures.gate_texture,20,type);
                         units.get(i).add(tile);
                         terrain.get(i).add(type);
                     }
                     else if(i>8 && i<12)
                     {
                         type = Tiles.EMPTY;
-                        tile = new Buildable((i)*tile_width,(j)*tile_height,tile_width,tile_height,grass_texture,20,type,10);
+                        tile = new Buildable((i)*tile_width,(j)*tile_height,tile_width,tile_height,textures.grass_texture,20,type,10);
                         units.get(i).add(tile);
                         terrain.get(i).add(type);
                     }
                     else
                     {
                         type = Tiles.BORDER;
-                        tile = new Border((i)*tile_width,(j)*tile_height,tile_width,tile_height,fence_texture,20,type);
+                        tile = new Border((i)*tile_width,(j)*tile_height,tile_width,tile_height,textures.fence_texture,20,type);
                         units.get(i).add(tile);
                         terrain.get(i).add(type);
                     }
@@ -164,14 +138,14 @@ public class GameMap implements TileBasedMap
                 else if (i == 0|| i == WIDTH - 1 || j == HEIGHT - 1)
                 {
                     type = Tiles.BORDER;
-                    tile = new Border((i)*tile_width,(j)*tile_height,tile_width,tile_height,wall_texture,10,type);
+                    tile = new Border((i)*tile_width,(j)*tile_height,tile_width,tile_height,textures.wall_texture,10,type);
                     units.get(i).add(tile);
                     terrain.get(i).add(type);
                 }
                 else
                 {
                     type = Tiles.EMPTY;
-                    tile = new Buildable((i)*tile_width,(j)*tile_height,tile_width,tile_height,grass_texture,10,type,10);
+                    tile = new Buildable((i)*tile_width,(j)*tile_height,tile_width,tile_height,textures.grass_texture,10,type,10);
                     units.get(i).add(tile);
                     terrain.get(i).add(type);
                 }
@@ -226,51 +200,51 @@ public class GameMap implements TileBasedMap
                     //megfelelő textúrák beállítása
                     if (road.upNeigh & road.rightNeigh & road.leftNeigh & road.downNeigh) //mind a 4 irányból jön út
                     {
-                        road.setTexture(road_from_all);
+                        road.setTexture(textures.road_from_all);
                     }
                     else if(road.upNeigh & road.leftNeigh & road.rightNeigh) //3 irányból, felfele
                     {
-                        road.setTexture(road_threeway_to_up);
+                        road.setTexture(textures.road_threeway_to_up);
                     }
                     else if(road.rightNeigh & road.upNeigh & road.downNeigh) //3 irányból, jobbra
                     {
-                        road.setTexture(road_threeway_to_right);
+                        road.setTexture(textures.road_threeway_to_right);
                     }
                     else if(road.downNeigh & road.leftNeigh & road.rightNeigh) //3 irányból, lefele
                     {
-                        road.setTexture(road_threeway_to_down);
+                        road.setTexture(textures.road_threeway_to_down);
                     }
                     else if(road.leftNeigh & road.upNeigh & road.downNeigh) //3 irányból balra
                     {
-                        road.setTexture(road_threeway_to_left);
+                        road.setTexture(textures.road_threeway_to_left);
                     }
                     else if(road.upNeigh & road.downNeigh) //2 irány, fel-le
                     {
-                        road.setTexture(road_down_to_up);
+                        road.setTexture(textures.road_down_to_up);
                     }
                     else if(road.upNeigh & road.leftNeigh) //2irány, fel-balra
                     {
-                        road.setTexture(road_top_to_left);
+                        road.setTexture(textures.road_top_to_left);
                     }
                     else if(road.upNeigh & road.rightNeigh) //2irány, fel-jobbra
                     {
-                        road.setTexture(road_top_to_right);
+                        road.setTexture(textures.road_top_to_right);
                     }
                     else if(road.downNeigh & road.leftNeigh) //2irány, le-balra
                     {
-                        road.setTexture(road_down_to_left);
+                        road.setTexture(textures.road_down_to_left);
                     }
                     else if(road.downNeigh & road.rightNeigh) //2irány, le-jobbra
                     {
-                        road.setTexture(road_down_to_right);
+                        road.setTexture(textures.road_down_to_right);
                     }
                     else if(road.leftNeigh & road.rightNeigh) //2 irány, jobbra-balra
                     {
-                        road.setTexture(road_left_to_right);
+                        road.setTexture(textures.road_left_to_right);
                     }
                     else if(road.leftNeigh || road.rightNeigh)
                     {
-                        road.setTexture(road_left_to_right);
+                        road.setTexture(textures.road_left_to_right);
                     }
                 }
             }
@@ -304,14 +278,14 @@ public class GameMap implements TileBasedMap
                             actual = new Buildable(units.get(i).get(j).x,
                                     units.get(i).get(j).y,
                                     units.get(i).get(j).width,
-                                    units.get(i).get(j).height,grass_texture,0, Tiles.EMPTY,0);
+                                    units.get(i).get(j).height,textures.grass_texture,0, Tiles.EMPTY,0);
 
                             type = Tiles.ROAD;
                             switch (chosen)
                             {
                                 // ROAD,BORDER,EMPTY,GAMES,STAFF,BUSH,TREE,TRASH,WATER,FOOD
                                 case ROAD:
-                                    actual = new Road(units.get(i).get(j).x,units.get(i).get(j).y, units.get(i).get(j).width,units.get(i).get(j).height, road_down_to_up,10,Tiles.ROAD);
+                                    actual = new Road(units.get(i).get(j).x,units.get(i).get(j).y, units.get(i).get(j).width,units.get(i).get(j).height, textures.road_down_to_up,10,Tiles.ROAD);
                                     type = Tiles.ROAD;
                                     break;
 
@@ -338,7 +312,7 @@ public class GameMap implements TileBasedMap
                                                     units.get(i).get(j).y,
                                                     units.get(i).get(j).width,
                                                     units.get(i).get(j).height,
-                                                    roller_texture, 10, Tiles.ROLLER,5, roller_texture,roller_broken_texture);
+                                                    textures.roller_texture, 10, Tiles.ROLLER,5, textures.roller_texture,textures.roller_broken_texture);
 
 
                                             destinationPoints.add(actual);
@@ -382,7 +356,7 @@ public class GameMap implements TileBasedMap
                                                                 units.get(i).get(j).y,
                                                                 units.get(i).get(j).width,
                                                                 units.get(i).get(j).height,
-                                                                castle_texture, 10, Tiles.CASTLE,5,castle_texture,castle_broken);
+                                                    textures.castle_texture, 10, Tiles.CASTLE,5,textures.castle_texture,textures.castle_broken);
 
                                             p.x = units.get(i).get(j).x/units.get(i).get(j).width;
                                             p.y = units.get(i).get(j).y/units.get(i).get(j).height;
@@ -418,7 +392,7 @@ public class GameMap implements TileBasedMap
                                                                 units.get(i).get(j).y,
                                                                 units.get(i).get(j).width,
                                                                 units.get(i).get(j).height,
-                                                    cleanerHouse_texture,10,Tiles.CLEANER);
+                                                    textures.cleanerHouse_texture,10,Tiles.CLEANER);
 
                                             p.x = units.get(i).get(j).x/units.get(i).get(j).width;
                                             p.y = units.get(i).get(j).y/units.get(i).get(j).height;
@@ -442,7 +416,7 @@ public class GameMap implements TileBasedMap
                                                     units.get(i).get(j).y,
                                                     units.get(i).get(j).width,
                                                     units.get(i).get(j).height,
-                                                    mechanicHouse_texture,10,Tiles.MECHANIC);
+                                                    textures.mechanicHouse_texture,10,Tiles.MECHANIC);
 
                                             p.x = units.get(i).get(j).x/units.get(i).get(j).width;
                                             p.y = units.get(i).get(j).y/units.get(i).get(j).height;
@@ -464,7 +438,7 @@ public class GameMap implements TileBasedMap
                                                     units.get(i).get(j).y,
                                                     units.get(i).get(j).width,
                                                     units.get(i).get(j).height,
-                                                    hamburger_texture,10,Tiles.FOOD);
+                                                    textures.hamburger_texture,10,Tiles.FOOD);
 
                                             p.x = units.get(i).get(j).x/units.get(i).get(j).width;
                                             p.y = units.get(i).get(j).y/units.get(i).get(j).height;
@@ -487,7 +461,7 @@ public class GameMap implements TileBasedMap
                                                         units.get(i).get(j).y,
                                                         units.get(i).get(j).width,
                                                         units.get(i).get(j).height,
-                                                        bush_texture,10,Tiles.BUSH);
+                                                    textures.bush_texture,10,Tiles.BUSH);
 
                                             p.x = units.get(i).get(j).x/units.get(i).get(j).width;
                                             p.y = units.get(i).get(j).y/units.get(i).get(j).height;
@@ -502,7 +476,7 @@ public class GameMap implements TileBasedMap
                                             units.get(i).get(j).y,
                                             units.get(i).get(j).width,
                                             units.get(i).get(j).height,
-                                            bush_texture,10,
+                                            textures.bush_texture,10,
                                             Tiles.TREE);
                                     type = Tiles.TREE;
 
@@ -520,7 +494,7 @@ public class GameMap implements TileBasedMap
                                                     units.get(i).get(j).y,
                                                     units.get(i).get(j).width,
                                                     units.get(i).get(j).height,
-                                                    trashcan_texture,10,Tiles.TRASHCAN);
+                                                    textures.trashcan_texture,10,Tiles.TRASHCAN);
 
                                             p.x = units.get(i).get(j).x/units.get(i).get(j).width;
                                             p.y = units.get(i).get(j).y/units.get(i).get(j).height;
@@ -543,7 +517,7 @@ public class GameMap implements TileBasedMap
                                                     units.get(i).get(j).y,
                                                     units.get(i).get(j).width,
                                                     units.get(i).get(j).height,
-                                                    water_texture,10,Tiles.WATER);
+                                                    textures.water_texture,10,Tiles.WATER);
 
                                             p.x = units.get(i).get(j).x/units.get(i).get(j).width;
                                             p.y = units.get(i).get(j).y/units.get(i).get(j).height;
@@ -557,7 +531,7 @@ public class GameMap implements TileBasedMap
                                 default: actual = new Buildable(units.get(i).get(j).x,
                                         units.get(i).get(j).y,
                                         units.get(i).get(j).width,
-                                        units.get(i).get(j).height,grass_texture,0, Tiles.EMPTY,0);
+                                        units.get(i).get(j).height,textures.grass_texture,0, Tiles.EMPTY,0);
                                     type = Tiles.EMPTY;
 
                             }
@@ -584,55 +558,6 @@ public class GameMap implements TileBasedMap
         }
     }
 
-    /**
-     * Kiírja az aktuális állípotát a pályának
-     */
-    public void writeOut()
-    {
-        for (int x=0;x<getWidthInTiles();x++)
-        {
-            for (int y=0;y<getHeightInTiles();y++)
-            {
-                String s;
-                switch (terrain.get(x).get(y))
-                {
-                    case ROAD:
-                        s="R";
-                        break;
-                    case BORDER:
-                        s="B";
-                        break;
-                    case EMPTY:
-                        s="E";
-                        break;
-                    case ROLLER:
-                        s="Ro";
-                        break;
-                    case CASTLE:
-                        s="Ca";
-                        break;
-                    case FOOD:
-                        s="F";
-                        break;
-                    case WATER:
-                        s="W";
-                        break;
-                    case BUSH:
-                        s="BU";
-                        break;
-                    case TRASH:
-                        s="T";
-                        break;
-                    case CLEANER:
-                        s="C";
-                        break;
-                    default:
-                        s="O";
-                        break;
-                }
-            }
-        }
-    }
 
     public boolean visited(int x, int y) {
         return visited[x][y];
@@ -680,38 +605,6 @@ public class GameMap implements TileBasedMap
     /**
      * terxtúrák beállítása.
      */
-    public void texturesInit()
-    {
-        wall_texture = new Texture(Gdx.files.internal("tile.png"));
-        grass_texture = new Texture(Gdx.files.internal("grass.png"));
-        gate_texture = new Texture(Gdx.files.internal("gate.png"));
-        fence_texture = new Texture(Gdx.files.internal("fence.png"));
-
-        road_down_to_up = new Texture(Gdx.files.internal("road_down.png"));
-        road_down_to_left = new Texture(Gdx.files.internal("road_left_to_down.png"));
-        road_down_to_right = new Texture(Gdx.files.internal("road_down_to_right.png"));
-        road_left_to_right = new Texture(Gdx.files.internal("road_right.png"));
-        road_top_to_right = new Texture(Gdx.files.internal("road_turn.png"));
-        road_top_to_left = new Texture(Gdx.files.internal("road_down_to_left.png"));
-        road_threeway_to_up = new Texture(Gdx.files.internal("road_three_up.png"));
-        road_threeway_to_down = new Texture(Gdx.files.internal("road_three_down.png"));
-        road_threeway_to_right = new Texture(Gdx.files.internal("road_three_right.png"));
-        road_threeway_to_left = new Texture(Gdx.files.internal("road_three_left.png"));
-        road_from_all = new Texture(Gdx.files.internal("road_inter.png"));
-
-        roller_texture = new Texture(Gdx.files.internal("roller.png"));
-        castle_texture = new Texture(Gdx.files.internal("castle.png"));
-        roller_broken_texture = new Texture(Gdx.files.internal("hullamvasut_rossz.png"));
-        castle_broken = new Texture(Gdx.files.internal("castle_broken.png"));
-        bush_texture = new Texture(Gdx.files.internal("bush.png"));
-        hamburger_texture = new Texture(Gdx.files.internal("hamburger.png"));
-        water_texture = new Texture(Gdx.files.internal("water.png"));
-        trashcan_texture = new Texture(Gdx.files.internal("trashcan.png"));
-        trash_texture = new Texture(Gdx.files.internal("trash.png"));
-        cleanerHouse_texture = new Texture(Gdx.files.internal("cleanerhouse.png"));
-        mechanicHouse_texture = new Texture(Gdx.files.internal("mechanichouse.png"));
-        cleaner_texture = new Texture(Gdx.files.internal("cleaner.png"));
-    }
 
     @Override
     public int getWidthInTiles()

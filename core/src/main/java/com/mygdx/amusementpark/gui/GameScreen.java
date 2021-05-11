@@ -135,7 +135,7 @@ public class GameScreen implements Screen, ActionListener
     Buildable actualPlaced = null;
 
 
-    public Textures textures = new Textures();
+    public Textures textures = new Textures(false);
 
     /**
      * Létrehozza a képernyőn a pályát
@@ -201,7 +201,7 @@ public class GameScreen implements Screen, ActionListener
 
         camera = new OrthographicCamera();
         camera.setToOrtho(false, window_width, window_height+100);
-        map = new GameMap(window_height, window_width, camera);
+        map = new GameMap(window_height, window_width, camera, false);
         buttonManagment();
         moneyHeist(0);
         runTimer();
@@ -1079,6 +1079,7 @@ public class GameScreen implements Screen, ActionListener
         }else{
             game.setScreen(new GameOverScreen(game));
         }
+
     }
 
     @Override

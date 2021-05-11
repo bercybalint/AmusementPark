@@ -3,6 +3,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.mygdx.amusementpark.gui.GameMap;
+import junit.framework.TestCase;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -10,7 +11,7 @@ import org.junit.runner.RunWith;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class GuestTest implements ActionListener, Screen
+public class GuestTest
 {
 
     Texture guest_texture;
@@ -20,54 +21,20 @@ public class GuestTest implements ActionListener, Screen
     Texture happy_texture;
 
     OrthographicCamera camera;
-    GameMap map = new GameMap(100, 100, camera);
+    GameMap map = new GameMap(100, 100, camera,true);
     Guest p = new Guest(map, 0, 0, 20, 20, guest_texture, 0, 0, happy_texture, annoyed_texture, angry_texture, trash_texture);
+
     @Test
-    public void gainMood()
+    public void testGetLong()
     {
-        Assert.assertTrue(true);
+        Assert.assertTrue(p.getMood()==100);
+
     }
 
-    public void actionPerformed(ActionEvent e)
+    @Test
+    public void testGetMood()
     {
-
+        Assert.assertTrue(p.getMood()==100);
     }
 
-    @Override
-    public void show() {
-
-    }
-
-    public void render(float delta)
-    {}
-
-    @Override
-    public void resize(int width, int height)
-    {
-
-    }
-
-    @Override
-    public void pause()
-    {
-
-    }
-
-    @Override
-    public void resume()
-    {
-
-    }
-
-    @Override
-    public void hide()
-    {
-
-    }
-
-    @Override
-    public void dispose()
-    {
-
-    }
 }

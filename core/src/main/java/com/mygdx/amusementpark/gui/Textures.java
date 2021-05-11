@@ -22,6 +22,8 @@ public class Textures
     public Texture trash_texture;
     public Texture cleaner_texture;
     public Texture mechanic_texture;
+    Texture roller_broken_texture;
+    Texture castle_broken;
 
 
      /**
@@ -61,8 +63,10 @@ public class Textures
     public Texture annoyed_texture;
     public Texture angry_texture;
 
-    public Textures()
+    public Textures(boolean forTest)
     {
+        if(!forTest)
+        {
         guest_texture = new Texture(Gdx.files.internal("people.png"));
         wall_texture = new Texture(Gdx.files.internal("tile.png"));
         grass_texture = new Texture(Gdx.files.internal("grass.png"));
@@ -91,7 +95,8 @@ public class Textures
         trashcan_texture = new Texture(Gdx.files.internal("trashcan.png"));
         cleaner_texture = new Texture(Gdx.files.internal("cleaner.png"));
         mechanic_texture = new Texture(Gdx.files.internal("mechanic.png"));
-
+        roller_broken_texture = new Texture(Gdx.files.internal("hullamvasut_rossz.png"));
+        castle_broken = new Texture(Gdx.files.internal("castle_broken.png"));
 
         cleanerHouse_texture = new Texture(Gdx.files.internal("cleanerhouse.png"));
         mechanicHouse_texture = new Texture(Gdx.files.internal("mechanichouse.png"));
@@ -123,6 +128,6 @@ public class Textures
         textureRegionDrawableCleaner = new TextureRegionDrawable(textureRegionCleaner);
         textureRegionMechanic = new TextureRegion(mechanicHouse_texture);
         textureRegionDrawableMechanic = new TextureRegionDrawable(textureRegionMechanic);
-
+    }
     }
 }
