@@ -18,6 +18,8 @@ public class Buildable extends Rectangle {
     public Timer gameTimer;
     public int guest_capacity = 2;
 
+    public boolean isBeingRepaired;
+
     /**
      * @moodGain - Ennyi kedvet kapnak a vendégek ha használják az egységet
      * @woring - Nem romlott-e el az egység

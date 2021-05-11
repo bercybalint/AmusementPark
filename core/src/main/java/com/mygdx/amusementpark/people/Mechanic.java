@@ -31,6 +31,7 @@ public class Mechanic extends Person implements Mover
     Timer homeTime;
     private Buildable home;
 
+
     public Mechanic(GameMap map, int x, int y, int width, int height, Texture texture, int window_h, int window_w, Point home)
     {
         super(map, x, y, width, height, texture, window_h, window_w);
@@ -89,9 +90,11 @@ public class Mechanic extends Person implements Mover
         Buildable p = null;
         for(int i = 0; i < map.destinationPoints.size; i++)
         {
-            if(map.destinationPoints.get(i).working==false)
+            if(map.destinationPoints.get(i).working==false && map.destinationPoints.get(i).isBeingRepaired==false)
             {
                 p=map.destinationPoints.get(i);
+                map.destinationPoints.get(i).isBeingRepaired=true;
+                return p;
             }
         }
         return p;
@@ -128,6 +131,7 @@ public class Mechanic extends Person implements Mover
         public void run() {
             ((Games)destination).fixed();
             isFixing=false;
+            destination.isBeingRepaired=false;
             new mechanicBehaviour().run();
             fixing_time.cancel();
         }

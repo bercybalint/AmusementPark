@@ -105,7 +105,7 @@ public class Guest extends Person implements Mover
      */
     public void loseMood(int mood)
     {
-        this.mood=this.mood-10;
+        this.mood=mood;
         if(this.mood<0)
         {
             this.mood=0;
@@ -273,7 +273,7 @@ public class Guest extends Person implements Mover
      */
     public void moodChange()
     {
-        mood=mood-10;
+        mood--;
         if (mood >= 70)
         {
             this.texture = happy_texture;
@@ -541,7 +541,6 @@ public class Guest extends Person implements Mover
         public void run() {
             isWaiting=false;
             goToNewPlace();
-            timer.cancel();
         }
     }
 

@@ -149,9 +149,6 @@ public class GuestTest
         Assert.assertTrue(c.leftNeigh==true);
         Assert.assertTrue(c.rightNeigh==true);
 
-
-
-
     }
 
 }
